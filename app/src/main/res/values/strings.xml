@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Out of</string>
+    <string name="more_options">More Options</string>
+    <string name="clear_list">Clear All Items</string>
+    <string name="share_list">Share List</string>
+    <string name="help">Help</string>
+    <string name="about">About</string>
+    <string name="add_custom_item">Add Custom Item</string>
+    <string name="print_list">Print List</string>
+</resources>

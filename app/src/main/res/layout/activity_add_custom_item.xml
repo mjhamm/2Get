@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddCustomItem">
+
+    <TextView
+        android:id="@+id/customItemName_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Item Name"
+        android:textSize="20sp"
+        android:fontFamily="@font/roboto_medium"
+        android:labelFor="@id/customItemName_EditText"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="48dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginTop="8dp"/>
+
+    <EditText
+        android:id="@+id/customItemName_EditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_medium"
+        app:layout_constraintTop_toBottomOf="@id/customItemName_textView"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="48dp"
+        android:layout_marginEnd="48dp"
+        android:inputType="text"/>
+
+    <TextView
+        android:id="@+id/customItemCategory_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_medium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/customItemName_EditText"
+        android:text="Item Category"
+        android:textSize="20sp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginEnd="48dp"/>
+
+    <Spinner
+        android:id="@+id/customItemCategory_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/customItemCategory_textView"
+        android:minHeight="?android:attr/listPreferredItemHeightSmall"
+        android:background="@android:color/darker_gray"
+        android:layout_marginStart="48dp"
+        android:layout_marginEnd="48dp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/customItemCategory_spinner"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="48dp"
+        android:text="Add Item To List"
+        android:layout_marginEnd="48dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
