@@ -11,25 +11,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Item Name"
-        android:textSize="20sp"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
         android:fontFamily="@font/roboto_medium"
         android:labelFor="@id/customItemName_EditText"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="48dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginStart="36dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginTop="36dp"/>
 
     <EditText
         android:id="@+id/customItemName_EditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto_medium"
+        android:textColor="@android:color/black"
         app:layout_constraintTop_toBottomOf="@id/customItemName_textView"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="48dp"
-        android:layout_marginEnd="48dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginTop="8dp"
         android:inputType="text"/>
 
     <TextView
@@ -40,30 +43,45 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/customItemName_EditText"
         android:text="Item Category"
-        android:textSize="20sp"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
         android:layout_marginTop="16dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginEnd="48dp"/>
+        android:layout_marginStart="36dp"
+        android:layout_marginEnd="36dp"/>
 
     <Spinner
         android:id="@+id/customItemCategory_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/customItemCategory_textView"
-        android:minHeight="?android:attr/listPreferredItemHeightSmall"
-        android:background="@android:color/darker_gray"
-        android:layout_marginStart="48dp"
-        android:layout_marginEnd="48dp"/>
+        android:layout_marginStart="34dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginTop="8dp"/>
 
-    <Button
-        android:layout_width="match_parent"
+    <!--<Button
+        android:id="@+id/cancelCustomItem_button"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/customItemCategory_spinner"
+        android:text="Cancel"
+        android:textAllCaps="false"
+        android:backgroundTint="@color/colorPrimary"
         android:layout_marginTop="16dp"
-        android:layout_marginStart="48dp"
+        android:layout_marginStart="36dp"/>
+
+    <Button
+        android:id="@+id/addCustomItem_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/customItemCategory_spinner"
+        android:layout_marginTop="16dp"
         android:text="Add Item To List"
-        android:layout_marginEnd="48dp"/>
+        android:layout_marginEnd="36dp"
+        android:backgroundTint="@color/colorPrimary"/>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

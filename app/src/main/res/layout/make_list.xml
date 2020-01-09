@@ -5,10 +5,13 @@
     android:orientation="vertical"
     android:id="@+id/makeList_fragment">
 
-    <ListView
+    <ExpandableListView
         android:id="@+id/makeList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"
+        android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="0.5dp"/>
 
     <ImageButton
         android:id="@+id/addCustomItem_button"
