@@ -7,4 +7,29 @@
     <string name="about">About</string>
     <string name="add_custom_item">Add Custom Item</string>
     <string name="print_list">Print List</string>
+    <string name="_2_get_logo">2 Get Logo</string>
+
+    <string-array name="category">
+        <item>Baby &amp; Childcare</item>
+        <item>Baking</item>
+        <item>Beverages</item>
+        <item>Bread</item>
+        <item>Breakfast &amp; Cereal</item>
+        <item>Canned Goods</item>
+        <item>Condiments</item>
+        <item>Dairy</item>
+        <item>Deli</item>
+        <item>Frozen Foods</item>
+        <item>Health &amp; Beauty</item>
+        <item>Household</item>
+        <item>Laundry, Paper &amp; Cleaning</item>
+        <item>Meat &amp; Fish</item>
+        <item>Pet Items</item>
+        <item>Produce</item>
+        <item>Rice &amp; Pasta</item>
+        <item>Sauces &amp; Oils</item>
+        <item>Snacks</item>
+        <item>Spices</item>
+        <item>Vegetarian</item>
+    </string-array>
 </resources>

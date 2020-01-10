@@ -1,17 +1,22 @@
 package com.example.outof;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.ExpandableListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.google.android.material.tabs.TabLayout;
@@ -62,9 +67,28 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
+
+            //Clear List
             case R.id.clear:
-                Toast.makeText(mContext, "Clear", Toast.LENGTH_SHORT).show();
-                makeListActivity.clear();
+                AlertDialog.Builder clearDialog = new AlertDialog.Builder(MainActivity.this);
+                clearDialog.setMessage("Are you sure that you want to clear everything on your list?");
+                clearDialog.setCancelable(false);
+
+                //Clear List - YES
+                clearDialog.setPositiveButton("Yes", (dialog, which) -> {
+
+                    makeListActivity.clear();
+                });
+
+                //Cancel Clearing List - NO
+                clearDialog.setNegativeButton("No", (dialog, which) -> dialog.cancel());
+
+                AlertDialog alertDialog = clearDialog.create();
+                alertDialog.show();
+                //makeListActivity.clear();
+                return true;
+            case R.id.share:
+                Toast.makeText(mContext, "Share List", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.print:
                 Toast.makeText(mContext, "Print List", Toast.LENGTH_SHORT).show();

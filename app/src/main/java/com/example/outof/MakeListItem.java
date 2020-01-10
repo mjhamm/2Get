@@ -1,13 +1,15 @@
 package com.example.outof;
 
-public class MakeListItem {
+import java.io.Serializable;
 
-    String itemName;
-    boolean isSelected = false;
+public class MakeListItem implements Serializable {
+
+    private String itemName;
+    private boolean selected;
 
     public MakeListItem(String name, boolean selected) {
         this.itemName = name;
-        this.isSelected = selected;
+        this.selected = selected;
     }
 
     public String getItemName() {
@@ -19,10 +21,10 @@ public class MakeListItem {
     }
 
     public boolean isSelected() {
-        return isSelected;
+        return selected;
     }
 
     public void setSelected(boolean selected) {
-        isSelected = selected;
+        this.selected = selected;
     }
 }
