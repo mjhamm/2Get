@@ -21,7 +21,6 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
     private Context context;
     private ArrayList<String> expandableListTitle;
     private HashMap<String, ArrayList<MakeListItem>> expandableListDetail;
-    private HashMap<Integer, boolean[]> mChildCheckStates = new HashMap<>();
 
     public CustomExpandableListAdapter(Context context, ArrayList<String> expandableListTitle, HashMap<String, ArrayList<MakeListItem>> expandableListDetail) {
         this.context = context;
@@ -71,17 +70,14 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
         String listTitle = (String) getGroup(listPosition);
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.list_group, null);
-            //LayoutInflater layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             groupHolder = new GroupHolder();
             groupHolder.groupTitle = convertView.findViewById(R.id.listTitle);
             convertView.setTag(groupHolder);
         } else {
             groupHolder = (GroupHolder) convertView.getTag();
         }
-        groupHolder.groupTitle.setTypeface(null, Typeface.BOLD);
         groupHolder.groupTitle.setText(listTitle);
-        //listTitleTextView.setTypeface(null, Typeface.BOLD);
-        //listTitleTextView.setText(listTitle);
+        notifyDataSetChanged();
         return convertView;
     }
 
@@ -101,35 +97,14 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
         CheckBox item_checkBox = convertView.findViewById(R.id.makeList_item_checkbox);
         TextView item_textView = convertView.findViewById(R.id.makeList_item_text);
 
-        if (mChildCheckStates.containsKey(groupPosition)) {
-            boolean[] getChecked = mChildCheckStates.get(groupPosition);
-            item_checkBox.setChecked(getChecked[childPosition]);
+        if (expandedListItem.isSelected()) {
+            item_checkBox.setChecked(true);
         } else {
-            boolean[] getChecked = new boolean[getChildrenCount(groupPosition)];
-            mChildCheckStates.put(groupPosition, getChecked);
             item_checkBox.setChecked(false);
         }
-
-        item_checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-            }
-        });
-
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (expandedListItem.isSelected()) {
-                    item_checkBox.setChecked(false);
-                    expandedListItem.setSelected(false);
-                } else {
-                    item_checkBox.setChecked(true);
-                    expandedListItem.setSelected(true);
-                }
-            }
-        });
         notifyDataSetChanged();
+
+        item_textView.setText(expandedListItem.getItemName());
 
         return convertView;
     }

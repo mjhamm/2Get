@@ -72,27 +72,23 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
 
         expandableListView.setOnGroupCollapseListener(groupPosition -> Toast.makeText(mContext, expandableListTitle.get(groupPosition) + " List Collapsed.", Toast.LENGTH_SHORT).show());
 
-        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                MakeListItem makeListItem = expandableListDetail.get(expandableListTitle.get(groupPosition)).get(childPosition);
+        expandableListView.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> {
+            MakeListItem makeListItem = expandableListDetail.get(expandableListTitle.get(groupPosition)).get(childPosition);
+            CheckBox itemCheckBox = v.findViewById(R.id.makeList_item_checkbox);
 
-                //Check
-                int index = parent.getFlatListPosition(ExpandableListView.getPackedPositionForChild(groupPosition, childPosition));
-                parent.setItemChecked(index, true);
-
-                CheckBox checkBox = v.findViewById(R.id.makeList_item_checkbox);
-                if (makeListItem.isSelected()) {
-                    checkBox.setChecked(false);
-                    makeListItem.setSelected(false);
-                } else {
-                    checkBox.setChecked(true);
-                    makeListItem.setSelected(true);
-                }
-                Toast.makeText(mContext, expandableListTitle.get(groupPosition) + "-> " + expandableListDetail.get(expandableListTitle.get(groupPosition)).get(childPosition).getItemName(), Toast.LENGTH_SHORT).show();
-                return true;
+            if (makeListItem.isSelected()) {
+                makeListItem.setSelected(false);
+                itemCheckBox.setChecked(false);
+                Toast.makeText(mContext, makeListItem.getItemName() + " is NOT Selected.", Toast.LENGTH_SHORT).show();
+            } else {
+                makeListItem.setSelected(true);
+                itemCheckBox.setChecked(true);
+                Toast.makeText(mContext, makeListItem.getItemName() + " is Selected.", Toast.LENGTH_SHORT).show();
             }
+            return true;
         });
+
+
 
         return view;
     }
@@ -101,62 +97,15 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //Expandable List View
-        expandableListView.setOnItemClickListener((parent, view1, position, id) -> {
-            CheckBox checkBox = view1.findViewById(R.id.makeList_item_checkbox);
-            checkBox.performClick();
-
-            int pos = expandableListView.getPositionForView(view1);
-            if (pos != ExpandableListView.INVALID_POSITION) {
-                MakeListItem makeItem = makeItems.get(pos);
-                if (makeItem.isSelected()) {
-                    makeItem.setSelected(false);
-                } else {
-                    makeItem.setSelected(true);
-                }
-
-                //Toast.makeText(mContext, "Clicked on Item: " + makeItem.getItemName() + ". State: is " + makeItem.isSelected(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
         addCustomItem.setOnClickListener(v -> {
-            /*final Dialog dialog = new Dialog(mContext);
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dialog.setContentView(R.layout.activity_add_custom_item);
-            dialog.setCancelable(false);
-
-            final Spinner spinner = dialog.findViewById(R.id.customItemCategory_spinner);
-            final EditText editText = dialog.findViewById(R.id.customItemName_EditText);
-            Button cancelButton = dialog.findViewById(R.id.cancelCustomItem_button);
-            Button addButton = dialog.findViewById(R.id.addCustomItem_button);
-
-            dialog.show();*/
 
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
             alertDialogBuilder.setTitle("Add a Custom Item");
+            alertDialogBuilder.setCancelable(false);
 
             LayoutInflater inflater = LayoutInflater.from(mContext);
             final View dialogView = inflater.inflate(R.layout.activity_add_custom_item, null);
-
-            final Spinner spinner = dialogView.findViewById(R.id.customItemCategory_spinner);
             final EditText editText = dialogView.findViewById(R.id.customItemName_EditText);
-            //Button cancelButton = dialogView.findViewById(R.id.cancelCustomItem_button);
-            //Button addButton = dialogView.findViewById(R.id.addCustomItem_button);
-
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mContext, R.array.category, android.R.layout.simple_spinner_item);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner.setAdapter(adapter);
-            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view12, int position, long id) {
-
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
 
             alertDialogBuilder.setView(dialogView);
 

@@ -2,11 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="wrap_content">
 
-    <View
-        android:layout_weight="1"
-        android:layout_width="0dp"
-        android:layout_height="0dp"/>
-
     <CheckBox
         android:id="@+id/makeList_item_checkbox"
         android:layout_width="wrap_content"
@@ -14,7 +9,8 @@
         android:focusable="false"
         android:scaleX="1.15"
         android:scaleY="1.15"
-        android:layout_marginStart="12dp"
+        android:clickable="false"
+        android:layout_marginStart="24dp"
         android:focusableInTouchMode="false"
         android:button="@drawable/checkbox_drawable"
         android:layout_gravity="center"
@@ -30,7 +26,7 @@
         android:text="Milk"
         android:textColor="@android:color/black"
         android:fontFamily="roboto_condensed_regular"
-        android:minHeight="?android:attr/listPreferredItemHeightSmall"
+        android:minHeight="48dp"
         android:textSize="18sp"/>
 
 </LinearLayout>
