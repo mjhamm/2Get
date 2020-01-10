@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.ExpandableListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.google.android.material.tabs.TabLayout;
@@ -74,7 +75,10 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                 clearDialog.setCancelable(false);
 
                 //Clear List - YES
-                clearDialog.setPositiveButton("Yes", (dialog, which) -> makeListActivity.clear());
+                clearDialog.setPositiveButton("Yes", (dialog, which) -> {
+
+                    makeListActivity.clear();
+                });
 
                 //Cancel Clearing List - NO
                 clearDialog.setNegativeButton("No", (dialog, which) -> dialog.cancel());

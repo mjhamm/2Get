@@ -76,12 +76,12 @@ public class ExpandableListData {
         deli.add(new MakeListItem("Turkey", false));
         //Frozen Foods
         ArrayList<MakeListItem> frozenFoods = new ArrayList<>();
-        frozenFoods.add(new MakeListItem("Pizza", false));
-        frozenFoods.add(new MakeListItem("Vegetables", false));
         frozenFoods.add(new MakeListItem("Ice Cream", false));
-        frozenFoods.add(new MakeListItem("Waffles", false));
         frozenFoods.add(new MakeListItem("Meals", false));
+        frozenFoods.add(new MakeListItem("Pizza", false));
         frozenFoods.add(new MakeListItem("Potatoes", false));
+        frozenFoods.add(new MakeListItem("Vegetables", false));
+        frozenFoods.add(new MakeListItem("Waffles", false));
         //Health & Beauty
         ArrayList<MakeListItem> toiletries = new ArrayList<>();
         toiletries.add(new MakeListItem("Bandages", false));
@@ -100,22 +100,26 @@ public class ExpandableListData {
         //Household
         ArrayList<MakeListItem> household = new ArrayList<>();
         household.add(new MakeListItem("Batteries", false));
-        household.add(new MakeListItem("Bleach", false));
-        household.add(new MakeListItem("Dishwashing Soap", false));
-        household.add(new MakeListItem("Garbage Bags", false));
-        household.add(new MakeListItem("Glass Cleaner", false));
-        household.add(new MakeListItem("Hand Soap", false));
-        household.add(new MakeListItem("Household Cleaner", false));
-        household.add(new MakeListItem("Laundry Detergent", false));
-        household.add(new MakeListItem("Laundry Softener", false));
+        household.add(new MakeListItem("Glue", false));
         household.add(new MakeListItem("Light Bulbs", false));
-        household.add(new MakeListItem("Sponges", false));
+        household.add(new MakeListItem("Tape", false));
+
         //Laundry, Paper & Cleaning
         ArrayList<MakeListItem> paperWrap = new ArrayList<>();
         paperWrap.add(new MakeListItem("Aluminum Foil", false));
+        paperWrap.add(new MakeListItem("Bleach", false));
+        paperWrap.add(new MakeListItem("Dishwashing Liquid", false));
+        paperWrap.add(new MakeListItem("Disinfectant Wipes", false));
+        paperWrap.add(new MakeListItem("Garbage Bags", false));
+        paperWrap.add(new MakeListItem("Glass Cleaner", false));
+        paperWrap.add(new MakeListItem("Hand Soap", false));
+        paperWrap.add(new MakeListItem("Household Cleaner", false));
+        paperWrap.add(new MakeListItem("Laundry Detergent", false));
+        paperWrap.add(new MakeListItem("Laundry Softener", false));
         paperWrap.add(new MakeListItem("Paper Towels", false));
         paperWrap.add(new MakeListItem("Plastic Bags", false));
         paperWrap.add(new MakeListItem("Plastic Wrap", false));
+        paperWrap.add(new MakeListItem("Sponges", false));
         paperWrap.add(new MakeListItem("Tissues", false));
         paperWrap.add(new MakeListItem("Toilet Paper", false));
         paperWrap.add(new MakeListItem("Trash Bags", false));
@@ -135,22 +139,22 @@ public class ExpandableListData {
         //Produce
         ArrayList<MakeListItem> produce = new ArrayList<>();
         produce.add(new MakeListItem("Apples", false));
+        produce.add(new MakeListItem("Avocados", false));
         produce.add(new MakeListItem("Bananas", false));
         produce.add(new MakeListItem("Berries", false));
-        produce.add(new MakeListItem("Grapes", false));
-        produce.add(new MakeListItem("Oranges", false));
-        produce.add(new MakeListItem("Melons", false));
-        produce.add(new MakeListItem("Avocados", false));
         produce.add(new MakeListItem("Broccoli", false));
         produce.add(new MakeListItem("Carrots", false));
         produce.add(new MakeListItem("Cucumber", false));
         produce.add(new MakeListItem("Garlic", false));
+        produce.add(new MakeListItem("Grapes", false));
+        produce.add(new MakeListItem("Oranges", false));
         produce.add(new MakeListItem("Lettuce", false));
+        produce.add(new MakeListItem("Melons", false));
+        produce.add(new MakeListItem("Mushrooms", false));
+        produce.add(new MakeListItem("Onions", false));
         produce.add(new MakeListItem("Peppers", false));
         produce.add(new MakeListItem("Potatoes", false));
         produce.add(new MakeListItem("Tomatoes", false));
-        produce.add(new MakeListItem("Onions", false));
-        produce.add(new MakeListItem("Mushrooms", false));
         produce.add(new MakeListItem("Zucchini", false));
         //Rice & Pasta
         ArrayList<MakeListItem> pasta = new ArrayList<>();

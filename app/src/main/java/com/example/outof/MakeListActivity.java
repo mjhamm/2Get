@@ -87,10 +87,21 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
             }
             return true;
         });
-
-
-
         return view;
+    }
+
+    public void clear() {
+        for (int i = 0; i < expandableListAdapter.getGroupCount(); i++) {
+            for (int j = 0; j < expandableListAdapter.getChildrenCount(i); j++) {
+
+                MakeListItem makeListItem = (MakeListItem) expandableListAdapter.getChild(i,j);
+                CheckBox checkBox = getView().findViewById(R.id.makeList_item_checkbox);
+                if (makeListItem.isSelected()) {
+                    makeListItem.setSelected(false);
+                    checkBox.setChecked(false);
+                }
+            }
+        }
     }
 
     @Override
@@ -162,16 +173,6 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
                 }
             }
         }
-    }
-
-    public void clear() {
-        /*if (makeItems != null) {
-            for (MakeListItem item : makeItems) {
-                item.setSelected(false);
-            }
-        } else {
-            Log.e(TAG, "Array is Empty");
-        }*/
     }
 
     @Override
