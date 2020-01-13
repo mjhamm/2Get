@@ -23,7 +23,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
+public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener, MakeListActivity.MakeListFragmentListener {
 
     private Context mContext;
     private MakeListActivity makeListActivity;
@@ -75,17 +75,13 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                 clearDialog.setCancelable(false);
 
                 //Clear List - YES
-                clearDialog.setPositiveButton("Yes", (dialog, which) -> {
-
-                    makeListActivity.clear();
-                });
+                clearDialog.setPositiveButton("Yes", (dialog, which) -> makeListActivity.clear());
 
                 //Cancel Clearing List - NO
                 clearDialog.setNegativeButton("No", (dialog, which) -> dialog.cancel());
 
                 AlertDialog alertDialog = clearDialog.create();
                 alertDialog.show();
-                //makeListActivity.clear();
                 return true;
             case R.id.share:
                 Toast.makeText(mContext, "Share List", Toast.LENGTH_SHORT).show();
@@ -106,5 +102,10 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             default:
                 return false;
         }
+    }
+
+    @Override
+    public void onSelectionASent(String selection) {
+        viewListActivity.updateList(selection);
     }
 }
