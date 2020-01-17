@@ -75,7 +75,10 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                 clearDialog.setCancelable(false);
 
                 //Clear List - YES
-                clearDialog.setPositiveButton("Yes", (dialog, which) -> makeListActivity.clear());
+                clearDialog.setPositiveButton("Yes", (dialog, which) -> {
+                    makeListActivity.clear();
+                    viewListActivity.clearList();
+                });
 
                 //Cancel Clearing List - NO
                 clearDialog.setNegativeButton("No", (dialog, which) -> dialog.cancel());
@@ -106,6 +109,13 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
     @Override
     public void onSelectionASent(String selection) {
-        viewListActivity.updateList(selection);
+        viewListActivity.addItemToList(selection);
     }
+
+    @Override
+    public void onSelectionBSent(String selection) {
+        viewListActivity.removeItemFromList(selection);
+    }
+
+
 }

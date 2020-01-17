@@ -8,19 +8,27 @@ import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+
 import java.util.ArrayList;
 
-public class ViewListAdapter extends BaseAdapter {
+public class ViewListAdapter extends ArrayAdapter<ViewListItem> {
 
     private Context context;
-    private ArrayList<ViewListItem> listItems;
-    private final DataSetObservable dataSetObservable = new DataSetObservable();
+    public ArrayList<ViewListItem> listItems;
+    public DataSetObservable dataSetObservable = new DataSetObservable();
+    private DatabaseHelper myDB;
+    private int isChecked = 0;
 
-    public ViewListAdapter(Context context, ArrayList<ViewListItem> listItems) {
-        this.context = context;
+    public ViewListAdapter(ArrayList<ViewListItem> listItems, Context context) {
+        super(context, R.layout.view_list_item, listItems);
         this.listItems = listItems;
+        this.context = context;
+        myDB = new DatabaseHelper(context);
     }
 
     @Override
@@ -29,8 +37,8 @@ public class ViewListAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
-        return position;
+    public ViewListItem getItem(int position) {
+        return listItems.get(position);
     }
 
     @Override
@@ -40,6 +48,7 @@ public class ViewListAdapter extends BaseAdapter {
 
     class ViewHolder {
         TextView item_textView;
+        boolean item_isStrikeThrough;
     }
 
     @Override
@@ -66,17 +75,31 @@ public class ViewListAdapter extends BaseAdapter {
         viewHolder.item_textView.setOnClickListener(v -> {
             if (viewListItem.getIsStrikeThrough()) {
                 viewListItem.setStrikeThrough(false);
+                myDB.updateView(viewListItem.getItemName(), viewListItem.getIsStrikeThrough());
                 viewHolder.item_textView.setPaintFlags(viewHolder.item_textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
             } else {
                 viewListItem.setStrikeThrough(true);
+                myDB.updateView(viewListItem.getItemName(), viewListItem.getIsStrikeThrough());
                 viewHolder.item_textView.setPaintFlags(viewHolder.item_textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             }
         });
 
         viewHolder.item_textView.setText(listItems.get(position).getItemName());
-        this.notifyDataSetChanged();
+        viewHolder.item_textView.setTag(position);
+        viewHolder.item_isStrikeThrough = listItems.get(position).getIsStrikeThrough();
+        notifyDataSetChanged();
 
         return convertView;
+    }
+
+    @Override
+    public void remove(@Nullable ViewListItem object) {
+        super.remove(object);
+    }
+
+    @Override
+    public int getPosition(@Nullable ViewListItem item) {
+        return super.getPosition(item);
     }
 
     private DataSetObservable getDataSetObservable() {
@@ -110,7 +133,7 @@ public class ViewListAdapter extends BaseAdapter {
 
     @Override
     public boolean hasStableIds() {
-        return false;
+        return true;
     }
 
     @Override
