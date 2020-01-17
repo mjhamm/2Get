@@ -1,37 +1,22 @@
 package com.example.outof;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.database.DataSetObserver;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -39,10 +24,8 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
 
     public static final String TAG = "LOG";
 
-    private ArrayList<MakeListItem> makeItems;
     private Context mContext;
     private ImageButton addCustomItem;
-
     private MakeListFragmentListener listener;
     private ExpandableListView expandableListView;
     private ExpandableListAdapter expandableListAdapter;
@@ -60,13 +43,13 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
 
     public interface MakeListFragmentListener {
         void onSelectionASent(String selection);
+        void onSelectionBSent(String selection);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.make_list, container,false);
-        makeItems = new ArrayList<>();
 
         mAddItemParent = view.findViewById(R.id.addItemParent);
         addCustomItem = view.findViewById(R.id.addCustomItem_button);
@@ -88,7 +71,7 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
                 makeListItem.setSelected(false);
                 itemCheckBox.setChecked(false);
                 String selection = makeListItem.getItemName();
-                listener.onSelectionASent(selection);
+                listener.onSelectionBSent(selection);
                 //Toast.makeText(mContext, makeListItem.getItemName() + " is NOT Selected.", Toast.LENGTH_SHORT).show();
             } else {
                 makeListItem.setSelected(true);

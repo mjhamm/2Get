@@ -1,6 +1,7 @@
 package com.example.outof;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +29,7 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
     private Context mContext;
     private ViewListAdapter viewListAdapter;
     private ArrayList<String> listItems;
+    private DatabaseHelper myDB;
 
     public ViewListActivity() {
 
@@ -46,21 +48,54 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
 
         mListView = view.findViewById(R.id.viewList);
         mTextView = view.findViewById(R.id.viewList_item_text);
-        viewListAdapter = new ViewListAdapter(mContext, viewItems);
+
+        myDB = new DatabaseHelper(mContext);
+        Cursor data = myDB.getListContents();
+        if (data.getCount() == 0) {
+            Toast.makeText(mContext, "Database Empty", Toast.LENGTH_SHORT).show();
+        } else {
+            while(data.moveToNext()) {
+                viewItems.add(new ViewListItem(data.getString(1), false));
+            }
+        }
+
+        viewListAdapter = new ViewListAdapter(viewItems, mContext);
         mListView.setAdapter(viewListAdapter);
 
         return view;
     }
 
-    public void updateList(String selection) {
+    public void addItemToList(String selection) {
         ViewListItem viewListItem = new ViewListItem(selection, false);
-        if (!viewItems.contains(viewListItem)) {
-            viewItems.add(viewListItem);
-            viewListAdapter.notifyDataSetChanged();
-        } else {
-            viewItems.remove(viewListItem);
-            viewListAdapter.notifyDataSetChanged();
+        viewItems.add(viewListItem);
+        AddData(selection);
+        viewListAdapter.notifyDataSetChanged();
+    }
+
+    public void removeItemFromList(String selection) {
+        ViewListItem viewListItem = new ViewListItem(selection, false);
+        for (int i = 0; i < viewItems.size(); i++) {
+            if (viewListItem.getItemName().equalsIgnoreCase(viewItems.get(i).getItemName())) {
+                viewItems.remove(i);
+                viewListAdapter.notifyDataSetChanged();
+                break;
+            }
         }
+    }
+
+    public void AddData(String newEntry) {
+        boolean insertData = myDB.addData(newEntry);
+
+        if (insertData) {
+            Toast.makeText(mContext, "Success", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(mContext, "Failed", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void clearList() {
+        viewItems.clear();
+        myDB.clearData();
         viewListAdapter.notifyDataSetChanged();
     }
 
@@ -100,5 +135,11 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
                     mTextView.setPaintFlags(mTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 }
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        myDB.close();
     }
 }
