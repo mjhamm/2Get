@@ -21,17 +21,15 @@ public class ViewListAdapter extends ArrayAdapter<ViewListItem> {
     private Context context;
     public ArrayList<ViewListItem> listItems;
     public DataSetObservable dataSetObservable = new DataSetObservable();
+    private DatabaseHelper myDB;
+    private int isChecked = 0;
 
     public ViewListAdapter(ArrayList<ViewListItem> listItems, Context context) {
         super(context, R.layout.view_list_item, listItems);
         this.listItems = listItems;
         this.context = context;
+        myDB = new DatabaseHelper(context);
     }
-
-    /*public ViewListAdapter(Context context, ArrayList<ViewListItem> listItems) {
-        this.context = context;
-        this.listItems = listItems;
-    }*/
 
     @Override
     public int getCount() {
@@ -68,8 +66,6 @@ public class ViewListAdapter extends ArrayAdapter<ViewListItem> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        ViewListItem item = getItem(position);
-
         if (viewListItem.getIsStrikeThrough()) {
             viewHolder.item_textView.setPaintFlags(viewHolder.item_textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         } else {
@@ -79,9 +75,11 @@ public class ViewListAdapter extends ArrayAdapter<ViewListItem> {
         viewHolder.item_textView.setOnClickListener(v -> {
             if (viewListItem.getIsStrikeThrough()) {
                 viewListItem.setStrikeThrough(false);
+                myDB.updateView(viewListItem.getItemName(), viewListItem.getIsStrikeThrough());
                 viewHolder.item_textView.setPaintFlags(viewHolder.item_textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
             } else {
                 viewListItem.setStrikeThrough(true);
+                myDB.updateView(viewListItem.getItemName(), viewListItem.getIsStrikeThrough());
                 viewHolder.item_textView.setPaintFlags(viewHolder.item_textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             }
         });

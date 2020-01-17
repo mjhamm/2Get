@@ -30,6 +30,8 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
     private ViewListAdapter viewListAdapter;
     private ArrayList<String> listItems;
     private DatabaseHelper myDB;
+    private int itemCheckedInt = 0;
+    private boolean itemChecked = false;
 
     public ViewListActivity() {
 
@@ -50,15 +52,19 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
         mTextView = view.findViewById(R.id.viewList_item_text);
 
         myDB = new DatabaseHelper(mContext);
-        Cursor data = myDB.getListContents();
+        Cursor data = myDB.getListContents_View();
         if (data.getCount() == 0) {
             Toast.makeText(mContext, "Database Empty", Toast.LENGTH_SHORT).show();
         } else {
             while(data.moveToNext()) {
-                viewItems.add(new ViewListItem(data.getString(1), false));
+                if (data.getInt(2) == 0) {
+                    itemChecked = false;
+                } else {
+                    itemChecked = true;
+                }
+                viewItems.add(new ViewListItem(data.getString(1), itemChecked));
             }
         }
-
         viewListAdapter = new ViewListAdapter(viewItems, mContext);
         mListView.setAdapter(viewListAdapter);
 
@@ -66,9 +72,23 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
     }
 
     public void addItemToList(String selection) {
-        ViewListItem viewListItem = new ViewListItem(selection, false);
+        itemCheckedInt = 0;
+        Cursor data = myDB.getListContents_View();
+        if (data.getCount() != 0) {
+            while(data.moveToNext()) {
+                if (data.getInt(2) == 0) {
+                    itemCheckedInt = 0;
+                } else {
+                    itemCheckedInt = 1;
+                }
+            }
+        }
+        ViewListItem viewListItem = new ViewListItem(selection, itemChecked);
+        if (!myDB.dupCheckViewTable(selection)) {
+            myDB.addDataToView(viewListItem.getItemName(), itemCheckedInt);
+        }
+        data.close();
         viewItems.add(viewListItem);
-        AddData(selection);
         viewListAdapter.notifyDataSetChanged();
     }
 
@@ -77,19 +97,10 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
         for (int i = 0; i < viewItems.size(); i++) {
             if (viewListItem.getItemName().equalsIgnoreCase(viewItems.get(i).getItemName())) {
                 viewItems.remove(i);
+                myDB.removeDataFromView(viewListItem.getItemName());
                 viewListAdapter.notifyDataSetChanged();
                 break;
             }
-        }
-    }
-
-    public void AddData(String newEntry) {
-        boolean insertData = myDB.addData(newEntry);
-
-        if (insertData) {
-            Toast.makeText(mContext, "Success", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(mContext, "Failed", Toast.LENGTH_SHORT).show();
         }
     }
 
