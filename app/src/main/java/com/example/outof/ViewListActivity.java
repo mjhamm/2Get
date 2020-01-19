@@ -65,6 +65,7 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
                 viewItems.add(new ViewListItem(data.getString(1), itemChecked));
             }
         }
+        data.close();
         viewListAdapter = new ViewListAdapter(viewItems, mContext);
         mListView.setAdapter(viewListAdapter);
 

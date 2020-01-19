@@ -6,11 +6,65 @@
     android:layout_height="match_parent"
     tools:context=".About">
 
-    <TextView
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="About"
-        android:textSize="24sp"
-        android:gravity="center"/>
+        android:background="@drawable/lined_paper_bg"
+        app:layout_constraintTop_toTopOf="parent"
+        android:adjustViewBounds="true"/>
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/about_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/actionBarSize"
+            android:background="@android:color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_keyboard_backspace_black_24dp"
+                android:background="@android:color/transparent"
+                android:onClick="close_about"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="About Us"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textSize="24sp"
+                android:textColor="@color/colorPrimaryDark"/>
+
+        </androidx.appcompat.widget.Toolbar>
+
+    <ImageView
+        android:id="@+id/about_logo"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:src="@drawable/logo_transparent"
+        app:layout_constraintTop_toBottomOf="@id/about_toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp"
+        android:contentDescription="@string/_2_get_logo" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:fontFamily="@font/roboto_condensed_regular"
+        android:gravity="center"
+        android:layout_marginTop="48dp"
+        android:lineSpacingExtra="1dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="2dp"
+        app:layout_constraintTop_toBottomOf="@id/about_logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/about_us_text"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

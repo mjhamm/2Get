@@ -8,6 +8,8 @@
     <string name="add_custom_item">Add Custom Item</string>
     <string name="print_list">Print List</string>
     <string name="_2_get_logo">2 Get Logo</string>
+    <string name="about_us_text">Here at 2Get, we are helping to create an easy experience for keeping
+        track of the most common items that you might need throughout your week.</string>
 
     <string-array name="category">
         <item>Baby &amp; Childcare</item>

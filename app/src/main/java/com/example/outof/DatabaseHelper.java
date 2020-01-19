@@ -23,22 +23,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //Common Columns
     private static final String KEY_ID = "id";
-    private static final String KEY_ITEM = "item";
+    private static final String KEY_ITEM = "name";
     private static final String KEY_CHECKED = "checked";
-
-    public SQLiteDatabase database;
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, LIST_DATABASE_NAME, null, DB_VERSION);
     }
 
     //Create View List Table
-    private static final String CREATE_TABLE_VIEW = "CREATE TABLE " + TABLE_VIEW + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_ITEM +
-            "TEXT," + KEY_CHECKED + " INTEGER)";
+    private static final String CREATE_TABLE_VIEW = "CREATE TABLE " + TABLE_VIEW + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + KEY_ITEM +
+            " TEXT, " + KEY_CHECKED + " INTEGER)";
 
     //Create Make List Table
-    private static final String CREATE_TABLE_MAKE = "CREATE TABLE " + TABLE_MAKE + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_ITEM +
-            "TEXT," + KEY_CHECKED + " INTEGER)";
+    private static final String CREATE_TABLE_MAKE = "CREATE TABLE " + TABLE_MAKE + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + KEY_ITEM +
+            " TEXT, " + KEY_CHECKED + " INTEGER)";
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -58,7 +56,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_ITEM, name);
         contentValues.put(KEY_CHECKED, checked);
-        db.update(TABLE_VIEW, contentValues,KEY_ITEM + "=?", new String[]{name});
+        db.update(TABLE_VIEW, contentValues,KEY_ITEM + " =?", new String[]{name});
     }
 
     //Update Make List Table if row exists
@@ -122,7 +120,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean dupCheckViewTable(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cur;
-        cur = db.query(TABLE_VIEW, null, KEY_ITEM + "=?"/* AND " + KEY_CHECKED + "=?"*/, new String[]{name}, null, null, null, null);
+        cur = db.query(TABLE_VIEW, null, KEY_ITEM + " =?"/* AND " + KEY_CHECKED + "=?"*/, new String[]{name}, null, null, null, null);
         if (cur != null && cur.getCount() > 0) {
             cur.close();
             return true;

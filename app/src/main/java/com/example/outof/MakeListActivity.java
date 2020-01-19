@@ -123,7 +123,7 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
 
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
             alertDialogBuilder.setTitle("Add a Custom Item");
-            alertDialogBuilder.setCancelable(false);
+            alertDialogBuilder.setCancelable(true);
 
             LayoutInflater inflater = LayoutInflater.from(mContext);
             final View dialogView = inflater.inflate(R.layout.activity_add_custom_item, mAddItemParent);
@@ -143,7 +143,7 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
                 }
             });
 
-            alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+            //alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
             AlertDialog alertDialog = alertDialogBuilder.create();
             alertDialog.show();

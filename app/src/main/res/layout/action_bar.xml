@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
-    app:contentInsetStart="0dp"
-    app:contentInsetEnd="0dp">
+    android:background="@android:color/white"
+    android:layout_height="?attr/actionBarSize">
 
-    <include layout="@layout/more_options"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        <include layout="@layout/more_options"
+            android:layout_width="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"/>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="?attr/actionBarSize"
-        android:contentDescription="@string/_2_get_logo"
-        android:src="@drawable/logo_transparent"
-        android:adjustViewBounds="true"
-        android:layout_gravity="center_horizontal"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="?attr/actionBarSize"
+            android:padding="4dp"
+            android:contentDescription="@string/_2_get_logo"
+            android:src="@drawable/logo_transparent"
+            android:adjustViewBounds="true"
+            android:layout_gravity="center"/>
 
 </androidx.appcompat.widget.Toolbar>
