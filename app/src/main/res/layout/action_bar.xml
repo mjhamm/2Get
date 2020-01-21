@@ -18,7 +18,7 @@
             android:layout_height="?attr/actionBarSize"
             android:padding="4dp"
             android:contentDescription="@string/_2_get_logo"
-            android:src="@drawable/logo_transparent"
+            android:src="@drawable/get_logo_full"
             android:adjustViewBounds="true"
             android:layout_gravity="center"/>
 

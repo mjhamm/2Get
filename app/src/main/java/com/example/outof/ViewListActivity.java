@@ -54,7 +54,7 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
         myDB = new DatabaseHelper(mContext);
         Cursor data = myDB.getListContents_View();
         if (data.getCount() == 0) {
-            Toast.makeText(mContext, "Database Empty", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "Database Empty for view Items");
         } else {
             while(data.moveToNext()) {
                 if (data.getInt(2) == 0) {
@@ -78,9 +78,9 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
         if (data.getCount() != 0) {
             while(data.moveToNext()) {
                 if (data.getInt(2) == 0) {
-                    itemCheckedInt = 0;
+                    itemChecked = false;
                 } else {
-                    itemCheckedInt = 1;
+                    itemChecked = true;
                 }
             }
         }

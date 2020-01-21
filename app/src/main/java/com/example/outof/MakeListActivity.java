@@ -1,6 +1,7 @@
 package com.example.outof;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,11 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
     private ArrayList<String> expandableListTitle;
     private HashMap<String, ArrayList<MakeListItem>> expandableListDetail;
     private ConstraintLayout mAddItemParent;
+    private DatabaseHelper myDB;
+    private int groupExpandedInt = 0;
+    private boolean groupExpanded = false;
+    private int itemCheckedInt = 0;
+    private boolean itemChecked = false;
 
     public MakeListActivity() {
 
@@ -59,9 +65,36 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         expandableListAdapter = new CustomExpandableListAdapter(mContext, expandableListTitle, expandableListDetail);
         expandableListView.setAdapter(expandableListAdapter);
 
-        expandableListView.setOnGroupExpandListener(groupPosition -> Toast.makeText(mContext, expandableListTitle.get(groupPosition) + " List Expanded.", Toast.LENGTH_SHORT).show());
+        myDB = new DatabaseHelper(mContext);
+        Cursor groupData = myDB.getListContents_Group();
 
-        expandableListView.setOnGroupCollapseListener(groupPosition -> Toast.makeText(mContext, expandableListTitle.get(groupPosition) + " List Collapsed.", Toast.LENGTH_SHORT).show());
+        if (groupData.getCount() == 0) {
+            Toast.makeText(mContext, "Database Empty", Toast.LENGTH_SHORT).show();
+        } else {
+            while(groupData.moveToNext()) {
+                if (groupData.getInt(2) == 0) {
+                    groupExpanded = false;
+                } else {
+                    groupExpanded = true;
+                }
+                if (groupExpanded) {
+                    expandableListView.expandGroup(groupData.getInt(1));
+                }
+            }
+        }
+        groupData.close();
+
+        expandableListView.setOnGroupExpandListener(groupPosition -> {
+            //Toast.makeText(mContext, expandableListTitle.get(groupPosition) + " List Expanded.", Toast.LENGTH_SHORT).show();
+            groupExpandedInt = 1;
+            myDB.addDataToGroup(expandableListTitle.get(groupPosition), groupExpandedInt);
+        });
+
+        expandableListView.setOnGroupCollapseListener(groupPosition -> {
+            groupExpandedInt = 0;
+            //Toast.makeText(mContext, expandableListTitle.get(groupPosition) + " List Collapsed.", Toast.LENGTH_SHORT).show();
+            myDB.addDataToGroup(expandableListTitle.get(groupPosition), groupExpandedInt);
+        });
 
         expandableListView.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> {
             MakeListItem makeListItem = expandableListDetail.get(expandableListTitle.get(groupPosition)).get(childPosition);
@@ -72,13 +105,11 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
                 itemCheckBox.setChecked(false);
                 String selection = makeListItem.getItemName();
                 listener.onSelectionBSent(selection);
-                //Toast.makeText(mContext, makeListItem.getItemName() + " is NOT Selected.", Toast.LENGTH_SHORT).show();
             } else {
                 makeListItem.setSelected(true);
                 itemCheckBox.setChecked(true);
                 String selection = makeListItem.getItemName();
                 listener.onSelectionASent(selection);
-                //Toast.makeText(mContext, makeListItem.getItemName() + " is Selected.", Toast.LENGTH_SHORT).show();
             }
             return true;
         });
@@ -111,6 +142,14 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
                     makeListItem.setSelected(false);
                     checkBox.setChecked(false);
                 }
+            }
+        }
+    }
+
+    public void setCheckedOnCreate() {
+        for (int i = 0; i < expandableListAdapter.getGroupCount(); i++) {
+            for (int j = 0; j < expandableListAdapter.getChildrenCount(i); j++) {
+
             }
         }
     }

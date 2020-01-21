@@ -44,27 +44,75 @@
         android:id="@+id/about_logo"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
-        android:src="@drawable/logo_transparent"
+        android:src="@drawable/get_logo_full"
         app:layout_constraintTop_toBottomOf="@id/about_toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="32dp"
         android:contentDescription="@string/_2_get_logo" />
 
-    <TextView
-        android:layout_width="match_parent"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"
-        android:fontFamily="@font/roboto_condensed_regular"
-        android:gravity="center"
-        android:layout_marginTop="48dp"
-        android:lineSpacingExtra="1dp"
-        android:layout_marginStart="2dp"
-        android:layout_marginEnd="2dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.72"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/about_logo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="@string/about_us_text"/>
+        app:layout_constraintBottom_toTopOf="@+id/guide"
+        android:background="@android:color/transparent"
+        android:gravity="center"
+        android:layout_marginTop="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="10dp"
+            app:cardBackgroundColor="@android:color/darker_gray"
+            android:alpha="0.9">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:fontFamily="@font/roboto_condensed_regular"
+                android:text="@string/about_us_text"/>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/version_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Version: "
+        android:textColor="@android:color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="4dp"/>
+
+    <TextView
+        android:id="@+id/version_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/version_1"
+        android:text="@string/version"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="4dp"
+        android:layout_marginStart="8dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
