@@ -13,7 +13,6 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".AddCustomItem"/>
         <activity android:name=".About" />
-        <activity android:name=".Help" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

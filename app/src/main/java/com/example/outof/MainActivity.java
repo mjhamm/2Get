@@ -92,11 +92,6 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             case R.id.print:
                 Toast.makeText(mContext, "Print List", Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.help:
-                Toast.makeText(mContext, "Help", Toast.LENGTH_SHORT).show();
-                Intent helpIntent = new Intent(MainActivity.this, Help.class);
-                startActivity(helpIntent);
-                return true;
             case R.id.about:
                 Toast.makeText(mContext, "About", Toast.LENGTH_SHORT).show();
                 Intent aboutIntent = new Intent(MainActivity.this, About.class);

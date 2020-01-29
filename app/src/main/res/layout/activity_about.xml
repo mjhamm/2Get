@@ -6,13 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".About">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/lined_paper_bg"
-        app:layout_constraintTop_toTopOf="parent"
-        android:adjustViewBounds="true"/>
-
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/about_toolbar"
             android:layout_width="match_parent"
@@ -35,6 +28,7 @@
                 android:text="About Us"
                 android:gravity="center"
                 android:layout_gravity="center"
+                android:fontFamily="@font/roboto_medium"
                 android:textSize="24sp"
                 android:textColor="@color/colorPrimaryDark"/>
 
@@ -50,49 +44,83 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="32dp"
         android:contentDescription="@string/_2_get_logo" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guide"
+    
+    <TextView
+        android:id="@+id/legal_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.72"/>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:text="Legal"
         app:layout_constraintTop_toBottomOf="@id/about_logo"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="24dp"
         app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/colorPrimary"
+        android:fontFamily="@font/roboto_medium"
+        android:textSize="16sp"/>
+    
+    <Button
+        android:id="@+id/privacy_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/legal_main"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/guide"
-        android:background="@android:color/transparent"
-        android:gravity="center"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp">
+        android:gravity="start|center_vertical"
+        android:fontFamily="@font/roboto_condensed_regular"
+        android:backgroundTint="@color/accentGreen"
+        android:textColor="@android:color/white"
+        android:text="Privacy Statement"
+        android:textAllCaps="false"/>
 
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="10dp"
-            app:cardBackgroundColor="@android:color/darker_gray"
-            android:alpha="0.9">
+    <Button
+        android:id="@+id/tou_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/privacy_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:gravity="start|center_vertical"
+        android:fontFamily="@font/roboto_condensed_regular"
+        android:backgroundTint="@color/accentGreen"
+        android:textColor="@android:color/white"
+        android:text="Terms of Use"
+        android:textAllCaps="false"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:gravity="center"
-                android:textSize="16sp"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
-                android:fontFamily="@font/roboto_condensed_regular"
-                android:text="@string/about_us_text"/>
+    <Button
+        android:id="@+id/licenses_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tou_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:gravity="start|center_vertical"
+        android:fontFamily="@font/roboto_condensed_regular"
+        android:backgroundTint="@color/accentGreen"
+        android:textColor="@android:color/white"
+        android:text="Licenses"
+        android:textAllCaps="false"/>
 
-        </com.google.android.material.card.MaterialCardView>
-
-    </ScrollView>
-
+    <TextView
+        android:id="@+id/about_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="About This App"
+        app:layout_constraintTop_toBottomOf="@id/licenses_button"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/colorPrimary"
+        android:fontFamily="@font/roboto_medium"
+        android:textSize="16sp"/>
     <TextView
         android:id="@+id/version_1"
         android:layout_width="wrap_content"

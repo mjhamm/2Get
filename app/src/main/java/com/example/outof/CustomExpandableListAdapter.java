@@ -31,11 +31,13 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
     private ArrayList<String> expandableListTitle;
     private HashMap<String, ArrayList<MakeListItem>> expandableListDetail;
     private final DataSetObservable dataSetObservable = new DataSetObservable();
+    private DatabaseHelper myDb;
 
     public CustomExpandableListAdapter(Context context, ArrayList<String> expandableListTitle, HashMap<String, ArrayList<MakeListItem>> expandableListDetail) {
         this.context = context;
         this.expandableListTitle = expandableListTitle;
         this.expandableListDetail = expandableListDetail;
+        myDb = new DatabaseHelper(context);
     }
 
     @Override
@@ -67,6 +69,21 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public long getChildId(int listPosition, int expandedListPosition) {
         return expandedListPosition;
+    }
+
+    @Override
+    public boolean areAllItemsEnabled() {
+        return true;
+    }
+
+    @Override
+    public void onGroupExpanded(int groupPosition) {
+        //myDb.addDataToGroup(expandableListTitle.get(groupPosition), 1);
+    }
+
+    @Override
+    public void onGroupCollapsed(int groupPosition) {
+        //myDb.addDataToGroup(expandableListTitle.get(groupPosition), 0);
     }
 
     @Override
@@ -114,7 +131,9 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
         }
         this.notifyDataSetChanged();
 
-        item_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> notifyDataSetChanged());
+        item_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            notifyDataSetChanged();
+        });
 
         item_textView.setText(expandedListItem.getItemName());
 
@@ -152,5 +171,10 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
 
     class GroupHolder {
         TextView groupTitle;
+    }
+
+    class ChildHolder {
+        TextView childTitle;
+        CheckBox itemCheckBox;
     }
 }
