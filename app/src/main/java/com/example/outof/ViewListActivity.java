@@ -51,7 +51,7 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
         mListView = view.findViewById(R.id.viewList);
         mTextView = view.findViewById(R.id.viewList_item_text);
 
-        myDB = new DatabaseHelper(mContext);
+        myDB = DatabaseHelper.getInstance(mContext);
         Cursor data = myDB.getListContents_View();
         if (data.getCount() == 0) {
             Log.e(TAG, "Database Empty for view Items");
@@ -107,7 +107,6 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
 
     public void clearList() {
         viewItems.clear();
-        myDB.clearData();
         viewListAdapter.notifyDataSetChanged();
     }
 

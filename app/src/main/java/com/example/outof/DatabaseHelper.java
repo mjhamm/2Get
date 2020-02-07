@@ -5,12 +5,17 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
+    public static final String TAG = "LOG";
+
+    private static DatabaseHelper sInstance;
     //Database Version
     private static final int DB_VERSION = 1;
 
@@ -19,7 +24,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //Table Names
     private static final String TABLE_VIEW = "viewList";
-
     private static final String TABLE_GROUP = "groupList";
     private static final String TABLE_CHILDREN = "childrenList";
 
@@ -30,7 +34,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_GROUP_NAME = "groupName";
     private static final String KEY_GROUP_EXPANDED = "expanded";
 
-    public DatabaseHelper(@Nullable Context context) {
+    public static synchronized DatabaseHelper getInstance(Context context) {
+        if (sInstance == null) {
+            sInstance = new DatabaseHelper(context.getApplicationContext());
+        }
+        return sInstance;
+    }
+
+    private DatabaseHelper(@Nullable Context context) {
         super(context, LIST_DATABASE_NAME, null, DB_VERSION);
     }
 
@@ -55,12 +66,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_VIEW);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_GROUP);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CHILDREN);
     }
 
     //Deletes all data from both Tables
     public void clearData() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_VIEW);
+        db.execSQL("DELETE FROM " + TABLE_GROUP);
+        db.execSQL("DELETE FROM " + TABLE_CHILDREN);
     }
 
     //------------------------------ VIEW TABLE -------------------------------------------------------------------------------------------
@@ -72,6 +87,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(KEY_ITEM, name);
         contentValues.put(KEY_CHECKED, checked);
         db.update(TABLE_VIEW, contentValues,KEY_ITEM + " =?", new String[]{name});
+        db.close();
     }
 
     //Add data to View List Table
@@ -98,7 +114,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean dupCheckViewTable(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cur;
-        cur = db.query(TABLE_VIEW, null, KEY_ITEM + " =?"/* AND " + KEY_CHECKED + "=?"*/, new String[]{name}, null, null, null, null);
+        cur = db.query(TABLE_VIEW, null, KEY_ITEM + " =?", new String[]{name}, null, null, null, null);
         if (cur != null && cur.getCount() > 0) {
             cur.close();
             return true;
@@ -115,6 +131,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //------------------------------ GROUP TABLE -------------------------------------------------------------------------------------------
 
+    public void addGroup(String groupName, int expanded) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_GROUP_NAME, groupName);
+        contentValues.put(KEY_GROUP_EXPANDED, expanded);
+        db.insert(TABLE_GROUP, null,contentValues);
+        db.close();
+    }
+
+    public void updateGroup(String groupName, int expanded) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_GROUP_EXPANDED, expanded);
+        db.update(TABLE_GROUP, contentValues, KEY_GROUP_NAME + " = ?", new String[]{groupName});
+        //Log.e(TAG, "SQL STATEMENT: " + db.update(TABLE_GROUP, contentValues, KEY_GROUP_NAME + " = ?", new String[]{String.valueOf(groupName)}));
+        db.close();
+    }
+
     public Cursor getListContents_Group() {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM " + TABLE_GROUP,null);
@@ -129,8 +163,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(KEY_ITEM, childName);
         contentValues.put(KEY_CHECKED, childChecked);
         db.insert(TABLE_CHILDREN,null, contentValues);
+        db.close();
     }
 
+    public void updateChild(String name, int checked) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_CHECKED, checked);
+        db.update(TABLE_CHILDREN, contentValues,KEY_ITEM + " = ?", new String[]{name});
+        Log.e(TAG, "SQL STATEMENT: " + db.update(TABLE_CHILDREN, contentValues, KEY_ITEM + " = ?", new String[]{String.valueOf(name)}));
+        db.close();
+    }
 
     public Cursor getChildren(String groupName) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -141,5 +184,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getListContents_Children() {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM " + TABLE_CHILDREN, null);
+    }
+
+    public boolean removeDataFromChildren(String itemName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(TABLE_CHILDREN, KEY_ITEM + "=?", new String[]{String.valueOf(itemName)}) > 0;
     }
 }

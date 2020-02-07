@@ -37,10 +37,7 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
     private HashMap<String, ArrayList<MakeListItem>> expandableListDetail;
     private ConstraintLayout mAddItemParent;
     private DatabaseHelper myDB;
-    private int groupExpandedInt = 0;
-    private boolean groupExpanded = false;
-    private int itemCheckedInt = 0;
-    private boolean itemChecked = false;
+    private CheckBox itemCheckBox;
 
     public MakeListActivity() {
 
@@ -60,60 +57,70 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.make_list, container,false);
 
+        final LayoutInflater layoutView = getLayoutInflater();
+        final View itemView = layoutView.inflate(R.layout.make_list_item, null);
+
         mAddItemParent = view.findViewById(R.id.addItemParent);
         addCustomItem = view.findViewById(R.id.addCustomItem_button);
         expandableListView = view.findViewById(R.id.makeList);
         expandableListDetail = getData();
         expandableListTitle = new ArrayList<>(expandableListDetail.keySet());
         expandableListAdapter = new CustomExpandableListAdapter(mContext, expandableListTitle, expandableListDetail);
+        expandableListView.setAdapter(expandableListAdapter);
+        myDB = DatabaseHelper.getInstance(mContext);
 
-        myDB = new DatabaseHelper(mContext);
-
+        Cursor groupData = myDB.getListContents_Group();
         Cursor childData = myDB.getListContents_Children();
-        if (childData.getCount() == 0) {
+        int groupCount = 0;
+
+        //EXPANDING OF GROUPS
+        if (groupData.getCount() == 0) {
             addDataToDb_Group();
             addDataToDb_Children();
         } else {
-            for (int i = 0; i < expandableListAdapter.getGroupCount(); i++) {
-
-            }
-        }
-
-        /*for (int k = 0; k < expandableListAdapter.getGroupCount(); k++) {
-            Cursor childData = myDB.getListContents_Children(expandableListTitle.get(k));
-            if (childData.getCount() == 0) {
-                Toast.makeText(mContext, "Database Empty", Toast.LENGTH_SHORT).show();
-                break;
-            } else {
-                while(childData.moveToNext()) {
-                    if (childData.getInt(2) == 0) {
-                        itemChecked = false;
-                    } else {
-                        itemChecked = true;
-                    }
-                    for (int j = 0; j < expandableListAdapter.getChildrenCount(k); j++) {
-                        MakeListItem makeListItem = (MakeListItem) expandableListAdapter.getChild(k,j);
-                        CheckBox checkBox = view.findViewById(R.id.makeList_item_checkbox);
-                        if (itemChecked) {
-                            makeListItem.setSelected(true);
-                            checkBox.setChecked(true);
-                        }
+            while(groupData.moveToNext()) { /* Beginning of Moving through group */
+                if (groupCount == expandableListAdapter.getGroupCount()) {
+                    break;
+                } else {
+                    if (groupData.getInt(2) != 0) {
+                        expandableListView.expandGroup(groupData.getPosition());
                     }
                 }
-            }
-            childData.close();
-        }*/
+                groupCount++;
+            } /* End of Moving through group */
+            groupData.close();
+        }
 
-        expandableListView.setAdapter(expandableListAdapter);
+        //CHECK CHILDREN
+        int count = 0;
+        for (int i = 0; i < expandableListAdapter.getGroupCount(); i++) {
+            int childCount = 0;
+            while(childData.moveToNext()) {
+                if (childCount + 1 == expandableListAdapter.getChildrenCount(i)) {
+                    break;
+                } else {
+                    MakeListItem makeListItem = (MakeListItem) expandableListAdapter.getChild(count, childCount);
+                    itemCheckBox = itemView.findViewById(R.id.makeList_item_checkbox);
+                    if (childData.getInt(2) != 0) {
+                        makeListItem.setSelected(true);
+                        itemCheckBox.setChecked(true);
+                    } else {
+                        makeListItem.setSelected(false);
+                        itemCheckBox.setChecked(false);
+                    }
+                }
+                childCount++;
+            }
+            count++;
+        }
+        childData.close();
 
         expandableListView.setOnGroupExpandListener(groupPosition -> {
-            Toast.makeText(mContext, expandableListTitle.get(groupPosition) + " List Expanded.", Toast.LENGTH_SHORT).show();
-            groupExpandedInt = 1;
+            myDB.updateGroup(expandableListTitle.get(groupPosition), 1);
         });
 
         expandableListView.setOnGroupCollapseListener(groupPosition -> {
-            groupExpandedInt = 0;
-            Toast.makeText(mContext, expandableListTitle.get(groupPosition) + " List Collapsed.", Toast.LENGTH_SHORT).show();
+            myDB.updateGroup(expandableListTitle.get(groupPosition), 0);
         });
 
         expandableListView.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> {
@@ -121,19 +128,17 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
             CheckBox itemCheckBox = v.findViewById(R.id.makeList_item_checkbox);
 
             if (makeListItem.isSelected()) {
-                itemCheckedInt = 0;
                 makeListItem.setSelected(false);
                 itemCheckBox.setChecked(false);
                 String selection = makeListItem.getItemName();
+                myDB.updateChild(selection, 0);
                 listener.onSelectionBSent(selection);
-                Log.e(TAG, selection);
             } else {
-                itemCheckedInt = 1;
                 makeListItem.setSelected(true);
                 itemCheckBox.setChecked(true);
                 String selection = makeListItem.getItemName();
+                myDB.updateChild(selection, 1);
                 listener.onSelectionASent(selection);
-                Log.e(TAG, selection);
             }
             return true;
         });
@@ -237,8 +242,29 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
 
     }
 
-    private void addDataToDb_Group() {
+    public void addDataToDb_Group() {
         //Add all Groups to Database
+        myDB.addGroup("Baby & Childcare",0);
+        myDB.addGroup("Baking",0);
+        myDB.addGroup("Beverages",0);
+        myDB.addGroup("Bread",0);
+        myDB.addGroup("Breakfast & Cereal",0);
+        myDB.addGroup("Canned Goods",0);
+        myDB.addGroup("Condiments",0);
+        myDB.addGroup("Dairy",0);
+        myDB.addGroup("Deli",0);
+        myDB.addGroup("Frozen Foods",0);
+        myDB.addGroup("Health & Beauty",0);
+        myDB.addGroup("Household",0);
+        myDB.addGroup("Laundry, Paper & Cleaning",0);
+        myDB.addGroup("Meat & Fish",0);
+        myDB.addGroup("Pet Items",0);
+        myDB.addGroup("Produce",0);
+        myDB.addGroup("Rice & Pasta",0);
+        myDB.addGroup("Sauces & Oils",0);
+        myDB.addGroup("Snacks",0);
+        myDB.addGroup("Spices",0);
+        myDB.addGroup("Vegetarian",0);
     }
 
     public void addDataToDb_Children() {
@@ -439,195 +465,195 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         LinkedHashMap<String, ArrayList<MakeListItem>> expandableListDetail = new LinkedHashMap<>();
         //Baby & Childcare
         ArrayList<MakeListItem> baby = new ArrayList<>();
-        baby.add(new MakeListItem("Baby Food", itemChecked));
-        baby.add(new MakeListItem("Diapers", itemChecked));
-        baby.add(new MakeListItem("Formula", itemChecked));
-        baby.add(new MakeListItem("Wipes", itemChecked));
+        baby.add(new MakeListItem("Baby Food", false));
+        baby.add(new MakeListItem("Diapers", false));
+        baby.add(new MakeListItem("Formula", false));
+        baby.add(new MakeListItem("Wipes", false));
         //Baking
         ArrayList<MakeListItem> baking = new ArrayList<>();
-        baking.add(new MakeListItem("Flour", itemChecked));
-        baking.add(new MakeListItem("Pancake Mix", itemChecked));
-        baking.add(new MakeListItem("Sugar", itemChecked));
-        baking.add(new MakeListItem("Vanilla", itemChecked));
-        baking.add(new MakeListItem("Yeast", itemChecked));
+        baking.add(new MakeListItem("Flour", false));
+        baking.add(new MakeListItem("Pancake Mix", false));
+        baking.add(new MakeListItem("Sugar", false));
+        baking.add(new MakeListItem("Vanilla", false));
+        baking.add(new MakeListItem("Yeast", false));
         //Beverages
         ArrayList<MakeListItem> beverages = new ArrayList<>();
-        beverages.add(new MakeListItem("Coffee", itemChecked));
-        beverages.add(new MakeListItem("Juice", itemChecked));
-        beverages.add(new MakeListItem("Soda", itemChecked));
-        beverages.add(new MakeListItem("Tea", itemChecked));
-        beverages.add(new MakeListItem("Water", itemChecked));
+        beverages.add(new MakeListItem("Coffee", false));
+        beverages.add(new MakeListItem("Juice", false));
+        beverages.add(new MakeListItem("Soda", false));
+        beverages.add(new MakeListItem("Tea", false));
+        beverages.add(new MakeListItem("Water", false));
         //Bread
         ArrayList<MakeListItem> bread = new ArrayList<>();
-        bread.add(new MakeListItem("Bagels", itemChecked));
-        bread.add(new MakeListItem("Bulky Rolls", itemChecked));
-        bread.add(new MakeListItem("Muffins", itemChecked));
-        bread.add(new MakeListItem("Pitas", itemChecked));
-        bread.add(new MakeListItem("Sandwich", itemChecked));
-        bread.add(new MakeListItem("Tortilla", itemChecked));
+        bread.add(new MakeListItem("Bagels", false));
+        bread.add(new MakeListItem("Bulky Rolls", false));
+        bread.add(new MakeListItem("Muffins", false));
+        bread.add(new MakeListItem("Pitas", false));
+        bread.add(new MakeListItem("Sandwich", false));
+        bread.add(new MakeListItem("Tortilla", false));
         //Breakfast & Cereal
         ArrayList<MakeListItem> breakfast = new ArrayList<>();
-        breakfast.add(new MakeListItem("Breakfast Bars", itemChecked));
-        breakfast.add(new MakeListItem("Cold Cereal", itemChecked));
-        breakfast.add(new MakeListItem("Granola", itemChecked));
-        breakfast.add(new MakeListItem("Hot Cereal", itemChecked));
-        breakfast.add(new MakeListItem("Oatmeal", itemChecked));
+        breakfast.add(new MakeListItem("Breakfast Bars", false));
+        breakfast.add(new MakeListItem("Cold Cereal", false));
+        breakfast.add(new MakeListItem("Granola", false));
+        breakfast.add(new MakeListItem("Hot Cereal", false));
+        breakfast.add(new MakeListItem("Oatmeal", false));
         //Canned Goods
         ArrayList<MakeListItem> cannedGoods = new ArrayList<>();
-        cannedGoods.add(new MakeListItem("Fruit", itemChecked));
-        cannedGoods.add(new MakeListItem("Pumpkin", itemChecked));
-        cannedGoods.add(new MakeListItem("Soup", itemChecked));
-        cannedGoods.add(new MakeListItem("Tomato Sauce", itemChecked));
-        cannedGoods.add(new MakeListItem("Tuna", itemChecked));
-        cannedGoods.add(new MakeListItem("Vegetables", itemChecked));
+        cannedGoods.add(new MakeListItem("Fruit", false));
+        cannedGoods.add(new MakeListItem("Pumpkin", false));
+        cannedGoods.add(new MakeListItem("Soup", false));
+        cannedGoods.add(new MakeListItem("Tomato Sauce", false));
+        cannedGoods.add(new MakeListItem("Tuna", false));
+        cannedGoods.add(new MakeListItem("Vegetables", false));
         //Condiments
         ArrayList<MakeListItem> condiments = new ArrayList<>();
-        condiments.add(new MakeListItem("Jelly", itemChecked));
-        condiments.add(new MakeListItem("Ketchup", itemChecked));
-        condiments.add(new MakeListItem("Mayonnaise", itemChecked));
-        condiments.add(new MakeListItem("Mustard", itemChecked));
-        condiments.add(new MakeListItem("Peanut Butter", itemChecked));
-        condiments.add(new MakeListItem("Pickles", itemChecked));
-        condiments.add(new MakeListItem("Relish", itemChecked));
+        condiments.add(new MakeListItem("Jelly", false));
+        condiments.add(new MakeListItem("Ketchup", false));
+        condiments.add(new MakeListItem("Mayonnaise", false));
+        condiments.add(new MakeListItem("Mustard", false));
+        condiments.add(new MakeListItem("Peanut Butter", false));
+        condiments.add(new MakeListItem("Pickles", false));
+        condiments.add(new MakeListItem("Relish", false));
         //Dairy
         ArrayList<MakeListItem> dairy = new ArrayList<>();
-        dairy.add(new MakeListItem("Butter", itemChecked));
-        dairy.add(new MakeListItem("Cheese", itemChecked));
-        dairy.add(new MakeListItem("Milk", itemChecked));
-        dairy.add(new MakeListItem("Sour Cream", itemChecked));
-        dairy.add(new MakeListItem("Yogurt", itemChecked));
+        dairy.add(new MakeListItem("Butter", false));
+        dairy.add(new MakeListItem("Cheese", false));
+        dairy.add(new MakeListItem("Milk", false));
+        dairy.add(new MakeListItem("Sour Cream", false));
+        dairy.add(new MakeListItem("Yogurt", false));
         //Deli
         ArrayList<MakeListItem> deli = new ArrayList<>();
-        deli.add(new MakeListItem("Cheese", itemChecked));
-        deli.add(new MakeListItem("Ham", itemChecked));
-        deli.add(new MakeListItem("Roast Beef", itemChecked));
-        deli.add(new MakeListItem("Salad", itemChecked));
-        deli.add(new MakeListItem("Turkey", itemChecked));
+        deli.add(new MakeListItem("Cheese", false));
+        deli.add(new MakeListItem("Ham", false));
+        deli.add(new MakeListItem("Roast Beef", false));
+        deli.add(new MakeListItem("Salad", false));
+        deli.add(new MakeListItem("Turkey", false));
         //Frozen Foods
         ArrayList<MakeListItem> frozenFoods = new ArrayList<>();
-        frozenFoods.add(new MakeListItem("Ice Cream", itemChecked));
-        frozenFoods.add(new MakeListItem("Meals", itemChecked));
-        frozenFoods.add(new MakeListItem("Pizza", itemChecked));
-        frozenFoods.add(new MakeListItem("Potatoes", itemChecked));
-        frozenFoods.add(new MakeListItem("Vegetables", itemChecked));
-        frozenFoods.add(new MakeListItem("Waffles", itemChecked));
+        frozenFoods.add(new MakeListItem("Ice Cream", false));
+        frozenFoods.add(new MakeListItem("Meals", false));
+        frozenFoods.add(new MakeListItem("Pizza", false));
+        frozenFoods.add(new MakeListItem("Potatoes", false));
+        frozenFoods.add(new MakeListItem("Vegetables", false));
+        frozenFoods.add(new MakeListItem("Waffles", false));
         //Health & Beauty
         ArrayList<MakeListItem> toiletries = new ArrayList<>();
-        toiletries.add(new MakeListItem("Bandages", itemChecked));
-        toiletries.add(new MakeListItem("Cold Medicine", itemChecked));
-        toiletries.add(new MakeListItem("Conditioner", itemChecked));
-        toiletries.add(new MakeListItem("Deodorant", itemChecked));
-        toiletries.add(new MakeListItem("Floss", itemChecked));
-        toiletries.add(new MakeListItem("Lotion", itemChecked));
-        toiletries.add(new MakeListItem("Pain Relievers", itemChecked));
-        toiletries.add(new MakeListItem("Razors", itemChecked));
-        toiletries.add(new MakeListItem("Shampoo", itemChecked));
-        toiletries.add(new MakeListItem("Shaving Cream", itemChecked));
-        toiletries.add(new MakeListItem("Soap", itemChecked));
-        toiletries.add(new MakeListItem("Toothpaste", itemChecked));
-        toiletries.add(new MakeListItem("Vitamins", itemChecked));
+        toiletries.add(new MakeListItem("Bandages", false));
+        toiletries.add(new MakeListItem("Cold Medicine", false));
+        toiletries.add(new MakeListItem("Conditioner", false));
+        toiletries.add(new MakeListItem("Deodorant", false));
+        toiletries.add(new MakeListItem("Floss", false));
+        toiletries.add(new MakeListItem("Lotion", false));
+        toiletries.add(new MakeListItem("Pain Relievers", false));
+        toiletries.add(new MakeListItem("Razors", false));
+        toiletries.add(new MakeListItem("Shampoo", false));
+        toiletries.add(new MakeListItem("Shaving Cream", false));
+        toiletries.add(new MakeListItem("Soap", false));
+        toiletries.add(new MakeListItem("Toothpaste", false));
+        toiletries.add(new MakeListItem("Vitamins", false));
         //Household
         ArrayList<MakeListItem> household = new ArrayList<>();
-        household.add(new MakeListItem("Batteries", itemChecked));
-        household.add(new MakeListItem("Glue", itemChecked));
-        household.add(new MakeListItem("Light Bulbs", itemChecked));
-        household.add(new MakeListItem("Tape", itemChecked));
+        household.add(new MakeListItem("Batteries", false));
+        household.add(new MakeListItem("Glue", false));
+        household.add(new MakeListItem("Light Bulbs", false));
+        household.add(new MakeListItem("Tape", false));
 
         //Laundry, Paper & Cleaning
         ArrayList<MakeListItem> paperWrap = new ArrayList<>();
-        paperWrap.add(new MakeListItem("Aluminum Foil", itemChecked));
-        paperWrap.add(new MakeListItem("Bleach", itemChecked));
-        paperWrap.add(new MakeListItem("Dishwashing Liquid", itemChecked));
-        paperWrap.add(new MakeListItem("Disinfectant Wipes", itemChecked));
-        paperWrap.add(new MakeListItem("Garbage Bags", itemChecked));
-        paperWrap.add(new MakeListItem("Glass Cleaner", itemChecked));
-        paperWrap.add(new MakeListItem("Hand Soap", itemChecked));
-        paperWrap.add(new MakeListItem("Household Cleaner", itemChecked));
-        paperWrap.add(new MakeListItem("Laundry Detergent", itemChecked));
-        paperWrap.add(new MakeListItem("Laundry Softener", itemChecked));
-        paperWrap.add(new MakeListItem("Paper Towels", itemChecked));
-        paperWrap.add(new MakeListItem("Plastic Bags", itemChecked));
-        paperWrap.add(new MakeListItem("Plastic Wrap", itemChecked));
-        paperWrap.add(new MakeListItem("Sponges", itemChecked));
-        paperWrap.add(new MakeListItem("Tissues", itemChecked));
-        paperWrap.add(new MakeListItem("Toilet Paper", itemChecked));
-        paperWrap.add(new MakeListItem("Trash Bags", itemChecked));
+        paperWrap.add(new MakeListItem("Aluminum Foil", false));
+        paperWrap.add(new MakeListItem("Bleach", false));
+        paperWrap.add(new MakeListItem("Dishwashing Liquid", false));
+        paperWrap.add(new MakeListItem("Disinfectant Wipes", false));
+        paperWrap.add(new MakeListItem("Garbage Bags", false));
+        paperWrap.add(new MakeListItem("Glass Cleaner", false));
+        paperWrap.add(new MakeListItem("Hand Soap", false));
+        paperWrap.add(new MakeListItem("Household Cleaner", false));
+        paperWrap.add(new MakeListItem("Laundry Detergent", false));
+        paperWrap.add(new MakeListItem("Laundry Softener", false));
+        paperWrap.add(new MakeListItem("Paper Towels", false));
+        paperWrap.add(new MakeListItem("Plastic Bags", false));
+        paperWrap.add(new MakeListItem("Plastic Wrap", false));
+        paperWrap.add(new MakeListItem("Sponges", false));
+        paperWrap.add(new MakeListItem("Tissues", false));
+        paperWrap.add(new MakeListItem("Toilet Paper", false));
+        paperWrap.add(new MakeListItem("Trash Bags", false));
         //Meat & Fish
         ArrayList<MakeListItem> meat = new ArrayList<>();
-        meat.add(new MakeListItem("Bacon", itemChecked));
-        meat.add(new MakeListItem("Beef", itemChecked));
-        meat.add(new MakeListItem("Fish", itemChecked));
-        meat.add(new MakeListItem("Pork", itemChecked));
-        meat.add(new MakeListItem("Poultry", itemChecked));
-        meat.add(new MakeListItem("Sausage", itemChecked));
+        meat.add(new MakeListItem("Bacon", false));
+        meat.add(new MakeListItem("Beef", false));
+        meat.add(new MakeListItem("Fish", false));
+        meat.add(new MakeListItem("Pork", false));
+        meat.add(new MakeListItem("Poultry", false));
+        meat.add(new MakeListItem("Sausage", false));
         //Pet Items
         ArrayList<MakeListItem> petItems = new ArrayList<>();
-        petItems.add(new MakeListItem("Cat Food",itemChecked));
-        petItems.add(new MakeListItem("Cat Litter",itemChecked));
-        petItems.add(new MakeListItem("Dog Food",itemChecked));
+        petItems.add(new MakeListItem("Cat Food", false));
+        petItems.add(new MakeListItem("Cat Litter", false));
+        petItems.add(new MakeListItem("Dog Food", false));
         //Produce
         ArrayList<MakeListItem> produce = new ArrayList<>();
-        produce.add(new MakeListItem("Apples", itemChecked));
-        produce.add(new MakeListItem("Avocados", itemChecked));
-        produce.add(new MakeListItem("Bananas", itemChecked));
-        produce.add(new MakeListItem("Berries", itemChecked));
-        produce.add(new MakeListItem("Broccoli", itemChecked));
-        produce.add(new MakeListItem("Carrots", itemChecked));
-        produce.add(new MakeListItem("Cucumber", itemChecked));
-        produce.add(new MakeListItem("Garlic", itemChecked));
-        produce.add(new MakeListItem("Grapes", itemChecked));
-        produce.add(new MakeListItem("Oranges", itemChecked));
-        produce.add(new MakeListItem("Lettuce", itemChecked));
-        produce.add(new MakeListItem("Melons", itemChecked));
-        produce.add(new MakeListItem("Mushrooms", itemChecked));
-        produce.add(new MakeListItem("Onions", itemChecked));
-        produce.add(new MakeListItem("Peppers", itemChecked));
-        produce.add(new MakeListItem("Potatoes", itemChecked));
-        produce.add(new MakeListItem("Tomatoes", itemChecked));
-        produce.add(new MakeListItem("Zucchini", itemChecked));
+        produce.add(new MakeListItem("Apples", false));
+        produce.add(new MakeListItem("Avocados", false));
+        produce.add(new MakeListItem("Bananas", false));
+        produce.add(new MakeListItem("Berries", false));
+        produce.add(new MakeListItem("Broccoli", false));
+        produce.add(new MakeListItem("Carrots", false));
+        produce.add(new MakeListItem("Cucumber", false));
+        produce.add(new MakeListItem("Garlic", false));
+        produce.add(new MakeListItem("Grapes", false));
+        produce.add(new MakeListItem("Oranges", false));
+        produce.add(new MakeListItem("Lettuce", false));
+        produce.add(new MakeListItem("Melons", false));
+        produce.add(new MakeListItem("Mushrooms", false));
+        produce.add(new MakeListItem("Onions", false));
+        produce.add(new MakeListItem("Peppers", false));
+        produce.add(new MakeListItem("Potatoes", false));
+        produce.add(new MakeListItem("Tomatoes", false));
+        produce.add(new MakeListItem("Zucchini", false));
         //Rice & Pasta
         ArrayList<MakeListItem> pasta = new ArrayList<>();
-        pasta.add(new MakeListItem("Brown Rice", itemChecked));
-        pasta.add(new MakeListItem("Lasagna", itemChecked));
-        pasta.add(new MakeListItem("Macaroni", itemChecked));
-        pasta.add(new MakeListItem("Shells", itemChecked));
-        pasta.add(new MakeListItem("Spaghetti", itemChecked));
-        pasta.add(new MakeListItem("White Rice", itemChecked));
+        pasta.add(new MakeListItem("Brown Rice", false));
+        pasta.add(new MakeListItem("Lasagna", false));
+        pasta.add(new MakeListItem("Macaroni", false));
+        pasta.add(new MakeListItem("Shells", false));
+        pasta.add(new MakeListItem("Spaghetti", false));
+        pasta.add(new MakeListItem("White Rice", false));
         //Sauce & Oil
         ArrayList<MakeListItem> sauceOil = new ArrayList<>();
-        sauceOil.add(new MakeListItem("BBQ Sauce",itemChecked));
-        sauceOil.add(new MakeListItem("Maple Syrup",itemChecked));
-        sauceOil.add(new MakeListItem("Oil",itemChecked));
-        sauceOil.add(new MakeListItem("Salad Dressing",itemChecked));
-        sauceOil.add(new MakeListItem("Soy Sauce",itemChecked));
-        sauceOil.add(new MakeListItem("Spaghetti Sauce",itemChecked));
-        sauceOil.add(new MakeListItem("Vinegar",itemChecked));
+        sauceOil.add(new MakeListItem("BBQ Sauce", false));
+        sauceOil.add(new MakeListItem("Maple Syrup", false));
+        sauceOil.add(new MakeListItem("Oil", false));
+        sauceOil.add(new MakeListItem("Salad Dressing", false));
+        sauceOil.add(new MakeListItem("Soy Sauce", false));
+        sauceOil.add(new MakeListItem("Spaghetti Sauce", false));
+        sauceOil.add(new MakeListItem("Vinegar", false));
         //Snacks
         ArrayList<MakeListItem> snacks = new ArrayList<>();
-        snacks.add(new MakeListItem("Candy",itemChecked));
-        snacks.add(new MakeListItem("Chips",itemChecked));
-        snacks.add(new MakeListItem("Cookies",itemChecked));
-        snacks.add(new MakeListItem("Crackers",itemChecked));
-        snacks.add(new MakeListItem("Dip/Salsa",itemChecked));
-        snacks.add(new MakeListItem("Nuts",itemChecked));
-        snacks.add(new MakeListItem("Popcorn",itemChecked));
-        snacks.add(new MakeListItem("Pretzels",itemChecked));
-        snacks.add(new MakeListItem("Raisins",itemChecked));
-        snacks.add(new MakeListItem("Snack Bars",itemChecked));
+        snacks.add(new MakeListItem("Candy", false));
+        snacks.add(new MakeListItem("Chips", false));
+        snacks.add(new MakeListItem("Cookies", false));
+        snacks.add(new MakeListItem("Crackers", false));
+        snacks.add(new MakeListItem("Dip/Salsa", false));
+        snacks.add(new MakeListItem("Nuts", false));
+        snacks.add(new MakeListItem("Popcorn", false));
+        snacks.add(new MakeListItem("Pretzels", false));
+        snacks.add(new MakeListItem("Raisins", false));
+        snacks.add(new MakeListItem("Snack Bars", false));
         //Spices
         ArrayList<MakeListItem> spices = new ArrayList<>();
-        spices.add(new MakeListItem("Basil",itemChecked));
-        spices.add(new MakeListItem("Cinnamon",itemChecked));
-        spices.add(new MakeListItem("Cumin",itemChecked));
-        spices.add(new MakeListItem("Oregano",itemChecked));
-        spices.add(new MakeListItem("Pepper",itemChecked));
-        spices.add(new MakeListItem("Salt",itemChecked));
+        spices.add(new MakeListItem("Basil", false));
+        spices.add(new MakeListItem("Cinnamon", false));
+        spices.add(new MakeListItem("Cumin", false));
+        spices.add(new MakeListItem("Oregano", false));
+        spices.add(new MakeListItem("Pepper", false));
+        spices.add(new MakeListItem("Salt", false));
         //Vegetarian
         ArrayList<MakeListItem> vegetarian = new ArrayList<>();
-        vegetarian.add(new MakeListItem("Almond Milk", itemChecked));
-        vegetarian.add(new MakeListItem("Hummus", itemChecked));
-        vegetarian.add(new MakeListItem("Soy Milk", itemChecked));
-        vegetarian.add(new MakeListItem("Tofu", itemChecked));
+        vegetarian.add(new MakeListItem("Almond Milk", false));
+        vegetarian.add(new MakeListItem("Hummus", false));
+        vegetarian.add(new MakeListItem("Soy Milk", false));
+        vegetarian.add(new MakeListItem("Tofu", false));
 
         //Adding Lists & Groups to Expandable List
         expandableListDetail.put("Baby & Childcare", baby);

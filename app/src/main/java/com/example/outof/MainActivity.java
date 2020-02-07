@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     private Context mContext;
     private MakeListActivity makeListActivity;
     private ViewListActivity viewListActivity;
+    private DatabaseHelper myDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         makeListActivity = MakeListActivity.newInstance();
         viewListActivity = ViewListActivity.newInstance();
         mContext = getApplicationContext();
+
+        myDB = DatabaseHelper.getInstance(mContext);
         setupViewPager(mViewPager);
         mTabLayout.setupWithViewPager(mViewPager);
     }
@@ -78,6 +81,9 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                 clearDialog.setPositiveButton("Yes", (dialog, which) -> {
                     makeListActivity.clear();
                     viewListActivity.clearList();
+                    myDB.clearData();
+                    makeListActivity.addDataToDb_Children();
+                    makeListActivity.addDataToDb_Group();
                 });
 
                 //Cancel Clearing List - NO
