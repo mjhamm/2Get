@@ -51,10 +51,10 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
         mListView = view.findViewById(R.id.viewList);
         mTextView = view.findViewById(R.id.viewList_item_text);
 
-        myDB = new DatabaseHelper(mContext);
+        myDB = DatabaseHelper.getInstance(mContext);
         Cursor data = myDB.getListContents_View();
         if (data.getCount() == 0) {
-            Toast.makeText(mContext, "Database Empty", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "Database Empty for view Items");
         } else {
             while(data.moveToNext()) {
                 if (data.getInt(2) == 0) {
@@ -65,6 +65,7 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
                 viewItems.add(new ViewListItem(data.getString(1), itemChecked));
             }
         }
+        data.close();
         viewListAdapter = new ViewListAdapter(viewItems, mContext);
         mListView.setAdapter(viewListAdapter);
 
@@ -77,9 +78,9 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
         if (data.getCount() != 0) {
             while(data.moveToNext()) {
                 if (data.getInt(2) == 0) {
-                    itemCheckedInt = 0;
+                    itemChecked = false;
                 } else {
-                    itemCheckedInt = 1;
+                    itemChecked = true;
                 }
             }
         }
@@ -106,7 +107,6 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
 
     public void clearList() {
         viewItems.clear();
-        myDB.clearData();
         viewListAdapter.notifyDataSetChanged();
     }
 

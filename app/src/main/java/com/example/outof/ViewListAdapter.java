@@ -28,7 +28,7 @@ public class ViewListAdapter extends ArrayAdapter<ViewListItem> {
         super(context, R.layout.view_list_item, listItems);
         this.listItems = listItems;
         this.context = context;
-        myDB = new DatabaseHelper(context);
+        myDB = DatabaseHelper.getInstance(context);
     }
 
     @Override

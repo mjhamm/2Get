@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     private Context mContext;
     private MakeListActivity makeListActivity;
     private ViewListActivity viewListActivity;
+    private DatabaseHelper myDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         makeListActivity = MakeListActivity.newInstance();
         viewListActivity = ViewListActivity.newInstance();
         mContext = getApplicationContext();
+
+        myDB = DatabaseHelper.getInstance(mContext);
         setupViewPager(mViewPager);
         mTabLayout.setupWithViewPager(mViewPager);
     }
@@ -78,6 +81,9 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                 clearDialog.setPositiveButton("Yes", (dialog, which) -> {
                     makeListActivity.clear();
                     viewListActivity.clearList();
+                    myDB.clearData();
+                    makeListActivity.addDataToDb_Children();
+                    makeListActivity.addDataToDb_Group();
                 });
 
                 //Cancel Clearing List - NO
@@ -91,11 +97,6 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                 return true;
             case R.id.print:
                 Toast.makeText(mContext, "Print List", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.help:
-                Toast.makeText(mContext, "Help", Toast.LENGTH_SHORT).show();
-                Intent helpIntent = new Intent(MainActivity.this, Help.class);
-                startActivity(helpIntent);
                 return true;
             case R.id.about:
                 Toast.makeText(mContext, "About", Toast.LENGTH_SHORT).show();

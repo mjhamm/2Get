@@ -5,52 +5,80 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
+    public static final String TAG = "LOG";
+
+    private static DatabaseHelper sInstance;
     //Database Version
     private static final int DB_VERSION = 1;
 
     //Database Name
-    private static final String LIST_DATABASE_NAME = "shoppingList";
+    private static final String LIST_DATABASE_NAME = "shoppingList.db";
 
     //Table Names
     private static final String TABLE_VIEW = "viewList";
-    private static final String TABLE_MAKE = "makeList";
+    private static final String TABLE_GROUP = "groupList";
+    private static final String TABLE_CHILDREN = "childrenList";
 
     //Common Columns
     private static final String KEY_ID = "id";
-    private static final String KEY_ITEM = "item";
+    private static final String KEY_ITEM = "name";
     private static final String KEY_CHECKED = "checked";
+    private static final String KEY_GROUP_NAME = "groupName";
+    private static final String KEY_GROUP_EXPANDED = "expanded";
 
-    public SQLiteDatabase database;
+    public static synchronized DatabaseHelper getInstance(Context context) {
+        if (sInstance == null) {
+            sInstance = new DatabaseHelper(context.getApplicationContext());
+        }
+        return sInstance;
+    }
 
-    public DatabaseHelper(@Nullable Context context) {
+    private DatabaseHelper(@Nullable Context context) {
         super(context, LIST_DATABASE_NAME, null, DB_VERSION);
     }
 
     //Create View List Table
-    private static final String CREATE_TABLE_VIEW = "CREATE TABLE " + TABLE_VIEW + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_ITEM +
-            "TEXT," + KEY_CHECKED + " INTEGER)";
+    private static final String CREATE_TABLE_VIEW = "CREATE TABLE IF NOT EXISTS " + TABLE_VIEW + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + KEY_ITEM +
+            " TEXT, " + KEY_CHECKED + " INTEGER)";
 
-    //Create Make List Table
-    private static final String CREATE_TABLE_MAKE = "CREATE TABLE " + TABLE_MAKE + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_ITEM +
-            "TEXT," + KEY_CHECKED + " INTEGER)";
+    private static final String CREATE_TABLE_GROUP = "CREATE TABLE IF NOT EXISTS " + TABLE_GROUP + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + KEY_GROUP_NAME + " TEXT, " +KEY_GROUP_EXPANDED + " INTEGER)";
+
+    private static final String CREATE_TABLE_CHILDREN = "CREATE TABLE IF NOT EXISTS " + TABLE_CHILDREN + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + KEY_GROUP_NAME + " TEXT, " + KEY_ITEM + " TEXT, "
+            + KEY_CHECKED + " INTEGER)";
+
+    //------------------------------ ALL TABLES -------------------------------------------------------------------------------------------
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_VIEW);
-        db.execSQL(CREATE_TABLE_MAKE);
+        db.execSQL(CREATE_TABLE_GROUP);
+        db.execSQL(CREATE_TABLE_CHILDREN);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_VIEW);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MAKE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_GROUP);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CHILDREN);
     }
+
+    //Deletes all data from both Tables
+    public void clearData() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + TABLE_VIEW);
+        db.execSQL("DELETE FROM " + TABLE_GROUP);
+        db.execSQL("DELETE FROM " + TABLE_CHILDREN);
+    }
+
+    //------------------------------ VIEW TABLE -------------------------------------------------------------------------------------------
 
     //Update View List Table if row exists
     public void updateView(String name, boolean checked) {
@@ -58,16 +86,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_ITEM, name);
         contentValues.put(KEY_CHECKED, checked);
-        db.update(TABLE_VIEW, contentValues,KEY_ITEM + "=?", new String[]{name});
-    }
-
-    //Update Make List Table if row exists
-    public void updateMake(String name, boolean checked) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(KEY_ITEM, name);
-        contentValues.put(KEY_CHECKED, checked);
-        db.update(TABLE_MAKE, contentValues, KEY_ITEM + "=?", new String[]{name});
+        db.update(TABLE_VIEW, contentValues,KEY_ITEM + " =?", new String[]{name});
+        db.close();
     }
 
     //Add data to View List Table
@@ -84,14 +104,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    //Add data to Make List Table
-    public boolean addDataToMake(String name, int checked) {
+    //Retrieve data from View List Table
+    public Cursor getListContents_View() {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(KEY_ITEM, name);
-        contentValues.put(KEY_CHECKED, checked);
-        long result = db.insert(TABLE_MAKE, null, contentValues);
-        return result != -1;
+        return db.rawQuery("SELECT * FROM " + TABLE_VIEW, null);
+    }
+
+    //Check for duplicates in View Table
+    public boolean dupCheckViewTable(String name) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cur;
+        cur = db.query(TABLE_VIEW, null, KEY_ITEM + " =?", new String[]{name}, null, null, null, null);
+        if (cur != null && cur.getCount() > 0) {
+            cur.close();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     //Remove data from View List Table
@@ -100,54 +129,65 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.delete(TABLE_VIEW, KEY_ITEM + "=?", new String[]{name}) > 0;
     }
 
-    //Remove data from View List Table
-    public boolean removeDataFromMake(String name) {
+    //------------------------------ GROUP TABLE -------------------------------------------------------------------------------------------
+
+    public void addGroup(String groupName, int expanded) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(TABLE_MAKE, KEY_ITEM + "=?", new String[]{name}) > 0;
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_GROUP_NAME, groupName);
+        contentValues.put(KEY_GROUP_EXPANDED, expanded);
+        db.insert(TABLE_GROUP, null,contentValues);
+        db.close();
     }
 
-    //Retrieve data from View List Table
-    public Cursor getListContents_View() {
+    public void updateGroup(String groupName, int expanded) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.rawQuery("SELECT * FROM " + TABLE_VIEW, null);
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_GROUP_EXPANDED, expanded);
+        db.update(TABLE_GROUP, contentValues, KEY_GROUP_NAME + " = ?", new String[]{groupName});
+        //Log.e(TAG, "SQL STATEMENT: " + db.update(TABLE_GROUP, contentValues, KEY_GROUP_NAME + " = ?", new String[]{String.valueOf(groupName)}));
+        db.close();
     }
 
-    //Retrieve data from Make List Table
-    public Cursor getListContents_Make() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        return db.rawQuery("SELECT * FROM " + TABLE_MAKE, null);
+    public Cursor getListContents_Group() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_GROUP,null);
     }
 
-    //Check for duplicates in View Table
-    public boolean dupCheckViewTable(String name) {
+    //------------------------------ CHILDREN TABLE -------------------------------------------------------------------------------------------
+
+    public void addChild(String groupName, String childName, int childChecked) {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cur;
-        cur = db.query(TABLE_VIEW, null, KEY_ITEM + "=?"/* AND " + KEY_CHECKED + "=?"*/, new String[]{name}, null, null, null, null);
-        if (cur != null && cur.getCount() > 0) {
-            cur.close();
-            return true;
-        } else {
-            return false;
-        }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_GROUP_NAME, groupName);
+        contentValues.put(KEY_ITEM, childName);
+        contentValues.put(KEY_CHECKED, childChecked);
+        db.insert(TABLE_CHILDREN,null, contentValues);
+        db.close();
     }
 
-    //Check for duplicates in Make Table
-    public boolean dupCheckMakeTable(String name) {
+    public void updateChild(String name, int checked) {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cur;
-        cur = db.query(TABLE_MAKE, null, KEY_ITEM + "=?"/* AND " KEY_CHECKED + "=?"*/, new String[]{name}, null, null, null, null);
-        if (cur != null && cur.getCount() > 0) {
-            cur.close();
-            return true;
-        } else {
-            return false;
-        }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_CHECKED, checked);
+        db.update(TABLE_CHILDREN, contentValues,KEY_ITEM + " = ?", new String[]{name});
+        Log.e(TAG, "SQL STATEMENT: " + db.update(TABLE_CHILDREN, contentValues, KEY_ITEM + " = ?", new String[]{String.valueOf(name)}));
+        db.close();
     }
 
-    //Deletes all data from both Tables
-    public void clearData() {
+    public Cursor getChildren(String groupName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_CHILDREN + " WHERE " + KEY_GROUP_NAME + " = " + groupName;
+        return db.rawQuery(query,null);
+    }
+
+    public Cursor getListContents_Children() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_CHILDREN, null);
+    }
+
+    public boolean removeDataFromChildren(String itemName) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DELETE FROM " + TABLE_VIEW);
-        db.execSQL("DELETE FROM " + TABLE_MAKE);
+        return db.delete(TABLE_CHILDREN, KEY_ITEM + "=?", new String[]{String.valueOf(itemName)}) > 0;
     }
 }
