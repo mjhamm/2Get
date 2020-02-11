@@ -1,28 +1,18 @@
 package com.example.outof;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.database.DataSetObservable;
 import android.database.DataSetObserver;
-import android.graphics.Typeface;
-import android.util.Log;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ExpandableListAdapter;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
 
@@ -96,6 +86,7 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
         String listTitle = (String) getGroup(listPosition);
 
         if (convertView == null) {
+            //check
             convertView = LayoutInflater.from(context).inflate(R.layout.list_group, null);
             groupHolder = new GroupHolder();
             groupHolder.groupTitle = convertView.findViewById(R.id.listTitle);
@@ -115,8 +106,7 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
         final MakeListItem expandedListItem = (MakeListItem) getChild(groupPosition, childPosition);
 
         if (convertView == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.make_list_item, null);
+            convertView = LayoutInflater.from(context).inflate(R.layout.make_list_item, null);
             convertView.setTag(expandedListItem.getItemName());
         } else {
             convertView.getTag();
@@ -129,7 +119,7 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
         } else {
             item_checkBox.setChecked(false);
         }
-        this.notifyDataSetChanged();
+        notifyDataSetChanged();
 
         item_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             notifyDataSetChanged();
@@ -171,10 +161,5 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
 
     class GroupHolder {
         TextView groupTitle;
-    }
-
-    class ChildHolder {
-        TextView childTitle;
-        CheckBox itemCheckBox;
     }
 }

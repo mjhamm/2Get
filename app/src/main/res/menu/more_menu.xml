@@ -12,11 +12,11 @@
             android:title="@string/share_list"
             android:orderInCategory="20"
             app:showAsAction="collapseActionView"/>
-        <item
+        <!--<item
             android:id="@+id/print"
             android:title="@string/print_list"
             android:orderInCategory="40"
-            app:showAsAction="collapseActionView"/>
+            app:showAsAction="collapseActionView"/>-->
         <item
             android:id="@+id/about"
             android:title="@string/about"

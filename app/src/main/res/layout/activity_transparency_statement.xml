@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".TransparencyStatement">
+
+    <TextView
+        android:id="@+id/statement_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/our_message_to_you"
+        android:textColor="@android:color/black"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:textSize="22sp"
+        android:fontFamily="@font/roboto_medium"/>
+
+    <TextView
+        android:id="@+id/statement_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/statement_title"
+        android:textSize="20sp"
+        android:textColor="@android:color/black"
+        android:fontFamily="@font/roboto_condensed_regular"
+        android:layout_margin="16dp"
+        android:text="@string/transparency_statement"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
