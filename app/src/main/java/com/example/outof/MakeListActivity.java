@@ -22,7 +22,6 @@ import androidx.fragment.app.Fragment;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 public class MakeListActivity extends Fragment implements CompoundButton.OnCheckedChangeListener {
 
@@ -38,6 +37,7 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
     private ConstraintLayout mAddItemParent;
     private DatabaseHelper myDB;
     private CheckBox itemCheckBox;
+
 
     public MakeListActivity() {
 
@@ -57,7 +57,7 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.make_list, container,false);
 
-        final LayoutInflater layoutView = getLayoutInflater();
+        final LayoutInflater layoutView  = getLayoutInflater();
         final View itemView = layoutView.inflate(R.layout.make_list_item, null);
 
         mAddItemParent = view.findViewById(R.id.addItemParent);
@@ -92,26 +92,23 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         }
 
         //CHECK CHILDREN
+        int childCount = 0;
         int count = 0;
-        for (int i = 0; i < expandableListAdapter.getGroupCount(); i++) {
-            int childCount = 0;
-            while(childData.moveToNext()) {
-                if (childCount + 1 == expandableListAdapter.getChildrenCount(i)) {
-                    break;
-                } else {
-                    MakeListItem makeListItem = (MakeListItem) expandableListAdapter.getChild(count, childCount);
-                    itemCheckBox = itemView.findViewById(R.id.makeList_item_checkbox);
-                    if (childData.getInt(2) != 0) {
-                        makeListItem.setSelected(true);
-                        itemCheckBox.setChecked(true);
-                    } else {
-                        makeListItem.setSelected(false);
-                        itemCheckBox.setChecked(false);
-                    }
-                }
-                childCount++;
+        while(childData.moveToNext()) {
+            if (childCount == expandableListAdapter.getChildrenCount(count)) {
+                childCount = 0;
+                count++;
             }
-            count++;
+            MakeListItem makeListItem = (MakeListItem) expandableListAdapter.getChild(count, childCount);
+            itemCheckBox = itemView.findViewById(R.id.makeList_item_checkbox);
+            if (childData.getInt(2) != 0) {
+                makeListItem.setSelected(true);
+                itemCheckBox.setChecked(true);
+            } else {
+                makeListItem.setSelected(false);
+                itemCheckBox.setChecked(false);
+            }
+            childCount++;
         }
         childData.close();
 
@@ -162,17 +159,21 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
     }
 
     public void clear() {
+        View itemView = LayoutInflater.from(mContext).inflate(R.layout.make_list_item, null);
         for (int i = 0; i < expandableListAdapter.getGroupCount(); i++) {
+            expandableListView.collapseGroup(i);
             for (int j = 0; j < expandableListAdapter.getChildrenCount(i); j++) {
 
                 MakeListItem makeListItem = (MakeListItem) expandableListAdapter.getChild(i,j);
-                CheckBox checkBox = getView().findViewById(R.id.makeList_item_checkbox);
+                CheckBox checkBox = itemView.findViewById(R.id.makeList_item_checkbox);
                 if (makeListItem.isSelected()) {
                     makeListItem.setSelected(false);
                     checkBox.setChecked(false);
                 }
             }
         }
+        myDB.clearGroups();
+        myDB.clearChildren();
     }
 
     @Override
@@ -208,12 +209,6 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
             AlertDialog alertDialog = alertDialogBuilder.create();
             alertDialog.show();
         });
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        myDB.close();
     }
 
     @Override
@@ -325,6 +320,7 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         //Dairy
         myDB.addChild("Dairy", "Butter",0);
         myDB.addChild("Dairy", "Cheese",0);
+        myDB.addChild("Dairy", "Cream",0);
         myDB.addChild("Dairy", "Milk",0);
         myDB.addChild("Dairy", "Sour Cream",0);
         myDB.addChild("Dairy", "Yogurt",0);

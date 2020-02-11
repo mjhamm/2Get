@@ -1,38 +1,31 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">2Get</string>
     <string name="more_options">More Options</string>
     <string name="clear_list">Clear All Items</string>
     <string name="share_list">Share List</string>
-    <string name="help">Help</string>
     <string name="about">About</string>
     <string name="add_custom_item">Add Custom Item</string>
-    <string name="print_list">Print List</string>
     <string name="_2_get_logo">2 Get Logo</string>
-    <string name="about_us_text">Here at 2Get, we are helping to create an easy experience for keeping
-        track of the most common items that you might need throughout your week.</string>
     <string name="version">1.0.0</string>
+    <string name="about_detail">Here at 2Get, we are helping to create an easy experience for keeping
+        track of the most common items that you might need throughout your week.
+        \n\nWhether you are going to the store to just pick up some milk,
+        or need to make a list of your entire food shopping before you leave the house, 2Get is here to help you prepare.</string>
+    <string name="about_back_button">back button</string>
+    <string name="about_us">About Us</string>
+    <string name="legal">Legal</string>
+    <string name="privacy_statement" tools:keep="@string/privacy_statement">Privacy Statement</string>
+    <string name="licenses">Licenses</string>
+    <string name="about_this_app">About This App</string>
+    <string name="test_group_header">Test</string>
+    <string name="test_child_item">Milk</string>
+    <string name="test_view_item">Test Item</string>
+    <string name="transparency_message">Transparency Message</string>
+    <string name="transparency_statement">Here at 2Get, we want to be completely transparent with you about the use of some permissions in our app. The only permission that we use is that of accessing your photo\'s.
+        This is for the strict purpose of being able to save your Shopping List in order to be able to view it, as well as send it to those that you need to send it to.
+        \n\nWe want you to understand what we are asking for when you press accept to allow us to access your mobile device.\n\nThank you for letting us be a part of your Shopping Experience.</string>
+    <string name="our_message_to_you">Our Message to You</string>
+    <string name="version_string">Version:</string>
+    <string name="custom_item_hint">Custom Item Name</string>
 
-    <string-array name="category">
-        <item>Baby &amp; Childcare</item>
-        <item>Baking</item>
-        <item>Beverages</item>
-        <item>Bread</item>
-        <item>Breakfast &amp; Cereal</item>
-        <item>Canned Goods</item>
-        <item>Condiments</item>
-        <item>Dairy</item>
-        <item>Deli</item>
-        <item>Frozen Foods</item>
-        <item>Health &amp; Beauty</item>
-        <item>Household</item>
-        <item>Laundry, Paper &amp; Cleaning</item>
-        <item>Meat &amp; Fish</item>
-        <item>Pet Items</item>
-        <item>Produce</item>
-        <item>Rice &amp; Pasta</item>
-        <item>Sauces &amp; Oils</item>
-        <item>Snacks</item>
-        <item>Spices</item>
-        <item>Vegetarian</item>
-    </string-array>
 </resources>

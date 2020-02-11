@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/viewListItem_parent">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/viewList_item_text"
@@ -20,8 +19,8 @@
         android:gravity="center_vertical"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:text="Test Item"
+        android:text="@string/test_view_item"
         android:textColor="@android:color/black"
-        android:textSize="20sp" />
+        android:textSize="22sp" />
 
 </RelativeLayout>

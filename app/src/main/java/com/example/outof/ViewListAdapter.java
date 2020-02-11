@@ -3,13 +3,11 @@ package com.example.outof;
 import android.content.Context;
 import android.database.DataSetObservable;
 import android.database.DataSetObserver;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -48,7 +46,7 @@ public class ViewListAdapter extends ArrayAdapter<ViewListItem> {
 
     class ViewHolder {
         TextView item_textView;
-        boolean item_isStrikeThrough;
+        boolean item_isStrikeThrough = false;
     }
 
     @Override
@@ -75,11 +73,11 @@ public class ViewListAdapter extends ArrayAdapter<ViewListItem> {
         viewHolder.item_textView.setOnClickListener(v -> {
             if (viewListItem.getIsStrikeThrough()) {
                 viewListItem.setStrikeThrough(false);
-                myDB.updateView(viewListItem.getItemName(), viewListItem.getIsStrikeThrough());
+                myDB.updateView(viewListItem.getItemName(), false);
                 viewHolder.item_textView.setPaintFlags(viewHolder.item_textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
             } else {
                 viewListItem.setStrikeThrough(true);
-                myDB.updateView(viewListItem.getItemName(), viewListItem.getIsStrikeThrough());
+                myDB.updateView(viewListItem.getItemName(), true);
                 viewHolder.item_textView.setPaintFlags(viewHolder.item_textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             }
         });

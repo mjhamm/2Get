@@ -2,21 +2,24 @@ package com.example.outof;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ViewListActivity extends Fragment implements View.OnClickListener {
@@ -57,11 +60,7 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
             Log.e(TAG, "Database Empty for view Items");
         } else {
             while(data.moveToNext()) {
-                if (data.getInt(2) == 0) {
-                    itemChecked = false;
-                } else {
-                    itemChecked = true;
-                }
+                itemChecked = data.getInt(2) != 0;
                 viewItems.add(new ViewListItem(data.getString(1), itemChecked));
             }
         }
@@ -72,8 +71,30 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    public void exportToBitmap() {
+        Bitmap bitmap = Bitmap.createBitmap(mListView.getWidth(), mListView.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        mListView.draw(canvas);
+        try {
+            File cachePath = new File(mContext.getCacheDir(), "images");
+            cachePath.mkdirs();
+            FileOutputStream stream = new FileOutputStream(cachePath + "/image.png");
+            bitmap.compress(Bitmap.CompressFormat.PNG,100,stream);
+            stream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void addItemToList(String selection) {
-        itemCheckedInt = 0;
+        /*itemCheckedInt = 0;
+        Cursor data = myDB.checkItem(selection);
+        if (data.getCount() != 0) {
+            itemChecked = data.getInt(2) != 0;
+        } else {
+            itemChecked = false;
+            myDB.addDataToView(selection, 0);
+        }*/
         Cursor data = myDB.getListContents_View();
         if (data.getCount() != 0) {
             while(data.moveToNext()) {
@@ -94,6 +115,14 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
     }
 
     public void removeItemFromList(String selection) {
+
+        /*Cursor data = myDB.checkItem(selection);
+        if (data.getCount() != 0) {
+            itemChecked = data.getInt(2) != 0;
+        } else {
+            itemChecked = false;
+        }*/
+
         ViewListItem viewListItem = new ViewListItem(selection, false);
         for (int i = 0; i < viewItems.size(); i++) {
             if (viewListItem.getItemName().equalsIgnoreCase(viewItems.get(i).getItemName())) {
@@ -116,11 +145,6 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
-    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getContext();
@@ -138,19 +162,19 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.viewList_item_text:
-                if (mTextView.getPaintFlags() == Paint.STRIKE_THRU_TEXT_FLAG) {
+        if (v.getId() == R.id.viewList_item_text) {
+            if (mTextView.getPaintFlags() == Paint.STRIKE_THRU_TEXT_FLAG) {
+                mTextView.setPaintFlags(mTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                myDB.updateChild(mTextView.getText().toString(), 0);
+            } else {
+                mTextView.setPaintFlags(mTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                myDB.updateChild(mTextView.getText().toString(), 1);
+            }
+                /*if (mTextView.getPaintFlags() == Paint.STRIKE_THRU_TEXT_FLAG) {
                     mTextView.setPaintFlags(mTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                 } else {
                     mTextView.setPaintFlags(mTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                }
+                }*/
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        myDB.close();
     }
 }
