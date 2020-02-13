@@ -93,21 +93,32 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                 alertDialog.show();
                 return true;
             case R.id.share:
-                Toast.makeText(mContext, "Share List", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mContext, "Share List", Toast.LENGTH_SHORT).show();
 
-                viewListActivity.exportToBitmap();
+                /*viewListActivity.exportToBitmap();
                 File imagePath = new File(mContext.getCacheDir(),"images");
-                File newFile = new File(imagePath, "image.png");
+                File newFile = new File(imagePath, "list.png");
                 Uri contentUri = FileProvider.getUriForFile(mContext, "com.example.outof.fileprovider", newFile);
 
                 if (contentUri != null) {
                     Intent shareIntent = new Intent();
                     shareIntent.setAction(Intent.ACTION_SEND);
-                    shareIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    shareIntent.setDataAndType(contentUri, "image/*");
+                    shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    shareIntent.setDataAndType(contentUri, getContentResolver().getType(contentUri));
                     shareIntent.putExtra(Intent.EXTRA_TEXT, "Here's the Shopping List!");
                     shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
                     startActivity(Intent.createChooser(shareIntent, "Share..."));
+                }*/
+                if (!viewListActivity.exportList().toString().isEmpty()) {
+                    Intent shareIntent = new Intent();
+                    shareIntent.setAction(Intent.ACTION_SEND);
+                    shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    shareIntent.setType("text/plain");
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Here's the Shopping List!");
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, "2Get Shopping List!\n\n" + viewListActivity.exportList().toString());
+                    startActivity(Intent.createChooser(shareIntent, "Share..."));
+                } else {
+                    Toast.makeText(mContext, "You have nothing added to your List.", Toast.LENGTH_SHORT).show();
                 }
 
                 return true;

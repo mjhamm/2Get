@@ -46,7 +46,92 @@
         android:layout_marginTop="32dp"
         android:contentDescription="@string/_2_get_logo" />
 
+    <!--<TextView
+        android:id="@+id/about_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/roboto_medium"
+        android:gravity="center"
+        android:text="@string/about_this_app"
+        android:textColor="@color/accentGreen"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/about_logo" />-->
+
     <TextView
+        android:id="@+id/about_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/about_logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/about_detail"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:fontFamily="@font/roboto_condensed_regular"
+        android:textColor="@android:color/black"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"/>
+
+    <Button
+        android:id="@+id/feedback_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/about_detail"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:fontFamily="@font/roboto_medium"
+        android:backgroundTint="@color/accentGreen"
+        android:textColor="@android:color/white"
+        android:text="@string/feedback_button"
+        android:textAllCaps="false"/>
+
+    <Button
+        android:id="@+id/licenses_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/feedback_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:fontFamily="@font/roboto_medium"
+        android:backgroundTint="@color/accentGreen"
+        android:textColor="@android:color/white"
+        android:text="@string/licenses"
+        android:textAllCaps="false"/>
+
+    <Button
+        android:id="@+id/help_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/licenses_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:fontFamily="@font/roboto_medium"
+        android:backgroundTint="@color/accentGreen"
+        android:textColor="@android:color/white"
+        android:text="Help"
+        android:textAllCaps="false"/>
+
+    <!--<TextView
         android:id="@+id/legal_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -57,9 +142,9 @@
         app:layout_constraintStart_toStartOf="parent"
         android:textColor="@color/colorPrimary"
         android:fontFamily="@font/roboto_medium"
-        android:textSize="16sp"/>
+        android:textSize="16sp"/>-->
 
-    <Button
+    <!--<Button
         android:id="@+id/trans_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -74,7 +159,7 @@
         android:backgroundTint="@color/accentGreen"
         android:textColor="@android:color/white"
         android:text="@string/transparency_message"
-        android:textAllCaps="false"/>
+        android:textAllCaps="false"/>-->
 
     <!--<Button
         android:id="@+id/privacy_button"
@@ -109,51 +194,6 @@
         android:textColor="@android:color/white"
         android:text="@string/terms_of_use"
         android:textAllCaps="false"/>-->
-
-    <Button
-        android:id="@+id/licenses_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/trans_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:gravity="start|center_vertical"
-        android:fontFamily="@font/roboto_condensed_regular"
-        android:backgroundTint="@color/accentGreen"
-        android:textColor="@android:color/white"
-        android:text="@string/licenses"
-        android:textAllCaps="false"/>
-
-    <TextView
-        android:id="@+id/about_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/about_this_app"
-        app:layout_constraintTop_toBottomOf="@+id/licenses_button"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="24dp"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textColor="@color/colorPrimary"
-        android:fontFamily="@font/roboto_medium"
-        android:textSize="16sp"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/about_title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:text="@string/about_detail"
-        android:textSize="18sp"
-        android:gravity="center"
-        android:fontFamily="@font/roboto_condensed_regular"
-        android:textColor="@android:color/black"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"/>
 
     <TextView
         android:id="@+id/version_1"

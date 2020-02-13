@@ -27,5 +27,12 @@
     <string name="our_message_to_you">Our Message to You</string>
     <string name="version_string">Version:</string>
     <string name="custom_item_hint">Custom Item Name</string>
+    <string name="feedback_detail_info">We want you to love our product! That\'s why we want you to let us know of anything that can be improved.\n\nIf you have a new idea to make your life easier while using our app,
+        let us know! We also hate to see something that may be making your life more difficult. This is why if you let us know any bugs or problems, we will begin to work on them right away!\n\nPlease email us with any
+        improvements, bugs or just to tell us that you love the app! We would live to hear from you!</string>
+    <string name="feedback_email">2GetCustomerService@gmail.com</string>
+    <string name="feedback_button">Feedback</string>
+    <string name="help_title">Help</string>
+    <string name="help_detail_1"><u>Click on items to add them to your list</u></string>
 
 </resources>

@@ -15,15 +15,25 @@ public class About extends AppCompatActivity {
         setContentView(R.layout.activity_about);
 
         Button licenses = findViewById(R.id.licenses_button);
-        Button transparency = findViewById(R.id.trans_button);
+        //Button transparency = findViewById(R.id.trans_button);
+        Button feedback = findViewById(R.id.feedback_button);
+        Button help = findViewById(R.id.help_button);
 
-        transparency.setOnClickListener(click -> {
+        /*transparency.setOnClickListener(click -> {
             startActivity(new Intent(this, TransparencyStatement.class));
-        });
+        });*/
 
         licenses.setOnClickListener(click -> {
             OssLicensesMenuActivity.setActivityTitle("Licenses");
             startActivity(new Intent(this, OssLicensesMenuActivity.class));
+        });
+
+        feedback.setOnClickListener(click -> {
+            startActivity(new Intent(this, Feedback.class));
+        });
+
+        help.setOnClickListener(click -> {
+            startActivity(new Intent(this, Help.class));
         });
     }
 
