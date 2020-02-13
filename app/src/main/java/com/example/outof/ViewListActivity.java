@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -71,30 +73,37 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
         return view;
     }
 
-    public void exportToBitmap() {
+    public StringBuilder exportList() {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < viewItems.size(); i++) {
+            sb.append(viewItems.get(i).getItemName());
+            if (i < viewItems.size() - 1) {
+                sb.append("\n");
+            }
+        }
+
+        return sb;
+    }
+
+
+    /*public void exportToBitmap() {
         Bitmap bitmap = Bitmap.createBitmap(mListView.getWidth(), mListView.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         mListView.draw(canvas);
         try {
             File cachePath = new File(mContext.getCacheDir(), "images");
-            cachePath.mkdirs();
-            FileOutputStream stream = new FileOutputStream(cachePath + "/image.png");
+            //Check
+            //cachePath.mkdirs();
+            FileOutputStream stream = new FileOutputStream(cachePath + "/list.png");
             bitmap.compress(Bitmap.CompressFormat.PNG,100,stream);
             stream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     public void addItemToList(String selection) {
-        /*itemCheckedInt = 0;
-        Cursor data = myDB.checkItem(selection);
-        if (data.getCount() != 0) {
-            itemChecked = data.getInt(2) != 0;
-        } else {
-            itemChecked = false;
-            myDB.addDataToView(selection, 0);
-        }*/
         Cursor data = myDB.getListContents_View();
         if (data.getCount() != 0) {
             while(data.moveToNext()) {
@@ -115,14 +124,6 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
     }
 
     public void removeItemFromList(String selection) {
-
-        /*Cursor data = myDB.checkItem(selection);
-        if (data.getCount() != 0) {
-            itemChecked = data.getInt(2) != 0;
-        } else {
-            itemChecked = false;
-        }*/
-
         ViewListItem viewListItem = new ViewListItem(selection, false);
         for (int i = 0; i < viewItems.size(); i++) {
             if (viewListItem.getItemName().equalsIgnoreCase(viewItems.get(i).getItemName())) {
