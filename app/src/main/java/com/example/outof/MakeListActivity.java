@@ -515,6 +515,7 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         ArrayList<MakeListItem> dairy = new ArrayList<>();
         dairy.add(new MakeListItem("Butter", false));
         dairy.add(new MakeListItem("Cheese", false));
+        dairy.add(new MakeListItem("Cream", false));
         dairy.add(new MakeListItem("Milk", false));
         dairy.add(new MakeListItem("Sour Cream", false));
         dairy.add(new MakeListItem("Yogurt", false));

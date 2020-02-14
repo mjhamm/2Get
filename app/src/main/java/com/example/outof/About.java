@@ -18,6 +18,8 @@ public class About extends AppCompatActivity {
         //Button transparency = findViewById(R.id.trans_button);
         Button feedback = findViewById(R.id.feedback_button);
         Button help = findViewById(R.id.help_button);
+        Button privacy = findViewById(R.id.privacy_button);
+        Button tou = findViewById(R.id.tou_button);
 
         /*transparency.setOnClickListener(click -> {
             startActivity(new Intent(this, TransparencyStatement.class));
@@ -34,6 +36,14 @@ public class About extends AppCompatActivity {
 
         help.setOnClickListener(click -> {
             startActivity(new Intent(this, Help.class));
+        });
+
+        privacy.setOnClickListener(click -> {
+            startActivity(new Intent(this, PrivacyStatement.class));
+        });
+
+        tou.setOnClickListener(click -> {
+            startActivity(new Intent(this, TermsAndConditions.class));
         });
     }
 
