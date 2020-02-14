@@ -36,7 +36,7 @@
             android:textSize="18sp"
             android:textColor="@android:color/black"
             android:fontFamily="@font/roboto_medium"
-            android:text="Adding items to your List"
+            android:text="@string/help_title_1"
             android:gravity="center"/>
 
         <TextView
@@ -63,7 +63,8 @@
             android:src="@drawable/help_1"
             android:adjustViewBounds="true"
             android:layout_marginTop="6dp"
-            app:layout_constraintWidth_percent="0.75"/>
+            app:layout_constraintWidth_percent="0.75"
+            android:contentDescription="@string/help_image_1" />
 
         <View
             android:id="@+id/hr_1"
@@ -86,7 +87,7 @@
             android:textSize="18sp"
             android:textColor="@android:color/black"
             android:fontFamily="@font/roboto_medium"
-            android:text="Need to Add a Custom Item?"
+            android:text="@string/help_title_2"
             android:gravity="center"/>
 
         <TextView
@@ -100,7 +101,7 @@
             android:textSize="18sp"
             android:textColor="@android:color/black"
             android:fontFamily="@font/roboto_condensed_regular"
-            android:text="Click on the Plus!"
+            android:text="@string/help_detail_2"
             android:gravity="center"/>
 
         <ImageView
@@ -113,7 +114,8 @@
             android:src="@drawable/help_6"
             android:adjustViewBounds="true"
             android:layout_marginTop="6dp"
-            app:layout_constraintWidth_percent="0.75"/>
+            app:layout_constraintWidth_percent="0.75"
+            android:contentDescription="@string/help_image_2" />
 
         <View
             android:id="@+id/hr_2"
@@ -136,7 +138,7 @@
             android:textSize="18sp"
             android:textColor="@android:color/black"
             android:fontFamily="@font/roboto_medium"
-            android:text="View your List!"
+            android:text="@string/help_title_3"
             android:gravity="center"/>
 
         <TextView
@@ -150,7 +152,7 @@
             android:textSize="18sp"
             android:textColor="@android:color/black"
             android:fontFamily="@font/roboto_condensed_regular"
-            android:text="Swipe to the left to check your List!"
+            android:text="@string/help_detail_3"
             android:gravity="center"/>
 
         <ImageView
@@ -163,7 +165,8 @@
             android:src="@drawable/help_2"
             android:adjustViewBounds="true"
             android:layout_marginTop="6dp"
-            app:layout_constraintWidth_percent="0.75"/>
+            app:layout_constraintWidth_percent="0.75"
+            android:contentDescription="@string/help_image_3" />
 
         <View
             android:id="@+id/hr_3"
@@ -186,7 +189,7 @@
             android:textSize="18sp"
             android:textColor="@android:color/black"
             android:fontFamily="@font/roboto_medium"
-            android:text="You got Something on your List?"
+            android:text="@string/help_title_4"
             android:gravity="center"/>
 
         <TextView
@@ -200,7 +203,7 @@
             android:textSize="18sp"
             android:textColor="@android:color/black"
             android:fontFamily="@font/roboto_condensed_regular"
-            android:text="Click on it to check it off!"
+            android:text="@string/help_detail_4"
             android:gravity="center"/>
 
         <ImageView
@@ -213,7 +216,8 @@
             android:src="@drawable/help_4"
             android:adjustViewBounds="true"
             android:layout_marginTop="6dp"
-            app:layout_constraintWidth_percent="0.75"/>
+            app:layout_constraintWidth_percent="0.75"
+            android:contentDescription="@string/help_image_4" />
 
         <View
             android:id="@+id/hr_4"
@@ -236,7 +240,7 @@
             android:textSize="18sp"
             android:textColor="@android:color/black"
             android:fontFamily="@font/roboto_medium"
-            android:text="Starting on your next List?"
+            android:text="@string/help_title_5"
             android:gravity="center"/>
 
         <TextView
@@ -250,7 +254,7 @@
             android:textSize="18sp"
             android:textColor="@android:color/black"
             android:fontFamily="@font/roboto_condensed_regular"
-            android:text="Press Clear All Items!"
+            android:text="@string/help_detail_5"
             android:gravity="center"/>
 
         <ImageView
@@ -263,7 +267,8 @@
             android:src="@drawable/help_7"
             android:adjustViewBounds="true"
             android:layout_marginTop="6dp"
-            app:layout_constraintWidth_percent="0.75"/>
+            app:layout_constraintWidth_percent="0.75"
+            android:contentDescription="@string/help_image_5" />
 
         <View
             android:id="@+id/hr_5"
@@ -286,7 +291,7 @@
             android:textSize="18sp"
             android:textColor="@android:color/black"
             android:fontFamily="@font/roboto_medium"
-            android:text="Want to share your List with someone?"
+            android:text="@string/help_title_6"
             android:gravity="center"/>
 
         <TextView
@@ -300,7 +305,7 @@
             android:textSize="18sp"
             android:textColor="@android:color/black"
             android:fontFamily="@font/roboto_condensed_regular"
-            android:text="Press Share List!"
+            android:text="@string/help_detail_6"
             android:gravity="center"/>
 
         <ImageView
@@ -313,7 +318,8 @@
             android:src="@drawable/help_5"
             android:adjustViewBounds="true"
             android:layout_marginTop="6dp"
-            app:layout_constraintWidth_percent="0.75"/>
+            app:layout_constraintWidth_percent="0.75"
+            android:contentDescription="@string/help_image_6" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
