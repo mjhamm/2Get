@@ -11,20 +11,13 @@
         track of the most common items that you might need throughout your week.
         \n\nWhether you are going to the store to just pick up some milk,
         or need to make a list of your entire food shopping before you leave the house, 2Get is here to help you prepare.</string>
-    <string name="about_back_button">back button</string>
     <string name="about_us">About Us</string>
     <string name="legal">Legal</string>
     <string name="privacy_statement" tools:keep="@string/privacy_statement">Privacy Statement</string>
     <string name="licenses">Licenses</string>
-    <string name="about_this_app">About This App</string>
     <string name="test_group_header">Test</string>
     <string name="test_child_item">Milk</string>
     <string name="test_view_item">Test Item</string>
-    <string name="transparency_message">Transparency Message</string>
-    <string name="transparency_statement">Here at 2Get, we want to be completely transparent with you about the use of some permissions in our app. The only permission that we use is that of accessing your photo\'s.
-        This is for the strict purpose of being able to save your Shopping List in order to be able to view it, as well as send it to those that you need to send it to.
-        \n\nWe want you to understand what we are asking for when you press accept to allow us to access your mobile device.\n\nThank you for letting us be a part of your Shopping Experience.</string>
-    <string name="our_message_to_you">Our Message to You</string>
     <string name="version_string">Version:</string>
     <string name="custom_item_hint">Custom Item Name</string>
     <string name="feedback_detail_info">We want you to love our product! That\'s why we want you to let us know of anything that can be improved.\n\nIf you have a new idea to make your life easier while using our app,
@@ -53,5 +46,6 @@
     <string name="help_image_4">Help checking off items</string>
     <string name="terms_of_use">Terms of Use</string>
     <string name="help_button">Help</string>
+    <string name="feedback_title">Feedback</string>
 
 </resources>

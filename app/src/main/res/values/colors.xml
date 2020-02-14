@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#41D62D</color>
     <color name="colorAccent">#41D62D</color>
     <color name="accentGreen">#1D8A0F</color>
+    <color name="link_blue">#448AFF</color>
 </resources>

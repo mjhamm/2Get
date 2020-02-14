@@ -309,7 +309,6 @@
             android:gravity="center"/>
 
         <ImageView
-            android:id="@+id/help_image_6"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/help_addItem_detail_6"

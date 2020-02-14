@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -22,13 +21,11 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
     private ArrayList<String> expandableListTitle;
     private HashMap<String, ArrayList<MakeListItem>> expandableListDetail;
     private final DataSetObservable dataSetObservable = new DataSetObservable();
-    private DatabaseHelper myDB;
 
     public CustomExpandableListAdapter(Context context, ArrayList<String> expandableListTitle, HashMap<String, ArrayList<MakeListItem>> expandableListDetail) {
         this.context = context;
         this.expandableListTitle = expandableListTitle;
         this.expandableListDetail = expandableListDetail;
-        myDB = DatabaseHelper.getInstance(context);
     }
 
     @Override
@@ -86,7 +83,6 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
         String listTitle = (String) getGroup(listPosition);
 
         if (convertView == null) {
-            //check
             convertView = LayoutInflater.from(context).inflate(R.layout.list_group, null);
             groupHolder = new GroupHolder();
             groupHolder.groupTitle = convertView.findViewById(R.id.listTitle);
@@ -121,9 +117,7 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
         }
         notifyDataSetChanged();
 
-        item_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            notifyDataSetChanged();
-        });
+        item_checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> notifyDataSetChanged());
 
         item_textView.setText(expandedListItem.getItemName());
 

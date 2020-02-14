@@ -3,7 +3,6 @@ package com.example.outof;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +35,6 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
     private HashMap<String, ArrayList<MakeListItem>> expandableListDetail;
     private ConstraintLayout mAddItemParent;
     private DatabaseHelper myDB;
-    private CheckBox itemCheckBox;
 
 
     public MakeListActivity() {
@@ -100,7 +98,7 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
                 count++;
             }
             MakeListItem makeListItem = (MakeListItem) expandableListAdapter.getChild(count, childCount);
-            itemCheckBox = itemView.findViewById(R.id.makeList_item_checkbox);
+            CheckBox itemCheckBox = itemView.findViewById(R.id.makeList_item_checkbox);
             if (childData.getInt(2) != 0) {
                 makeListItem.setSelected(true);
                 itemCheckBox.setChecked(true);
@@ -112,13 +110,9 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         }
         childData.close();
 
-        expandableListView.setOnGroupExpandListener(groupPosition -> {
-            myDB.updateGroup(expandableListTitle.get(groupPosition), 1);
-        });
+        expandableListView.setOnGroupExpandListener(groupPosition -> myDB.updateGroup(expandableListTitle.get(groupPosition), 1));
 
-        expandableListView.setOnGroupCollapseListener(groupPosition -> {
-            myDB.updateGroup(expandableListTitle.get(groupPosition), 0);
-        });
+        expandableListView.setOnGroupCollapseListener(groupPosition -> myDB.updateGroup(expandableListTitle.get(groupPosition), 0));
 
         expandableListView.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> {
             MakeListItem makeListItem = expandableListDetail.get(expandableListTitle.get(groupPosition)).get(childPosition);

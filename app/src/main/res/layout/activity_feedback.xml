@@ -10,7 +10,7 @@
         android:id="@+id/feedback_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Feedback"
+        android:text="@string/feedback_title"
         android:gravity="center_horizontal"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +50,9 @@
         android:gravity="center"
         android:textSize="18sp"
         android:textColor="@android:color/black"
-        android:text="@string/feedback_email"/>
+        android:text="@string/feedback_email"
+        android:autoLink="email"
+        android:textColorLink="@color/link_blue"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
