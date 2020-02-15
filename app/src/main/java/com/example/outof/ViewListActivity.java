@@ -8,14 +8,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class ViewListActivity extends Fragment implements View.OnClickListener {
 
@@ -23,11 +29,13 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
 
     private TextView mTextView;
     private ArrayList<ViewListItem> viewItems;
+    private ViewListFragmentListener listener;
     private Context mContext;
     private ViewListAdapter viewListAdapter;
     private ArrayList<String> listItems;
     private DatabaseHelper myDB;
     private boolean itemChecked = false;
+    private ImageButton refreshButton;
 
     public ViewListActivity() {
 
@@ -35,6 +43,10 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
 
     public static ViewListActivity newInstance() {
         return new ViewListActivity();
+    }
+
+    public interface ViewListFragmentListener {
+        void onSelectionARemoved(String selection);
     }
 
 
@@ -46,6 +58,7 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
 
         ListView mListView = view.findViewById(R.id.viewList);
         mTextView = view.findViewById(R.id.viewList_item_text);
+        refreshButton = view.findViewById(R.id.refresh_button);
 
         myDB = DatabaseHelper.getInstance(mContext);
         Cursor data = myDB.getListContents_View();
@@ -114,6 +127,17 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+        if (context instanceof ViewListFragmentListener) {
+            listener = (ViewListFragmentListener) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement ViewListFragmentListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        listener = null;
     }
 
     @Override
@@ -130,6 +154,41 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        refreshButton.setOnClickListener(refresh -> {
+            AlertDialog.Builder clearDialog = new AlertDialog.Builder(mContext);
+            clearDialog.setMessage("Are you sure that you want to remove all purchased items?");
+            clearDialog.setCancelable(false);
+
+            //Clear List - YES
+            clearDialog.setPositiveButton("Confirm", (dialog, which) -> {
+                removePurchasedItems();
+            });
+
+            //Cancel Clearing List - NO
+            clearDialog.setNegativeButton("Cancel", (dialog, which) -> {
+
+                dialog.cancel();
+            });
+
+            AlertDialog alertDialog = clearDialog.create();
+            alertDialog.show();
+
+        });
+    }
+
+    public void removePurchasedItems() {
+        Iterator itr = viewItems.iterator();
+        while(itr.hasNext()) {
+            ViewListItem item = (ViewListItem) itr.next();
+            if (item.getIsStrikeThrough()) {
+                itr.remove();
+                String selection = item.getItemName();
+                listener.onSelectionARemoved(selection);
+                myDB.removeDataFromView(item.getItemName());
+            }
+        }
+        viewListAdapter.notifyDataSetChanged();
     }
 
     @Override
