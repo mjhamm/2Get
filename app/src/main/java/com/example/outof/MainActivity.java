@@ -10,12 +10,12 @@ import android.os.Bundle;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.tabs.TabLayout;
 
 public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener, MakeListActivity.MakeListFragmentListener {
@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     private ViewListActivity viewListActivity;
     private DatabaseHelper myDB;
     private AdView mAdView;
+    private boolean rotated = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +50,26 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     }
 
     public void showPopup(View view) {
+        Animation cw = AnimationUtils.loadAnimation(mContext, R.anim.menu_clockwise);
+        Animation acw = AnimationUtils.loadAnimation(mContext, R.anim.menu_anti_clockwise);
+
         PopupMenu popupMenu = new PopupMenu(this, view);
         popupMenu.setOnMenuItemClickListener(this);
         MenuInflater inflater = popupMenu.getMenuInflater();
         inflater.inflate(R.menu.more_menu, popupMenu.getMenu());
         popupMenu.show();
+
+        if (!rotated) {
+            view.startAnimation(cw);
+            rotated = true;
+            cw.setFillAfter(true);
+        }
+
+        popupMenu.setOnDismissListener(dismiss -> {
+            view.startAnimation(acw);
+            rotated = false;
+            acw.setFillAfter(true);
+        });
     }
 
     private void setupViewPager(ViewPager viewPager) {
