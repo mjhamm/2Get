@@ -30,21 +30,13 @@ public class About extends AppCompatActivity {
             startActivity(new Intent(this, OssLicensesMenuActivity.class));
         });
 
-        feedback.setOnClickListener(click -> {
-            startActivity(new Intent(this, Feedback.class));
-        });
+        feedback.setOnClickListener(click -> startActivity(new Intent(this, Feedback.class)));
 
-        help.setOnClickListener(click -> {
-            startActivity(new Intent(this, Help.class));
-        });
+        help.setOnClickListener(click -> startActivity(new Intent(this, Help.class)));
 
-        privacy.setOnClickListener(click -> {
-            startActivity(new Intent(this, PrivacyStatement.class));
-        });
+        privacy.setOnClickListener(click -> startActivity(new Intent(this, PrivacyStatement.class)));
 
-        tou.setOnClickListener(click -> {
-            startActivity(new Intent(this, TermsAndConditions.class));
-        });
+        tou.setOnClickListener(click -> startActivity(new Intent(this, TermsAndConditions.class)));
     }
 
     public void close_about(View view) {

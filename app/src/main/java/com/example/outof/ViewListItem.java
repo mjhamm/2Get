@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class ViewListItem implements Serializable {
 
     private String itemName;
-    private boolean isStrikeThrough = false;
+    private boolean isStrikeThrough;
 
     public ViewListItem(String itemName, boolean isStrikeThrough) {
         this.itemName = itemName;

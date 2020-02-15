@@ -2,11 +2,8 @@ package com.example.outof;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,24 +15,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class ViewListActivity extends Fragment implements View.OnClickListener {
 
     public static final String TAG = "LOG";
 
-    private ListView mListView;
     private TextView mTextView;
     private ArrayList<ViewListItem> viewItems;
     private Context mContext;
     private ViewListAdapter viewListAdapter;
     private ArrayList<String> listItems;
     private DatabaseHelper myDB;
-    private int itemCheckedInt = 0;
     private boolean itemChecked = false;
 
     public ViewListActivity() {
@@ -53,7 +44,7 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.view_list, container,false);
         viewItems = new ArrayList<>();
 
-        mListView = view.findViewById(R.id.viewList);
+        ListView mListView = view.findViewById(R.id.viewList);
         mTextView = view.findViewById(R.id.viewList_item_text);
 
         myDB = DatabaseHelper.getInstance(mContext);
@@ -86,36 +77,16 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
         return sb;
     }
 
-
-    /*public void exportToBitmap() {
-        Bitmap bitmap = Bitmap.createBitmap(mListView.getWidth(), mListView.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        mListView.draw(canvas);
-        try {
-            File cachePath = new File(mContext.getCacheDir(), "images");
-            //Check
-            //cachePath.mkdirs();
-            FileOutputStream stream = new FileOutputStream(cachePath + "/list.png");
-            bitmap.compress(Bitmap.CompressFormat.PNG,100,stream);
-            stream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }*/
-
     public void addItemToList(String selection) {
         Cursor data = myDB.getListContents_View();
         if (data.getCount() != 0) {
             while(data.moveToNext()) {
-                if (data.getInt(2) == 0) {
-                    itemChecked = false;
-                } else {
-                    itemChecked = true;
-                }
+                itemChecked = data.getInt(2) != 0;
             }
         }
         ViewListItem viewListItem = new ViewListItem(selection, itemChecked);
         if (!myDB.dupCheckViewTable(selection)) {
+            int itemCheckedInt = 0;
             myDB.addDataToView(viewListItem.getItemName(), itemCheckedInt);
         }
         data.close();
@@ -171,11 +142,6 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
                 mTextView.setPaintFlags(mTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 myDB.updateChild(mTextView.getText().toString(), 1);
             }
-                /*if (mTextView.getPaintFlags() == Paint.STRIKE_THRU_TEXT_FLAG) {
-                    mTextView.setPaintFlags(mTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                } else {
-                    mTextView.setPaintFlags(mTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                }*/
         }
     }
 }

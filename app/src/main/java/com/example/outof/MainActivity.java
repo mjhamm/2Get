@@ -3,22 +3,20 @@ package com.example.outof;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
-import androidx.core.content.FileProvider;
 import androidx.viewpager.widget.ViewPager;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
-
-import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
-import com.google.android.gms.ads.doubleclick.PublisherAdView;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.tabs.TabLayout;
-
-import java.io.File;
 
 public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener, MakeListActivity.MakeListFragmentListener {
 
@@ -26,18 +24,22 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     private MakeListActivity makeListActivity;
     private ViewListActivity viewListActivity;
     private DatabaseHelper myDB;
-    private PublisherAdView mPublisherAdView;
+    private AdView mAdView;
+    private boolean rotated = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        MobileAds.initialize(this, initializationStatus -> {
+        });
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest );
+
         ViewPager mViewPager = findViewById(R.id.viewPager);
         TabLayout mTabLayout = findViewById(R.id.tabLayout);
-        mPublisherAdView = findViewById(R.id.adView);
-        PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
-        mPublisherAdView.loadAd(adRequest);
         makeListActivity = MakeListActivity.newInstance();
         viewListActivity = ViewListActivity.newInstance();
         mContext = getApplicationContext();
@@ -48,18 +50,27 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     }
 
     public void showPopup(View view) {
-        //hideSoftKeyboard(view);
+        Animation cw = AnimationUtils.loadAnimation(mContext, R.anim.menu_clockwise);
+        Animation acw = AnimationUtils.loadAnimation(mContext, R.anim.menu_anti_clockwise);
+
         PopupMenu popupMenu = new PopupMenu(this, view);
         popupMenu.setOnMenuItemClickListener(this);
         MenuInflater inflater = popupMenu.getMenuInflater();
         inflater.inflate(R.menu.more_menu, popupMenu.getMenu());
         popupMenu.show();
-    }
 
-    /*public void hideSoftKeyboard(View view) {
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }*/
+        if (!rotated) {
+            view.startAnimation(cw);
+            rotated = true;
+            cw.setFillAfter(true);
+        }
+
+        popupMenu.setOnDismissListener(dismiss -> {
+            view.startAnimation(acw);
+            rotated = false;
+            acw.setFillAfter(true);
+        });
+    }
 
     private void setupViewPager(ViewPager viewPager) {
         MainPagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager());
@@ -93,22 +104,6 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                 alertDialog.show();
                 return true;
             case R.id.share:
-                //Toast.makeText(mContext, "Share List", Toast.LENGTH_SHORT).show();
-
-                /*viewListActivity.exportToBitmap();
-                File imagePath = new File(mContext.getCacheDir(),"images");
-                File newFile = new File(imagePath, "list.png");
-                Uri contentUri = FileProvider.getUriForFile(mContext, "com.example.outof.fileprovider", newFile);
-
-                if (contentUri != null) {
-                    Intent shareIntent = new Intent();
-                    shareIntent.setAction(Intent.ACTION_SEND);
-                    shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    shareIntent.setDataAndType(contentUri, getContentResolver().getType(contentUri));
-                    shareIntent.putExtra(Intent.EXTRA_TEXT, "Here's the Shopping List!");
-                    shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
-                    startActivity(Intent.createChooser(shareIntent, "Share..."));
-                }*/
                 if (!viewListActivity.exportList().toString().isEmpty()) {
                     Intent shareIntent = new Intent();
                     shareIntent.setAction(Intent.ACTION_SEND);
@@ -122,11 +117,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                 }
 
                 return true;
-            /*case R.id.print:
-                Toast.makeText(mContext, "Print List", Toast.LENGTH_SHORT).show();
-                return true;*/
             case R.id.about:
-                Toast.makeText(mContext, "About", Toast.LENGTH_SHORT).show();
                 Intent aboutIntent = new Intent(MainActivity.this, About.class);
                 startActivity(aboutIntent);
                 return true;

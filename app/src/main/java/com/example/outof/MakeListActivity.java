@@ -3,10 +3,11 @@ package com.example.outof;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -36,7 +37,6 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
     private HashMap<String, ArrayList<MakeListItem>> expandableListDetail;
     private ConstraintLayout mAddItemParent;
     private DatabaseHelper myDB;
-    private CheckBox itemCheckBox;
 
 
     public MakeListActivity() {
@@ -100,7 +100,7 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
                 count++;
             }
             MakeListItem makeListItem = (MakeListItem) expandableListAdapter.getChild(count, childCount);
-            itemCheckBox = itemView.findViewById(R.id.makeList_item_checkbox);
+            CheckBox itemCheckBox = itemView.findViewById(R.id.makeList_item_checkbox);
             if (childData.getInt(2) != 0) {
                 makeListItem.setSelected(true);
                 itemCheckBox.setChecked(true);
@@ -112,13 +112,9 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         }
         childData.close();
 
-        expandableListView.setOnGroupExpandListener(groupPosition -> {
-            myDB.updateGroup(expandableListTitle.get(groupPosition), 1);
-        });
+        expandableListView.setOnGroupExpandListener(groupPosition -> myDB.updateGroup(expandableListTitle.get(groupPosition), 1));
 
-        expandableListView.setOnGroupCollapseListener(groupPosition -> {
-            myDB.updateGroup(expandableListTitle.get(groupPosition), 0);
-        });
+        expandableListView.setOnGroupCollapseListener(groupPosition -> myDB.updateGroup(expandableListTitle.get(groupPosition), 0));
 
         expandableListView.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> {
             MakeListItem makeListItem = expandableListDetail.get(expandableListTitle.get(groupPosition)).get(childPosition);
@@ -180,6 +176,9 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Animation cw = AnimationUtils.loadAnimation(mContext, R.anim.add_clockwise);
+        Animation acw = AnimationUtils.loadAnimation(mContext, R.anim.add_anti_clockwise);
+
         addCustomItem.setOnClickListener(v -> {
 
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
@@ -193,6 +192,9 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
             alertDialogBuilder.setView(dialogView);
             editText.requestFocus();
 
+            addCustomItem.startAnimation(cw);
+            cw.setFillAfter(true);
+
             alertDialogBuilder.setPositiveButton("Add Item", (dialog, which) -> {
                 if (!editText.getText().toString().isEmpty()) {
                     String customItem = editText.getText().toString();
@@ -202,6 +204,13 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
                 } else {
                     Toast.makeText(mContext, "You must enter an item to add it to your list.", Toast.LENGTH_SHORT).show();
                 }
+                addCustomItem.startAnimation(acw);
+                acw.setFillAfter(true);
+            });
+
+            alertDialogBuilder.setOnDismissListener(dismiss -> {
+                addCustomItem.startAnimation(acw);
+                acw.setFillAfter(true);
             });
 
             //alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
@@ -320,7 +329,6 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         //Dairy
         myDB.addChild("Dairy", "Butter",0);
         myDB.addChild("Dairy", "Cheese",0);
-        myDB.addChild("Dairy", "Cream",0);
         myDB.addChild("Dairy", "Milk",0);
         myDB.addChild("Dairy", "Sour Cream",0);
         myDB.addChild("Dairy", "Yogurt",0);
@@ -515,7 +523,6 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         ArrayList<MakeListItem> dairy = new ArrayList<>();
         dairy.add(new MakeListItem("Butter", false));
         dairy.add(new MakeListItem("Cheese", false));
-        dairy.add(new MakeListItem("Cream", false));
         dairy.add(new MakeListItem("Milk", false));
         dairy.add(new MakeListItem("Sour Cream", false));
         dairy.add(new MakeListItem("Yogurt", false));
