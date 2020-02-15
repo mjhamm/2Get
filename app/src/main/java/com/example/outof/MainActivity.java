@@ -18,7 +18,7 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.tabs.TabLayout;
 
-public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener, MakeListActivity.MakeListFragmentListener {
+public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener, MakeListActivity.MakeListFragmentListener, ViewListActivity.ViewListFragmentListener {
 
     private Context mContext;
     private MakeListActivity makeListActivity;
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                 clearDialog.setCancelable(false);
 
                 //Clear List - YES
-                clearDialog.setPositiveButton("Yes", (dialog, which) -> {
+                clearDialog.setPositiveButton("Confirm", (dialog, which) -> {
                     makeListActivity.clear();
                     viewListActivity.clearList();
                     myDB.clearData();
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                 });
 
                 //Cancel Clearing List - NO
-                clearDialog.setNegativeButton("No", (dialog, which) -> dialog.cancel());
+                clearDialog.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
                 AlertDialog alertDialog = clearDialog.create();
                 alertDialog.show();
@@ -143,4 +143,8 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     }
 
 
+    @Override
+    public void onSelectionARemoved(String selection) {
+        makeListActivity.uncheckItem(selection);
+    }
 }

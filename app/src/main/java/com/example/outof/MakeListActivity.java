@@ -172,6 +172,22 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         myDB.clearChildren();
     }
 
+    public void uncheckItem(String selection) {
+        View itemView = LayoutInflater.from(mContext).inflate(R.layout.make_list_item, null);
+        for (int i = 0; i < expandableListAdapter.getGroupCount(); i++) {
+            expandableListView.collapseGroup(i);
+            for (int j = 0; j < expandableListAdapter.getChildrenCount(i); j++) {
+                MakeListItem makeListItem = (MakeListItem) expandableListAdapter.getChild(i,j);
+                CheckBox checkBox = itemView.findViewById(R.id.makeList_item_checkbox);
+                if (makeListItem.getItemName().equalsIgnoreCase(selection)) {
+                    makeListItem.setSelected(false);
+                    checkBox.setChecked(false);
+                    myDB.updateChild(selection, 0);
+                }
+            }
+        }
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
