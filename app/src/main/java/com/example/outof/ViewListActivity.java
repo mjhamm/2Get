@@ -3,15 +3,19 @@ package com.example.outof;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Paint;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +26,7 @@ import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.concurrent.TimeUnit;
 
 public class ViewListActivity extends Fragment implements View.OnClickListener {
 
@@ -32,7 +37,7 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
     private ViewListFragmentListener listener;
     private Context mContext;
     private ViewListAdapter viewListAdapter;
-    private ArrayList<String> listItems;
+    private ArrayList<ViewListItem> checkedItems;
     private DatabaseHelper myDB;
     private boolean itemChecked = false;
     private ImageButton refreshButton;
@@ -55,6 +60,7 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.view_list, container,false);
         viewItems = new ArrayList<>();
+        checkedItems = new ArrayList<>();
 
         ListView mListView = view.findViewById(R.id.viewList);
         mTextView = view.findViewById(R.id.viewList_item_text);
@@ -67,7 +73,11 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
         } else {
             while(data.moveToNext()) {
                 itemChecked = data.getInt(2) != 0;
-                viewItems.add(new ViewListItem(data.getString(1), itemChecked));
+                ViewListItem item = new ViewListItem(data.getString(1), itemChecked);
+                viewItems.add(item);
+                if (item.getIsStrikeThrough()) {
+                    checkedItems.add(item);
+                }
             }
         }
         data.close();
@@ -99,8 +109,7 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
         }
         ViewListItem viewListItem = new ViewListItem(selection, itemChecked);
         if (!myDB.dupCheckViewTable(selection)) {
-            int itemCheckedInt = 0;
-            myDB.addDataToView(viewListItem.getItemName(), itemCheckedInt);
+            myDB.addDataToView(viewListItem.getItemName(), 0);
         }
         data.close();
         viewItems.add(viewListItem);
@@ -108,15 +117,22 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
     }
 
     public void removeItemFromList(String selection) {
-        ViewListItem viewListItem = new ViewListItem(selection, false);
+        Cursor data = myDB.getListContents_View();
+        if (data.getCount() != 0) {
+            while(data.moveToNext()) {
+                itemChecked = data.getInt(2) != 0;
+            }
+        }
+        ViewListItem viewListItem = new ViewListItem(selection, itemChecked);
         for (int i = 0; i < viewItems.size(); i++) {
             if (viewListItem.getItemName().equalsIgnoreCase(viewItems.get(i).getItemName())) {
                 viewItems.remove(i);
                 myDB.removeDataFromView(viewListItem.getItemName());
-                viewListAdapter.notifyDataSetChanged();
                 break;
             }
         }
+        data.close();
+        viewListAdapter.notifyDataSetChanged();
     }
 
     public void clearList() {
@@ -155,19 +171,23 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Animation cw = AnimationUtils.loadAnimation(mContext, R.anim.refresh_clockwise);
+
         refreshButton.setOnClickListener(refresh -> {
             AlertDialog.Builder clearDialog = new AlertDialog.Builder(mContext);
             clearDialog.setMessage("Are you sure that you want to remove all purchased items?");
             clearDialog.setCancelable(false);
 
+            refreshButton.startAnimation(cw);
+
             //Clear List - YES
             clearDialog.setPositiveButton("Confirm", (dialog, which) -> {
                 removePurchasedItems();
+                dialog.dismiss();
             });
 
             //Cancel Clearing List - NO
             clearDialog.setNegativeButton("Cancel", (dialog, which) -> {
-
                 dialog.cancel();
             });
 
@@ -197,9 +217,16 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
             if (mTextView.getPaintFlags() == Paint.STRIKE_THRU_TEXT_FLAG) {
                 mTextView.setPaintFlags(mTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                 myDB.updateChild(mTextView.getText().toString(), 0);
+                String itemName = mTextView.getText().toString();
+                for (ViewListItem item : checkedItems) {
+                    if (item.getItemName().equalsIgnoreCase(itemName)) {
+                        checkedItems.remove(item);
+                    }
+                }
             } else {
                 mTextView.setPaintFlags(mTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 myDB.updateChild(mTextView.getText().toString(), 1);
+                checkedItems.add(new ViewListItem(mTextView.getText().toString(), true));
             }
         }
     }

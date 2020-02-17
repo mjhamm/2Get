@@ -47,5 +47,8 @@
     <string name="terms_and_conditions">Terms &amp; Conditions</string>
     <string name="help_button">Help</string>
     <string name="feedback_title">Feedback</string>
+    <string name="help_title_7">Want to Clean Up your List?</string>
+    <string name="help_detail_7"><u>Use the refresh button to remove your purchased items!</u></string>
+    <string name="help_image_7">help_refreshing_list</string>
 
 </resources>

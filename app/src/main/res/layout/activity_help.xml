@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     tools:context=".Help">
 
@@ -25,7 +25,9 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/help_title">
+        app:layout_constraintTop_toBottomOf="@id/help_title"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="72dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -80,7 +82,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/help_image_1"
-                android:layout_margin="16dp"/>
+                android:layout_margin="12dp"/>
 
             <TextView
                 android:id="@+id/help_addItem_title_2"
@@ -131,7 +133,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/help_image_2"
-                android:layout_margin="16dp"/>
+                android:layout_margin="12dp"/>
 
             <TextView
                 android:id="@+id/help_addItem_title_3"
@@ -182,7 +184,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/help_image_3"
-                android:layout_margin="16dp"/>
+                android:layout_margin="12dp"/>
 
             <TextView
                 android:id="@+id/help_addItem_title_4"
@@ -233,7 +235,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/help_image_4"
-                android:layout_margin="16dp"/>
+                android:layout_margin="12dp"/>
 
             <TextView
                 android:id="@+id/help_addItem_title_5"
@@ -284,7 +286,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/help_image_5"
-                android:layout_margin="16dp"/>
+                android:layout_margin="12dp"/>
 
             <TextView
                 android:id="@+id/help_addItem_title_6"
@@ -315,6 +317,7 @@
                 android:gravity="center"/>
 
             <ImageView
+                android:id="@+id/help_image_6"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/help_addItem_detail_6"
@@ -325,6 +328,59 @@
                 android:layout_marginTop="6dp"
                 app:layout_constraintWidth_percent="0.75"
                 android:contentDescription="@string/help_image_6" />
+
+            <View
+                android:id="@+id/hr_6"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/help_image_6"
+                android:layout_margin="12dp"/>
+
+            <TextView
+                android:id="@+id/help_addItem_title_7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/hr_6"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="16dp"
+                android:textSize="18sp"
+                android:textColor="@android:color/black"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/help_title_7"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/help_addItem_detail_7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/help_addItem_title_7"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="6dp"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:fontFamily="@font/roboto_condensed_regular"
+                android:text="@string/help_detail_7"
+                android:gravity="center"/>
+
+            <ImageView
+                android:id="@+id/help_image_7"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/help_addItem_detail_7"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:src="@drawable/help_8"
+                android:adjustViewBounds="true"
+                android:layout_marginTop="6dp"
+                app:layout_constraintWidth_percent="0.75"
+                android:contentDescription="@string/help_image_7"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
