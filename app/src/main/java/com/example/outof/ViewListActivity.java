@@ -24,6 +24,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
@@ -41,6 +42,7 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
     private DatabaseHelper myDB;
     private boolean itemChecked = false;
     private ImageButton refreshButton;
+    private FrameLayout progressHolder;
 
     public ViewListActivity() {
 
@@ -65,6 +67,7 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
         ListView mListView = view.findViewById(R.id.viewList);
         mTextView = view.findViewById(R.id.viewList_item_text);
         refreshButton = view.findViewById(R.id.refresh_button);
+        progressHolder = view.findViewById(R.id.progressHolder);
 
         myDB = DatabaseHelper.getInstance(mContext);
         Cursor data = myDB.getListContents_View();
@@ -101,18 +104,10 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
     }
 
     public void addItemToList(String selection) {
-        Cursor data = myDB.getListContents_View();
-        if (data.getCount() != 0) {
-            while(data.moveToNext()) {
-                itemChecked = data.getInt(2) != 0;
-            }
-        }
-        ViewListItem viewListItem = new ViewListItem(selection, itemChecked);
+        viewItems.add(new ViewListItem(selection, false));
         if (!myDB.dupCheckViewTable(selection)) {
-            myDB.addDataToView(viewListItem.getItemName(), 0);
+            myDB.addDataToView(selection, 0);
         }
-        data.close();
-        viewItems.add(viewListItem);
         viewListAdapter.notifyDataSetChanged();
     }
 
@@ -187,9 +182,7 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
             });
 
             //Cancel Clearing List - NO
-            clearDialog.setNegativeButton("Cancel", (dialog, which) -> {
-                dialog.cancel();
-            });
+            clearDialog.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
             AlertDialog alertDialog = clearDialog.create();
             alertDialog.show();
@@ -216,18 +209,54 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
         if (v.getId() == R.id.viewList_item_text) {
             if (mTextView.getPaintFlags() == Paint.STRIKE_THRU_TEXT_FLAG) {
                 mTextView.setPaintFlags(mTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                myDB.updateChild(mTextView.getText().toString(), 0);
-                String itemName = mTextView.getText().toString();
-                for (ViewListItem item : checkedItems) {
-                    if (item.getItemName().equalsIgnoreCase(itemName)) {
-                        checkedItems.remove(item);
-                    }
-                }
+                //myDB.updateChild(mTextView.getText().toString(), 0);
             } else {
                 mTextView.setPaintFlags(mTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                myDB.updateChild(mTextView.getText().toString(), 1);
-                checkedItems.add(new ViewListItem(mTextView.getText().toString(), true));
+                //myDB.updateChild(mTextView.getText().toString(), 1);
             }
+        }
+    }
+
+    private class Load extends AsyncTask<ArrayList<ViewListItem>, Void, Void> {
+
+        ArrayList<ViewListItem> mViewItems = new ArrayList<>();
+        ViewListFragmentListener mListener;
+        ViewListAdapter mAdapter;
+        DatabaseHelper db;
+
+        private Load(ArrayList<ViewListItem> items, ViewListFragmentListener listener, ViewListAdapter adapter, DatabaseHelper myDb) {
+            mListener = listener;
+            mViewItems = items;
+            mAdapter = adapter;
+            db = myDb;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressHolder.setVisibility(View.VISIBLE);
+        }
+
+        @SafeVarargs
+        @Override
+        protected final Void doInBackground(ArrayList<ViewListItem>... arrayLists) {
+            Iterator itr = mViewItems.iterator();
+            while(itr.hasNext()) {
+                ViewListItem item = (ViewListItem) itr.next();
+                if (item.getIsStrikeThrough()) {
+                    itr.remove();
+                    String selection = item.getItemName();
+                    mListener.onSelectionARemoved(selection);
+                    db.removeDataFromView(item.getItemName());
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            progressHolder.setVisibility(View.GONE);
         }
     }
 }

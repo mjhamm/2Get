@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         });
         mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest );
+        mAdView.loadAd(adRequest);
 
         ViewPager mViewPager = findViewById(R.id.viewPager);
         TabLayout mTabLayout = findViewById(R.id.tabLayout);
@@ -129,8 +129,8 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
     @Override
     protected void onDestroy() {
-        myDB.close();
         super.onDestroy();
+        myDB.close();
     }
 
     @Override

@@ -54,6 +54,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_CHILDREN = "CREATE TABLE IF NOT EXISTS " + TABLE_CHILDREN + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + KEY_GROUP_NAME + " TEXT, " + KEY_ITEM + " TEXT, "
             + KEY_CHECKED + " INTEGER)";
 
+
+
     //------------------------------ ALL TABLES -------------------------------------------------------------------------------------------
 
     @Override
@@ -68,6 +70,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_VIEW);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_GROUP);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CHILDREN);
+        onCreate(db);
     }
 
     //Deletes all data from both Tables
@@ -119,13 +122,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //Retrieve data from View List Table
     public Cursor getListContents_View() {
-        SQLiteDatabase db = this.getWritableDatabase();
+        //changed to readable
+        SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM " + TABLE_VIEW, null);
     }
 
     //Check for duplicates in View Table
     public boolean dupCheckViewTable(String name) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        //changed to readable
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor cur;
         cur = db.query(TABLE_VIEW, null, KEY_ITEM + " =?", new String[]{name}, null, null, null, null);
         if (cur != null && cur.getCount() > 0) {

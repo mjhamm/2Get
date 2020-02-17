@@ -3,6 +3,7 @@ package com.example.outof;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,7 +102,8 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
             }
             MakeListItem makeListItem = (MakeListItem) expandableListAdapter.getChild(count, childCount);
             CheckBox itemCheckBox = itemView.findViewById(R.id.makeList_item_checkbox);
-            if (childData.getInt(2) != 0) {
+            Log.d(TAG, "CHILD: " + childData.getString(2) + " CHECKED: " + childData.getInt(3));
+            if (childData.getInt(3) == 1) {
                 makeListItem.setSelected(true);
                 itemCheckBox.setChecked(true);
             } else {
@@ -124,14 +126,14 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
                 makeListItem.setSelected(false);
                 itemCheckBox.setChecked(false);
                 String selection = makeListItem.getItemName();
-                myDB.updateChild(selection, 0);
                 listener.onSelectionBSent(selection);
+                myDB.updateChild(selection, 0);
             } else {
                 makeListItem.setSelected(true);
                 itemCheckBox.setChecked(true);
                 String selection = makeListItem.getItemName();
-                myDB.updateChild(selection, 1);
                 listener.onSelectionASent(selection);
+                myDB.updateChild(selection, 1);
             }
             return true;
         });
@@ -345,16 +347,17 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         //Dairy
         myDB.addChild("Dairy", "Butter",0);
         myDB.addChild("Dairy", "Cheese",0);
+        myDB.addChild("Dairy", "Cream",0);
         myDB.addChild("Dairy", "Milk",0);
         myDB.addChild("Dairy", "Sour Cream",0);
         myDB.addChild("Dairy", "Yogurt",0);
 
         //Deli
-        myDB.addChild("Deli", "Cheese", 0);
-        myDB.addChild("Deli", "Ham", 0);
-        myDB.addChild("Deli", "Roast Beef", 0);
-        myDB.addChild("Deli", "Salad", 0);
-        myDB.addChild("Deli", "Turkey", 0);
+        myDB.addChild("Deli", "Deli Cheese", 0);
+        myDB.addChild("Deli", "Deli Ham", 0);
+        myDB.addChild("Deli", "Deli Roast Beef", 0);
+        myDB.addChild("Deli", "Deli Salad", 0);
+        myDB.addChild("Deli", "Deli Turkey", 0);
 
         //Frozen Foods
         myDB.addChild("Frozen Foods", "Ice Cream", 0);
@@ -539,24 +542,25 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         ArrayList<MakeListItem> dairy = new ArrayList<>();
         dairy.add(new MakeListItem("Butter", false));
         dairy.add(new MakeListItem("Cheese", false));
+        dairy.add(new MakeListItem("Cream", false));
         dairy.add(new MakeListItem("Milk", false));
         dairy.add(new MakeListItem("Sour Cream", false));
         dairy.add(new MakeListItem("Yogurt", false));
         //Deli
         ArrayList<MakeListItem> deli = new ArrayList<>();
-        deli.add(new MakeListItem("Cheese", false));
-        deli.add(new MakeListItem("Ham", false));
-        deli.add(new MakeListItem("Roast Beef", false));
-        deli.add(new MakeListItem("Salad", false));
-        deli.add(new MakeListItem("Turkey", false));
+        deli.add(new MakeListItem("Deli Cheese", false));
+        deli.add(new MakeListItem("Deli Ham", false));
+        deli.add(new MakeListItem("Deli Roast Beef", false));
+        deli.add(new MakeListItem("Deli Salad", false));
+        deli.add(new MakeListItem("Deli Turkey", false));
         //Frozen Foods
         ArrayList<MakeListItem> frozenFoods = new ArrayList<>();
         frozenFoods.add(new MakeListItem("Ice Cream", false));
-        frozenFoods.add(new MakeListItem("Meals", false));
-        frozenFoods.add(new MakeListItem("Pizza", false));
-        frozenFoods.add(new MakeListItem("Potatoes", false));
-        frozenFoods.add(new MakeListItem("Vegetables", false));
-        frozenFoods.add(new MakeListItem("Waffles", false));
+        frozenFoods.add(new MakeListItem("Frozen Meals", false));
+        frozenFoods.add(new MakeListItem("Frozen Pizza", false));
+        frozenFoods.add(new MakeListItem("Frozen Potatoes", false));
+        frozenFoods.add(new MakeListItem("Frozen Vegetables", false));
+        frozenFoods.add(new MakeListItem("Frozen Waffles", false));
         //Health & Beauty
         ArrayList<MakeListItem> toiletries = new ArrayList<>();
         toiletries.add(new MakeListItem("Bandages", false));
