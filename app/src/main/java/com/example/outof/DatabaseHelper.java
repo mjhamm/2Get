@@ -10,10 +10,7 @@ import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final String TAG = "LOG";
-
-    private SQLiteDatabase sqlDb;
-    private SQLiteOpenHelper DbHelper;
+    //public static final String TAG = "LOG";
 
     private static DatabaseHelper sInstance;
     //Database Version
@@ -53,8 +50,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_TABLE_CHILDREN = "CREATE TABLE IF NOT EXISTS " + TABLE_CHILDREN + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + KEY_GROUP_NAME + " TEXT, " + KEY_ITEM + " TEXT, "
             + KEY_CHECKED + " INTEGER)";
-
-
 
     //------------------------------ ALL TABLES -------------------------------------------------------------------------------------------
 
@@ -128,7 +123,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Check for duplicates in View Table
-    public boolean dupCheckViewTable(String name) {
+    /*public boolean dupCheckViewTable(String name) {
         //changed to readable
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cur;
@@ -139,7 +134,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } else {
             return false;
         }
-    }
+    }*/
 
     //Remove data from View List Table
     /*public void removeDataFromView(String name) {

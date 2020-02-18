@@ -102,7 +102,6 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
             }
             MakeListItem makeListItem = (MakeListItem) expandableListAdapter.getChild(count, childCount);
             CheckBox itemCheckBox = itemView.findViewById(R.id.makeList_item_checkbox);
-            Log.d(TAG, "CHILD: " + childData.getString(2) + " CHECKED: " + childData.getInt(3));
             if (childData.getInt(3) == 1) {
                 makeListItem.setSelected(true);
                 itemCheckBox.setChecked(true);
