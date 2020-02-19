@@ -12,25 +12,30 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".TermsAndConditions"/>
-        <activity android:name=".PrivacyStatement" />
-        <activity android:name=".Help" />
-        <activity android:name=".Feedback" />
-        <activity android:name=".AddCustomItem" />
-        <activity android:name=".About" />
         <activity
-            android:name=".MainActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize">
+            android:name=".SplashScreenActivity"
+            android:theme="@style/SplashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize">
+        </activity>
+        <activity android:name=".Licenses"/>
+        <activity android:name=".Terms" />
+        <activity android:name=".Privacy" />
+        <activity android:name=".Help" />
+        <activity android:name=".Feedback" />
+        <activity android:name=".AddCustomItem" />
+        <activity android:name=".About" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-1616194854650059~9878347450" />
+            android:value="ca-app-pub-3940256099942544/6300978111" />
         <meta-data
             android:name="com.google.android.gms.ads.AD_MANAGER_APP"
             android:value="true" />

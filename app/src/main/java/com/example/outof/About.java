@@ -3,9 +3,7 @@ package com.example.outof;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 
 public class About extends AppCompatActivity {
 
@@ -14,32 +12,37 @@ public class About extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
+        //Licenses Button
         Button licenses = findViewById(R.id.licenses_button);
-        //Button transparency = findViewById(R.id.trans_button);
+        //Feedback Button
         Button feedback = findViewById(R.id.feedback_button);
+        //Help Button
         Button help = findViewById(R.id.help_button);
+        //Privacy Policy Button
         Button privacy = findViewById(R.id.privacy_button);
+        //Terms & Conditions Button
         Button tou = findViewById(R.id.tou_button);
 
-        /*transparency.setOnClickListener(click -> {
-            startActivity(new Intent(this, TransparencyStatement.class));
-        });*/
+        //Launch android licenses activity
+        licenses.setOnClickListener(click -> startActivity(new Intent(this, Licenses.class)));
 
-        licenses.setOnClickListener(click -> {
-            OssLicensesMenuActivity.setActivityTitle("Licenses");
-            startActivity(new Intent(this, OssLicensesMenuActivity.class));
-        });
-
+        //Start Feedback
         feedback.setOnClickListener(click -> startActivity(new Intent(this, Feedback.class)));
 
+        //Start Help
         help.setOnClickListener(click -> startActivity(new Intent(this, Help.class)));
 
-        privacy.setOnClickListener(click -> startActivity(new Intent(this, PrivacyStatement.class)));
+        //Start Privacy Policy
+        privacy.setOnClickListener(click -> startActivity(new Intent(this, Privacy.class)));
 
-        tou.setOnClickListener(click -> startActivity(new Intent(this, TermsAndConditions.class)));
+        //Start Terms & Conditions
+        tou.setOnClickListener(click -> startActivity(new Intent(this, Terms.class)));
     }
 
-    public void close_about(View view) {
+    //Make sure activities are destroyed
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
         finish();
     }
 }

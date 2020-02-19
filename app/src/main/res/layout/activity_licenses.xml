@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Licenses">
+
+    <TextView
+        android:id="@+id/osl_title"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:text="@string/open_source_libraries"
+        android:gravity="center"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="22sp"
+        android:fontFamily="@font/roboto_medium"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/osl_title"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"
+        android:padding="8dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/osl_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="@string/libraries_we_use"
+                android:textSize="24sp"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@android:color/black"/>
+
+            <TextView
+                android:id="@+id/osl_header_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/osl_header"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:textColor="@android:color/black"
+                android:fontFamily="@font/roboto_condensed_regular"
+                android:layout_marginTop="16dp"
+                android:text="@string/osl_header_detail" />
+
+            <TextView
+                android:id="@+id/glide_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/osl_header_detail"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="12dp"
+                android:textSize="18sp"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@android:color/black"
+                android:text="@string/glide_title"/>
+
+            <TextView
+                android:id="@+id/glide_pc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/glide_title"
+                android:layout_marginTop="8dp"
+                android:textColor="@android:color/black"
+                android:text="@string/project_code_glide"
+                android:fontFamily="@font/roboto_medium"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/glide_pc"
+                app:layout_constraintTop_toBottomOf="@id/glide_title"
+                android:layout_marginTop="8dp"
+                android:autoLink="web"
+                android:textColorLink="@android:color/holo_blue_dark"
+                android:text="@string/glide_pc_url"/>
+
+            <TextView
+                android:id="@+id/glide_copy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/glide_pc"
+                android:textColor="@android:color/black"
+                android:text="@string/glide_copy"
+                android:fontFamily="@font/roboto_condensed_regular"/>
+
+            <TextView
+                android:id="@+id/glide_license"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/glide_copy"
+                android:textColor="@android:color/black"
+                android:text="@string/project_license_glide"
+                android:fontFamily="@font/roboto_medium"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/glide_license"
+                app:layout_constraintTop_toBottomOf="@id/glide_copy"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:autoLink="web"
+                android:textColorLink="@android:color/holo_blue_dark"
+                android:text="@string/glide_pl_url"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

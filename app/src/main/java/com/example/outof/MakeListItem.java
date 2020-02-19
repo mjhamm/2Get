@@ -16,10 +16,6 @@ public class MakeListItem implements Serializable {
         return itemName;
     }
 
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
     public boolean isSelected() {
         return selected;
     }

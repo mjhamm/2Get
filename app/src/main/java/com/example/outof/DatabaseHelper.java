@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -31,14 +30,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_GROUP_NAME = "groupName";
     private static final String KEY_GROUP_EXPANDED = "expanded";
 
-    public static synchronized DatabaseHelper getInstance(Context context) {
+    protected static synchronized DatabaseHelper getInstance(Context context) {
         if (sInstance == null) {
             sInstance = new DatabaseHelper(context.getApplicationContext());
         }
         return sInstance;
     }
 
-    public DatabaseHelper(@Nullable Context context) {
+    private DatabaseHelper(@Nullable Context context) {
         super(context, LIST_DATABASE_NAME, null, DB_VERSION);
     }
 
@@ -74,11 +73,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM " + TABLE_VIEW);
     }
 
+    //Makes all groups not Expanded
     public void clearGroups() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("UPDATE " + TABLE_GROUP + " SET " + KEY_GROUP_EXPANDED + " = 0");
     }
 
+    //Makes all children not checked
     public void clearChildren() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("UPDATE " + TABLE_CHILDREN + " SET " + KEY_CHECKED + " = 0");
@@ -86,13 +87,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //------------------------------ VIEW TABLE -------------------------------------------------------------------------------------------
 
-    //Update View List Table if row exists
-    /*public void updateView(String name, int checked) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(KEY_CHECKED, checked);
-        db.update(TABLE_VIEW, contentValues,KEY_ITEM + " =?", new String[]{name});
-    }*/
+    //Updates ViewList item
     public void updateView(String name, boolean checked) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -110,11 +105,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insert(TABLE_VIEW, null, contentValues);
     }
 
-    public Cursor checkItem(String name) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.query(TABLE_VIEW, null, KEY_ITEM + " = ? ", new String[]{name}, null, null, null, null);
-    }
-
     //Retrieve data from View List Table
     public Cursor getListContents_View() {
         //changed to readable
@@ -122,25 +112,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery("SELECT * FROM " + TABLE_VIEW, null);
     }
 
-    //Check for duplicates in View Table
-    /*public boolean dupCheckViewTable(String name) {
-        //changed to readable
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cur;
-        cur = db.query(TABLE_VIEW, null, KEY_ITEM + " =?", new String[]{name}, null, null, null, null);
-        if (cur != null && cur.getCount() > 0) {
-            cur.close();
-            return true;
-        } else {
-            return false;
-        }
-    }*/
-
-    //Remove data from View List Table
-    /*public void removeDataFromView(String name) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_VIEW, KEY_ITEM + "=?", new String[]{name});
-    }*/
+    //Remove item from View list when child item unchecked
     public boolean removeDataFromView(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TABLE_VIEW, KEY_ITEM + "=?", new String[]{name}) > 0;
@@ -148,6 +120,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //------------------------------ GROUP TABLE -------------------------------------------------------------------------------------------
 
+    //Add group to DB
     public void addGroup(String groupName, int expanded) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -156,6 +129,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insert(TABLE_GROUP, null,contentValues);
     }
 
+    //Update group expanded variable
     public void updateGroup(String groupName, int expanded) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -163,6 +137,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.update(TABLE_GROUP, contentValues, KEY_GROUP_NAME + " = ?", new String[]{groupName});
     }
 
+    //Query all group items in MakeList Group Table
     public Cursor getListContents_Group() {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM " + TABLE_GROUP,null);
@@ -170,6 +145,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //------------------------------ CHILDREN TABLE -------------------------------------------------------------------------------------------
 
+    //Add child to DB with link to Group
     public void addChild(String groupName, String childName, int childChecked) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -179,6 +155,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insert(TABLE_CHILDREN,null, contentValues);
     }
 
+    //Update child checked variable
     public void updateChild(String name, int checked) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -186,6 +163,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.update(TABLE_CHILDREN, contentValues,KEY_ITEM + " = ?", new String[]{name});
     }
 
+    //Query all child items in MakeList Child Table
     public Cursor getListContents_Children() {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM " + TABLE_CHILDREN, null);

@@ -36,7 +36,6 @@
         android:text="@string/feedback_detail_info"/>
 
     <TextView
-        android:id="@+id/feedback_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"

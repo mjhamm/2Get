@@ -16,10 +16,6 @@ public class ViewListItem implements Serializable {
         return itemName;
     }
 
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
     public boolean getIsStrikeThrough() {
         return isStrikeThrough;
     }

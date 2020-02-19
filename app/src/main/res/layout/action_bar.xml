@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     style="@style/actionBar"
     android:layout_height="?attr/actionBarSize">
@@ -10,6 +10,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:layout_gravity="end"/>
 
         <ImageView

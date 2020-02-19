@@ -6,26 +6,30 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.viewpager.widget.ViewPager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
+
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.material.tabs.TabLayout;
 
 public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener, MakeListActivity.MakeListFragmentListener, ViewListActivity.ViewListFragmentListener {
+
+    public static final String TAG = "LOG: ";
 
     private Context mContext;
     private MakeListActivity makeListActivity;
     private ViewListActivity viewListActivity;
     private DatabaseHelper myDB;
-    private AdView mAdView;
     private boolean rotated = false;
 
     @Override
@@ -33,11 +37,21 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MobileAds.initialize(this, initializationStatus -> {
-        });
-        mAdView = findViewById(R.id.adView);
+        MobileAds.initialize(this, "ca-app-pub-3940256099942544/6300978111");
+        AdView mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+        mAdView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                Log.e(TAG, "Ad successfully Loaded");
+            }
+
+            @Override
+            public void onAdFailedToLoad(int i) {
+                Log.e(TAG, "Ad failed to Load");
+            }
+        });
 
         ViewPager mViewPager = findViewById(R.id.viewPager);
         TabLayout mTabLayout = findViewById(R.id.tabLayout);
@@ -74,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        MainPagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager());
+        PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager());
         adapter.addFragment(makeListActivity, "Make List");
         adapter.addFragment(viewListActivity, "View List");
         viewPager.setAdapter(adapter);

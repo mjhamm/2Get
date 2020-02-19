@@ -42,21 +42,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!--<TextView
-                android:id="@+id/about_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:fontFamily="@font/roboto_medium"
-                android:gravity="center"
-                android:text="@string/about_this_app"
-                android:textColor="@color/accentGreen"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/about_logo" />-->
-
             <TextView
                 android:id="@+id/about_detail"
                 android:layout_width="match_parent"
@@ -123,7 +108,7 @@
                 android:textSize="16sp"/>
 
             <Button
-                android:id="@+id/licenses_button"
+                android:id="@+id/privacy_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
@@ -137,25 +122,7 @@
                 android:fontFamily="@font/roboto_medium"
                 android:backgroundTint="@color/accentGreen"
                 android:textColor="@android:color/white"
-                android:text="@string/licenses"
-                android:textAllCaps="false"/>
-
-            <Button
-                android:id="@+id/privacy_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/licenses_button"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
-                android:gravity="center"
-                android:textSize="16sp"
-                android:fontFamily="@font/roboto_medium"
-                android:backgroundTint="@color/accentGreen"
-                android:textColor="@android:color/white"
-                android:text="@string/privacy_statement"
+                android:text="@string/privacy_policy"
                 android:textAllCaps="false"/>
 
             <Button
@@ -176,28 +143,27 @@
                 android:text="@string/terms_and_conditions"
                 android:textAllCaps="false"/>
 
-            <!--<Button
-                android:id="@+id/trans_button"
+            <Button
+                android:id="@+id/licenses_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/legal_main"
+                app:layout_constraintTop_toBottomOf="@+id/tou_button"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
-                android:gravity="start|center_vertical"
-                android:fontFamily="@font/roboto_condensed_regular"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:fontFamily="@font/roboto_medium"
                 android:backgroundTint="@color/accentGreen"
                 android:textColor="@android:color/white"
-                android:text="@string/transparency_message"
-                android:textAllCaps="false"/>-->
+                android:text="@string/licenses"
+                android:textAllCaps="false"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     </ScrollView>
-
 
     <TextView
         android:id="@+id/version_1"
@@ -220,9 +186,5 @@
         android:textColor="@android:color/black"
         android:layout_marginBottom="4dp"
         android:layout_marginStart="8dp"/>
-
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

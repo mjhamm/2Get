@@ -9,39 +9,33 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.concurrent.TimeUnit;
 
 public class ViewListActivity extends Fragment implements View.OnClickListener {
 
     public static final String TAG = "LOG";
 
     private TextView mTextView;
-    private ArrayList<ViewListItem> viewItems;
-    private ViewListFragmentListener listener;
+    private static ArrayList<ViewListItem> viewItems;
+    private static ViewListFragmentListener listener;
     private Context mContext;
     private ViewListAdapter viewListAdapter;
-    private DatabaseHelper myDB;
+    private static DatabaseHelper myDB;
     private boolean itemChecked = false;
     private ImageButton refreshButton;
     private FrameLayout progressHolder;
+    private Load myLoad;
 
     public ViewListActivity() {
 
@@ -55,12 +49,12 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
         void onSelectionARemoved(String selection);
     }
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.view_list, container,false);
         viewItems = new ArrayList<>();
+        myLoad = new Load();
 
         ListView mListView = view.findViewById(R.id.viewList);
         mTextView = view.findViewById(R.id.viewList_item_text);
@@ -100,9 +94,6 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
 
     public void addItemToList(String selection) {
         viewItems.add(new ViewListItem(selection, false));
-        /*if (!myDB.dupCheckViewTable(selection)) {
-            myDB.addDataToView(selection, 0);
-        }*/
         myDB.addDataToView(selection, 0);
         viewListAdapter.notifyDataSetChanged();
     }
@@ -154,11 +145,6 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -174,7 +160,7 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
             //Clear List - YES
             clearDialog.setPositiveButton("Confirm", (dialog, which) -> {
                 dialog.dismiss();
-                new Load().execute();
+                myLoad.execute();
             });
 
             //Cancel Clearing List - NO
@@ -200,16 +186,6 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
     private class Load extends AsyncTask<Void, Void, ArrayList<ViewListItem>> {
 
         ArrayList<String> selections = new ArrayList<>();
-        /*ViewListFragmentListener mListener;
-        ViewListAdapter mAdapter;
-        DatabaseHelper db;
-
-        private Load(ArrayList<ViewListItem> items, ViewListFragmentListener listener, ViewListAdapter adapter, DatabaseHelper myDb) {
-            mListener = listener;
-            mViewItems = items;
-            mAdapter = adapter;
-            db = myDb;
-        }*/
 
         @Override
         protected void onPreExecute() {
@@ -241,5 +217,11 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
             progressHolder.setVisibility(View.GONE);
             viewListAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        myLoad.cancel(true);
+        super.onDestroy();
     }
 }

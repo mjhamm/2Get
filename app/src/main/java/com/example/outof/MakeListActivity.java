@@ -3,7 +3,6 @@ package com.example.outof;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,7 @@ import java.util.LinkedHashMap;
 
 public class MakeListActivity extends Fragment implements CompoundButton.OnCheckedChangeListener {
 
-    public static final String TAG = "LOG";
+    //public static final String TAG = "LOG";
 
     private Context mContext;
     private ImageButton addCustomItem;
@@ -37,8 +36,9 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
     private ArrayList<String> expandableListTitle;
     private HashMap<String, ArrayList<MakeListItem>> expandableListDetail;
     private ConstraintLayout mAddItemParent;
-    private DatabaseHelper myDB;
-
+    private static DatabaseHelper myDB;
+    private Cursor childData;
+    private View itemView;
 
     public MakeListActivity() {
 
@@ -53,31 +53,51 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         void onSelectionBSent(String selection);
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mContext = getContext();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.make_list, container,false);
 
         final LayoutInflater layoutView  = getLayoutInflater();
-        final View itemView = layoutView.inflate(R.layout.make_list_item, null);
+        itemView = layoutView.inflate(R.layout.make_list_item, null);
 
         mAddItemParent = view.findViewById(R.id.addItemParent);
         addCustomItem = view.findViewById(R.id.addCustomItem_button);
         expandableListView = view.findViewById(R.id.makeList);
         expandableListDetail = getData();
         expandableListTitle = new ArrayList<>(expandableListDetail.keySet());
-        expandableListAdapter = new CustomExpandableListAdapter(mContext, expandableListTitle, expandableListDetail);
+        expandableListAdapter = new ExpandListAdapter(mContext, expandableListTitle, expandableListDetail);
         expandableListView.setAdapter(expandableListAdapter);
         myDB = DatabaseHelper.getInstance(mContext);
 
         Cursor groupData = myDB.getListContents_Group();
-        Cursor childData = myDB.getListContents_Children();
+        childData = myDB.getListContents_Children();
         int groupCount = 0;
 
+
         //EXPANDING OF GROUPS
+        /*if (groupData.getCount() != 0) {
+            while(groupData.moveToNext()) { *//* Beginning of Moving through group *//*
+                if (groupCount == expandableListAdapter.getGroupCount()) {
+                    break;
+                } else {
+                    if (groupData.getInt(2) != 0) {
+                        expandableListView.expandGroup(groupData.getPosition());
+                    }
+                }
+                groupCount++;
+            } *//* End of Moving through group *//*
+            groupData.close();
+        }*/
         if (groupData.getCount() == 0) {
-            addDataToDb_Group();
-            addDataToDb_Children();
+            LoadDatabase load = new LoadDatabase();
+            load.execute();
         } else {
             while(groupData.moveToNext()) { /* Beginning of Moving through group */
                 if (groupCount == expandableListAdapter.getGroupCount()) {
@@ -88,30 +108,12 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
                     }
                 }
                 groupCount++;
-            } /* End of Moving through group */
+            }/* End of Moving through group */
             groupData.close();
         }
 
         //CHECK CHILDREN
-        int childCount = 0;
-        int count = 0;
-        while(childData.moveToNext()) {
-            if (childCount == expandableListAdapter.getChildrenCount(count)) {
-                childCount = 0;
-                count++;
-            }
-            MakeListItem makeListItem = (MakeListItem) expandableListAdapter.getChild(count, childCount);
-            CheckBox itemCheckBox = itemView.findViewById(R.id.makeList_item_checkbox);
-            if (childData.getInt(3) == 1) {
-                makeListItem.setSelected(true);
-                itemCheckBox.setChecked(true);
-            } else {
-                makeListItem.setSelected(false);
-                itemCheckBox.setChecked(false);
-            }
-            childCount++;
-        }
-        childData.close();
+        checkChildren();
 
         expandableListView.setOnGroupExpandListener(groupPosition -> myDB.updateGroup(expandableListTitle.get(groupPosition), 1));
 
@@ -189,6 +191,28 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         }
     }
 
+    public void checkChildren() {
+        int childCount = 0;
+        int count = 0;
+        while(childData.moveToNext()) {
+            if (childCount == expandableListAdapter.getChildrenCount(count)) {
+                childCount = 0;
+                count++;
+            }
+            MakeListItem makeListItem = (MakeListItem) expandableListAdapter.getChild(count, childCount);
+            CheckBox itemCheckBox = itemView.findViewById(R.id.makeList_item_checkbox);
+            if (childData.getInt(3) == 1) {
+                makeListItem.setSelected(true);
+                itemCheckBox.setChecked(true);
+            } else {
+                makeListItem.setSelected(false);
+                itemCheckBox.setChecked(false);
+            }
+            childCount++;
+        }
+        childData.close();
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -230,32 +254,9 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
                 acw.setFillAfter(true);
             });
 
-            //alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-
             AlertDialog alertDialog = alertDialogBuilder.create();
             alertDialog.show();
         });
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mContext = getContext();
     }
 
     @Override
@@ -483,7 +484,8 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         myDB.addChild("Vegetarian", "Tofu",0);
     }
 
-    public HashMap<String, ArrayList<MakeListItem>> getData() {
+    //Creating HashMaps and ArrayLists for information to go into Expandable List View
+    private HashMap<String, ArrayList<MakeListItem>> getData() {
         LinkedHashMap<String, ArrayList<MakeListItem>> expandableListDetail = new LinkedHashMap<>();
         //Baby & Childcare
         ArrayList<MakeListItem> baby = new ArrayList<>();

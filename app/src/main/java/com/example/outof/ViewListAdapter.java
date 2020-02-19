@@ -17,10 +17,9 @@ import java.util.ArrayList;
 public class ViewListAdapter extends ArrayAdapter<ViewListItem> {
 
     private Context context;
-    public ArrayList<ViewListItem> listItems;
-    public DataSetObservable dataSetObservable = new DataSetObservable();
+    private ArrayList<ViewListItem> listItems;
+    private DataSetObservable dataSetObservable = new DataSetObservable();
     private DatabaseHelper myDB;
-    private int isChecked = 0;
 
     public ViewListAdapter(ArrayList<ViewListItem> listItems, Context context) {
         super(context, R.layout.view_list_item, listItems);
@@ -55,7 +54,7 @@ public class ViewListAdapter extends ArrayAdapter<ViewListItem> {
         ViewListItem viewListItem = listItems.get(position);
 
         if (convertView == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater layoutInflater = LayoutInflater.from(context);
             convertView = layoutInflater.inflate(R.layout.view_list_item,null);
             viewHolder = new ViewHolder();
             viewHolder.item_textView = convertView.findViewById(R.id.viewList_item_text);
@@ -83,9 +82,7 @@ public class ViewListAdapter extends ArrayAdapter<ViewListItem> {
         });
 
         viewHolder.item_textView.setText(listItems.get(position).getItemName());
-        viewHolder.item_textView.setTag(position);
         viewHolder.item_isStrikeThrough = listItems.get(position).getIsStrikeThrough();
-        notifyDataSetChanged();
 
         return convertView;
     }
