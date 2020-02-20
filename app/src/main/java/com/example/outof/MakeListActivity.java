@@ -20,6 +20,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -82,19 +84,6 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
 
 
         //EXPANDING OF GROUPS
-        /*if (groupData.getCount() != 0) {
-            while(groupData.moveToNext()) { *//* Beginning of Moving through group *//*
-                if (groupCount == expandableListAdapter.getGroupCount()) {
-                    break;
-                } else {
-                    if (groupData.getInt(2) != 0) {
-                        expandableListView.expandGroup(groupData.getPosition());
-                    }
-                }
-                groupCount++;
-            } *//* End of Moving through group *//*
-            groupData.close();
-        }*/
         if (groupData.getCount() == 0) {
             LoadDatabase load = new LoadDatabase();
             load.execute();
@@ -279,14 +268,14 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         myDB.addGroup("Health & Beauty",0);
         myDB.addGroup("Household",0);
         myDB.addGroup("Laundry, Paper & Cleaning",0);
-        myDB.addGroup("Meat & Fish",0);
+        myDB.addGroup("Meat & Seafood",0);
         myDB.addGroup("Pet Items",0);
+        myDB.addGroup("Pre-Baked Goods",0);
         myDB.addGroup("Produce",0);
         myDB.addGroup("Rice & Pasta",0);
         myDB.addGroup("Sauces & Oils",0);
         myDB.addGroup("Snacks",0);
         myDB.addGroup("Spices",0);
-        myDB.addGroup("Vegetarian",0);
     }
 
     public void addDataToDb_Children() {
@@ -299,9 +288,13 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         myDB.addChild("Baby & Childcare", "Wipes", 0);
 
         //Baking
+        myDB.addChild("Baking", "Baking Powder", 0);
+        myDB.addChild("Baking", "Baking Soda", 0);
+        myDB.addChild("Baking", "Brown Sugar", 0);
         myDB.addChild("Baking", "Flour", 0);
         myDB.addChild("Baking", "Pancake Mix", 0);
         myDB.addChild("Baking", "Sugar", 0);
+        myDB.addChild("Baking", "Syrup", 0);
         myDB.addChild("Baking", "Vanilla", 0);
         myDB.addChild("Baking", "Yeast", 0);
 
@@ -314,17 +307,17 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
 
         //Bread
         myDB.addChild("Bread", "Bagels", 0);
-        myDB.addChild("Bread", "Bulky Rolls", 0);
-        myDB.addChild("Bread", "Muffins", 0);
+        myDB.addChild("Bread", "English Muffins", 0);
+        myDB.addChild("Bread", "Hamburger/Hot dog Rolls", 0);
         myDB.addChild("Bread", "Pitas", 0);
+        myDB.addChild("Bread", "Rolls", 0);
         myDB.addChild("Bread", "Sandwich", 0);
         myDB.addChild("Bread", "Tortilla", 0);
 
         //Breakfast & Cereal
-        myDB.addChild("Breakfast & Cereal", "Breakfast Bars", 0);
-        myDB.addChild("Breakfast & Cereal", "Cold Cereal", 0);
+        myDB.addChild("Breakfast & Cereal", "Cereal", 0);
         myDB.addChild("Breakfast & Cereal", "Granola", 0);
-        myDB.addChild("Breakfast & Cereal", "Hot Cereal", 0);
+        myDB.addChild("Breakfast & Cereal", "Granola Bars", 0);
         myDB.addChild("Breakfast & Cereal", "Oatmeal", 0);
 
         //Canned Goods
@@ -354,10 +347,8 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
 
         //Deli
         myDB.addChild("Deli", "Deli Cheese", 0);
-        myDB.addChild("Deli", "Deli Ham", 0);
-        myDB.addChild("Deli", "Deli Roast Beef", 0);
-        myDB.addChild("Deli", "Deli Salad", 0);
-        myDB.addChild("Deli", "Deli Turkey", 0);
+        myDB.addChild("Deli", "Deli Meats", 0);
+        myDB.addChild("Deli", "Deli Salads", 0);
 
         //Frozen Foods
         myDB.addChild("Frozen Foods", "Ice Cream", 0);
@@ -408,17 +399,27 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         myDB.addChild("Laundry, Paper & Cleaning", "Trash Bags", 0);
 
         //Meat & Fish
-        myDB.addChild("Meat & Fish", "Bacon", 0);
-        myDB.addChild("Meat & Fish", "Beef", 0);
-        myDB.addChild("Meat & Fish", "Fish", 0);
-        myDB.addChild("Meat & Fish", "Pork", 0);
-        myDB.addChild("Meat & Fish", "Poultry", 0);
-        myDB.addChild("Meat & Fish", "Sausage", 0);
+        myDB.addChild("Meat & Seafood", "Bacon", 0);
+        myDB.addChild("Meat & Seafood", "Beef", 0);
+        myDB.addChild("Meat & Seafood", "Burgers", 0);
+        myDB.addChild("Meat & Seafood", "Fish", 0);
+        myDB.addChild("Meat & Seafood", "Hot dogs", 0);
+        myDB.addChild("Meat & Seafood", "Pork", 0);
+        myDB.addChild("Meat & Seafood", "Poultry", 0);
+        myDB.addChild("Meat & Seafood", "Sausage", 0);
+        myDB.addChild("Meat & Seafood", "Shrimp", 0);
 
         //Pet Items
         myDB.addChild("Pet Items", "Cat Food", 0);
         myDB.addChild("Pet Items", "Cat Litter", 0);
         myDB.addChild("Pet Items", "Dog Food", 0);
+
+        //Pre-Baked Goods
+        myDB.addChild("Pre-Baked Goods", "Brownies", 0);
+        myDB.addChild("Pre-Baked Goods", "Cake", 0);
+        myDB.addChild("Pre-Baked Goods", "Cookies", 0);
+        myDB.addChild("Pre-Baked Goods", "Muffins", 0);
+        myDB.addChild("Pre-Baked Goods", "Pie", 0);
 
         //Produce
         myDB.addChild("Produce", "Apples", 0);
@@ -427,6 +428,7 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         myDB.addChild("Produce", "Berries", 0);
         myDB.addChild("Produce", "Broccoli", 0);
         myDB.addChild("Produce", "Carrots", 0);
+        myDB.addChild("Produce", "Celery", 0);
         myDB.addChild("Produce", "Cucumber", 0);
         myDB.addChild("Produce", "Garlic", 0);
         myDB.addChild("Produce", "Grapes", 0);
@@ -442,15 +444,11 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
 
         //Rice & Pasta
         myDB.addChild("Rice & Pasta", "Brown Rice", 0);
-        myDB.addChild("Rice & Pasta", "Lasagna", 0);
-        myDB.addChild("Rice & Pasta", "Macaroni", 0);
-        myDB.addChild("Rice & Pasta", "Shells", 0);
-        myDB.addChild("Rice & Pasta", "Spaghetti", 0);
+        myDB.addChild("Rice & Pasta", "Pasta", 0);
         myDB.addChild("Rice & Pasta", "White Rice", 0);
 
         //Sauces & Oil
         myDB.addChild("Sauces & Oils", "BBQ Sauce",0);
-        myDB.addChild("Sauces & Oils", "Maple Syrup",0);
         myDB.addChild("Sauces & Oils", "Oil",0);
         myDB.addChild("Sauces & Oils", "Salad Dressing",0);
         myDB.addChild("Sauces & Oils", "Soy Sauce",0);
@@ -471,17 +469,23 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
 
         //Spices
         myDB.addChild("Spices", "Basil", 0);
+        myDB.addChild("Spices", "Bay Leaf", 0);
+        myDB.addChild("Spices", "Cayenne Pepper", 0);
+        myDB.addChild("Spices", "Chili Powder", 0);
         myDB.addChild("Spices", "Cinnamon", 0);
+        myDB.addChild("Spices", "Crushed Red Pepper", 0);
         myDB.addChild("Spices", "Cumin", 0);
+        myDB.addChild("Spices", "Curry", 0);
+        myDB.addChild("Spices", "Garlic Powder/Salt", 0);
+        myDB.addChild("Spices", "Ginger", 0);
+        myDB.addChild("Spices", "Onion Powder/Salt", 0);
         myDB.addChild("Spices", "Oregano", 0);
+        myDB.addChild("Spices", "Nutmeg", 0);
+        myDB.addChild("Spices", "Paprika", 0);
         myDB.addChild("Spices", "Pepper", 0);
+        myDB.addChild("Spices", "Rosemary", 0);
         myDB.addChild("Spices", "Salt", 0);
-
-        //Vegetarian
-        myDB.addChild("Vegetarian", "Almond Milk",0);
-        myDB.addChild("Vegetarian", "Hummus",0);
-        myDB.addChild("Vegetarian", "Soy Milk",0);
-        myDB.addChild("Vegetarian", "Tofu",0);
+        myDB.addChild("Spices", "Turmeric", 0);
     }
 
     //Creating HashMaps and ArrayLists for information to go into Expandable List View
@@ -495,9 +499,13 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         baby.add(new MakeListItem("Wipes", false));
         //Baking
         ArrayList<MakeListItem> baking = new ArrayList<>();
+        baking.add(new MakeListItem("Baking Powder", false));
+        baking.add(new MakeListItem("Baking Soda", false));
+        baking.add(new MakeListItem("Brown Sugar", false));
         baking.add(new MakeListItem("Flour", false));
         baking.add(new MakeListItem("Pancake Mix", false));
         baking.add(new MakeListItem("Sugar", false));
+        baking.add(new MakeListItem("Syrup", false));
         baking.add(new MakeListItem("Vanilla", false));
         baking.add(new MakeListItem("Yeast", false));
         //Beverages
@@ -510,17 +518,17 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         //Bread
         ArrayList<MakeListItem> bread = new ArrayList<>();
         bread.add(new MakeListItem("Bagels", false));
-        bread.add(new MakeListItem("Bulky Rolls", false));
-        bread.add(new MakeListItem("Muffins", false));
+        bread.add(new MakeListItem("English Muffins", false));
+        bread.add(new MakeListItem("Hamburger/Hot dog Rolls", false));
         bread.add(new MakeListItem("Pitas", false));
+        bread.add(new MakeListItem("Rolls", false));
         bread.add(new MakeListItem("Sandwich", false));
         bread.add(new MakeListItem("Tortilla", false));
         //Breakfast & Cereal
         ArrayList<MakeListItem> breakfast = new ArrayList<>();
-        breakfast.add(new MakeListItem("Breakfast Bars", false));
-        breakfast.add(new MakeListItem("Cold Cereal", false));
+        breakfast.add(new MakeListItem("Cereal", false));
         breakfast.add(new MakeListItem("Granola", false));
-        breakfast.add(new MakeListItem("Hot Cereal", false));
+        breakfast.add(new MakeListItem("Granola Bars", false));
         breakfast.add(new MakeListItem("Oatmeal", false));
         //Canned Goods
         ArrayList<MakeListItem> cannedGoods = new ArrayList<>();
@@ -550,10 +558,8 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         //Deli
         ArrayList<MakeListItem> deli = new ArrayList<>();
         deli.add(new MakeListItem("Deli Cheese", false));
-        deli.add(new MakeListItem("Deli Ham", false));
-        deli.add(new MakeListItem("Deli Roast Beef", false));
-        deli.add(new MakeListItem("Deli Salad", false));
-        deli.add(new MakeListItem("Deli Turkey", false));
+        deli.add(new MakeListItem("Deli Meats", false));
+        deli.add(new MakeListItem("Deli Salads", false));
         //Frozen Foods
         ArrayList<MakeListItem> frozenFoods = new ArrayList<>();
         frozenFoods.add(new MakeListItem("Ice Cream", false));
@@ -607,15 +613,25 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         ArrayList<MakeListItem> meat = new ArrayList<>();
         meat.add(new MakeListItem("Bacon", false));
         meat.add(new MakeListItem("Beef", false));
+        meat.add(new MakeListItem("Burgers", false));
         meat.add(new MakeListItem("Fish", false));
+        meat.add(new MakeListItem("Hot dogs", false));
         meat.add(new MakeListItem("Pork", false));
         meat.add(new MakeListItem("Poultry", false));
         meat.add(new MakeListItem("Sausage", false));
+        meat.add(new MakeListItem("Shrimp", false));
         //Pet Items
         ArrayList<MakeListItem> petItems = new ArrayList<>();
         petItems.add(new MakeListItem("Cat Food", false));
         petItems.add(new MakeListItem("Cat Litter", false));
         petItems.add(new MakeListItem("Dog Food", false));
+        //Pre-Baked Goods
+        ArrayList<MakeListItem> preBaked = new ArrayList<>();
+        preBaked.add(new MakeListItem("Brownies",false));
+        preBaked.add(new MakeListItem("Cake",false));
+        preBaked.add(new MakeListItem("Cookies",false));
+        preBaked.add(new MakeListItem("Muffins",false));
+        preBaked.add(new MakeListItem("Pie",false));
         //Produce
         ArrayList<MakeListItem> produce = new ArrayList<>();
         produce.add(new MakeListItem("Apples", false));
@@ -624,6 +640,7 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         produce.add(new MakeListItem("Berries", false));
         produce.add(new MakeListItem("Broccoli", false));
         produce.add(new MakeListItem("Carrots", false));
+        produce.add(new MakeListItem("Celery", false));
         produce.add(new MakeListItem("Cucumber", false));
         produce.add(new MakeListItem("Garlic", false));
         produce.add(new MakeListItem("Grapes", false));
@@ -639,15 +656,11 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         //Rice & Pasta
         ArrayList<MakeListItem> pasta = new ArrayList<>();
         pasta.add(new MakeListItem("Brown Rice", false));
-        pasta.add(new MakeListItem("Lasagna", false));
-        pasta.add(new MakeListItem("Macaroni", false));
-        pasta.add(new MakeListItem("Shells", false));
-        pasta.add(new MakeListItem("Spaghetti", false));
+        pasta.add(new MakeListItem("Pasta", false));
         pasta.add(new MakeListItem("White Rice", false));
         //Sauce & Oil
         ArrayList<MakeListItem> sauceOil = new ArrayList<>();
         sauceOil.add(new MakeListItem("BBQ Sauce", false));
-        sauceOil.add(new MakeListItem("Maple Syrup", false));
         sauceOil.add(new MakeListItem("Oil", false));
         sauceOil.add(new MakeListItem("Salad Dressing", false));
         sauceOil.add(new MakeListItem("Soy Sauce", false));
@@ -668,17 +681,23 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         //Spices
         ArrayList<MakeListItem> spices = new ArrayList<>();
         spices.add(new MakeListItem("Basil", false));
+        spices.add(new MakeListItem("Bay Leaf", false));
+        spices.add(new MakeListItem("Cayenne Pepper", false));
+        spices.add(new MakeListItem("Chili Powder", false));
         spices.add(new MakeListItem("Cinnamon", false));
+        spices.add(new MakeListItem("Crushed Red Pepper", false));
         spices.add(new MakeListItem("Cumin", false));
+        spices.add(new MakeListItem("Curry", false));
+        spices.add(new MakeListItem("Garlic Powder/Salt", false));
+        spices.add(new MakeListItem("Ginger", false));
+        spices.add(new MakeListItem("Onion Powder/Salt", false));
         spices.add(new MakeListItem("Oregano", false));
+        spices.add(new MakeListItem("Nutmeg", false));
+        spices.add(new MakeListItem("Paprika", false));
         spices.add(new MakeListItem("Pepper", false));
+        spices.add(new MakeListItem("Rosemary", false));
         spices.add(new MakeListItem("Salt", false));
-        //Vegetarian
-        ArrayList<MakeListItem> vegetarian = new ArrayList<>();
-        vegetarian.add(new MakeListItem("Almond Milk", false));
-        vegetarian.add(new MakeListItem("Hummus", false));
-        vegetarian.add(new MakeListItem("Soy Milk", false));
-        vegetarian.add(new MakeListItem("Tofu", false));
+        spices.add(new MakeListItem("Turmeric", false));
 
         //Adding Lists & Groups to Expandable List
         expandableListDetail.put("Baby & Childcare", baby);
@@ -694,14 +713,14 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         expandableListDetail.put("Health & Beauty", toiletries);
         expandableListDetail.put("Household", household);
         expandableListDetail.put("Laundry, Paper & Cleaning", paperWrap);
-        expandableListDetail.put("Meat & Fish", meat);
+        expandableListDetail.put("Meat & Seafood", meat);
         expandableListDetail.put("Pet Items", petItems);
+        expandableListDetail.put("Pre-Baked Goods", petItems);
         expandableListDetail.put("Produce", produce);
         expandableListDetail.put("Rice & Pasta",pasta);
         expandableListDetail.put("Sauces & Oils", sauceOil);
         expandableListDetail.put("Snacks", snacks);
         expandableListDetail.put("Spices", spices);
-        expandableListDetail.put("Vegetarian", vegetarian);
 
         return expandableListDetail;
     }

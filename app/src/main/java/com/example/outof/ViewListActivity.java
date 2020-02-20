@@ -49,12 +49,18 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
         void onSelectionARemoved(String selection);
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mContext = getContext();
+        myLoad = new Load();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.view_list, container,false);
         viewItems = new ArrayList<>();
-        myLoad = new Load();
 
         ListView mListView = view.findViewById(R.id.viewList);
         mTextView = view.findViewById(R.id.viewList_item_text);
@@ -84,6 +90,9 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
 
         for (int i = 0; i < viewItems.size(); i++) {
             sb.append(viewItems.get(i).getItemName());
+            if (viewItems.get(i).getIsStrikeThrough()) {
+                sb.append(" - \u2713");
+            }
             if (i < viewItems.size() - 1) {
                 sb.append("\n");
             }
@@ -136,12 +145,6 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
     public void onDetach() {
         super.onDetach();
         listener = null;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mContext = getContext();
     }
 
     @Override

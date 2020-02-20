@@ -1,25 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    style="@style/actionBar"
     android:layout_height="?attr/actionBarSize">
 
-        <include layout="@layout/more_options"
-            android:layout_width="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_gravity="end"/>
-
         <ImageView
+            android:id="@+id/logo_toolbar"
             android:layout_width="wrap_content"
             android:layout_height="?attr/actionBarSize"
             android:padding="4dp"
             android:contentDescription="@string/_2_get_logo"
             android:src="@drawable/get_logo_full"
             android:adjustViewBounds="true"
-            android:layout_gravity="center"/>
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="8dp"
+            android:layout_centerInParent="true"/>
 
-</androidx.appcompat.widget.Toolbar>
+        <!--<Spinner
+            android:id="@+id/spinner_toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toStartOf="@id/options"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:onClick="showLists"
+            android:layout_toEndOf="@id/logo_toolbar" />-->
+
+        <include layout="@layout/more_options"
+            android:id="@+id/options"
+            android:layout_width="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"/>
+
+</RelativeLayout>

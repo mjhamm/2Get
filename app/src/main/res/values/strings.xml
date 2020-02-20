@@ -54,10 +54,10 @@
     <string name="libraries_we_use">Libraries We Use</string>
     <string name="osl_header_detail">The following sets forth attribution notices for third part software that may be contained in portions of the 2Get product. We thank the open source community for all of their contributions.</string>
     <string name="glide_title">Glide</string>
-    <string name="project_code_glide">Project Code:</string>
+    <string name="project_code_glide">Project Code: </string>
     <string name="glide_pc_url">https://github.com/bumptech/glide</string>
     <string name="glide_copy">Copyright © Sam Judd - @sjudd on GitHub, @samajudd on Twitter</string>
-    <string name="project_license_glide">Project License:</string>
+    <string name="project_license_glide">Project License: </string>
     <string name="glide_pl_url">https://github.com/bumptech/glide/blob/master/LICENSE</string>
 
 </resources>

@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
+
 public class About extends AppCompatActivity {
 
     @Override
@@ -24,7 +26,10 @@ public class About extends AppCompatActivity {
         Button tou = findViewById(R.id.tou_button);
 
         //Launch android licenses activity
-        licenses.setOnClickListener(click -> startActivity(new Intent(this, Licenses.class)));
+        //Check
+        //licenses.setOnClickListener(click -> startActivity(new Intent(this, Licenses.class)));
+        OssLicensesMenuActivity.setActivityTitle("Open Source Libraries");
+        startActivity(new Intent(this, OssLicensesMenuActivity.class));
 
         //Start Feedback
         feedback.setOnClickListener(click -> startActivity(new Intent(this, Feedback.class)));

@@ -25,8 +25,8 @@
         android:layout_below="@id/osl_title"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_margin="16dp"
-        android:padding="8dp">
+        android:layout_margin="12dp"
+        android:padding="6dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -91,34 +91,38 @@
                 android:text="@string/glide_pc_url"/>
 
             <TextView
-                android:id="@+id/glide_copy"
+                android:id="@+id/glide_license"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/glide_pc"
                 android:textColor="@android:color/black"
-                android:text="@string/glide_copy"
-                android:fontFamily="@font/roboto_condensed_regular"/>
-
-            <TextView
-                android:id="@+id/glide_license"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/glide_copy"
-                android:textColor="@android:color/black"
                 android:text="@string/project_license_glide"
                 android:fontFamily="@font/roboto_medium"/>
 
             <TextView
+                android:id="@+id/glide_license_link"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toEndOf="@id/glide_license"
-                app:layout_constraintTop_toBottomOf="@id/glide_copy"
+                app:layout_constraintTop_toBottomOf="@id/glide_pc"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:minLines="2"
                 android:autoLink="web"
                 android:textColorLink="@android:color/holo_blue_dark"
                 android:text="@string/glide_pl_url"/>
+
+            <TextView
+                android:id="@+id/glide_copy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/glide_license_link"
+                android:textColor="@android:color/black"
+                android:text="@string/glide_copy"
+                android:fontFamily="@font/roboto_condensed_regular"/>
+
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
