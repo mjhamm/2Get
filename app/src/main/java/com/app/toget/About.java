@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
-
 public class About extends AppCompatActivity {
 
     @Override
@@ -28,11 +26,11 @@ public class About extends AppCompatActivity {
         Button eula = findViewById(R.id.eula_button);
 
         //Launch android licenses activity
-        //licenses.setOnClickListener(click -> startActivity(new Intent(this, Licenses.class)));
-        licenses.setOnClickListener(click -> {
+        licenses.setOnClickListener(click -> startActivity(new Intent(this, Licenses.class)));
+        /*licenses.setOnClickListener(click -> {
             OssLicensesMenuActivity.setActivityTitle("Open Source Libraries");
             startActivity(new Intent(this, OssLicensesMenuActivity.class));
-        });
+        });*/
 
         //Start Feedback
         feedback.setOnClickListener(click -> startActivity(new Intent(this, Feedback.class)));
@@ -49,8 +47,6 @@ public class About extends AppCompatActivity {
         //Start EULA
         eula.setOnClickListener(click -> startActivity(new Intent(this, EULA.class)));
     }
-
-    //Make sure activities are destroyed
     @Override
     public void onBackPressed() {
         super.onBackPressed();
