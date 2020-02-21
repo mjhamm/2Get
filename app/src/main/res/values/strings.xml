@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">2Get</string>
     <string name="more_options">More Options</string>
     <string name="clear_list">Clear All Items</string>
@@ -13,8 +13,7 @@
         or need to make a list of your entire food shopping before you leave the house, 2Get is here to help you prepare.</string>
     <string name="about_us">About Us</string>
     <string name="legal">Legal</string>
-    <string name="privacy_statement" tools:keep="@string/privacy_statement">Privacy Statement</string>
-    <string name="licenses">Licenses</string>
+    <string name="licenses">Open Source Libraries</string>
     <string name="test_group_header">Test</string>
     <string name="test_child_item">Milk</string>
     <string name="test_view_item">Test Item</string>
@@ -47,5 +46,19 @@
     <string name="terms_and_conditions">Terms &amp; Conditions</string>
     <string name="help_button">Help</string>
     <string name="feedback_title">Feedback</string>
+    <string name="help_title_7">Want to Clean Up your List?</string>
+    <string name="help_detail_7"><u>Use the refresh button to remove your purchased items!</u></string>
+    <string name="help_image_7">help_refreshing_list</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="open_source_libraries">Open Source Libraries</string>
+    <string name="libraries_we_use">Libraries We Use</string>
+    <string name="osl_header_detail">The following sets forth attribution notices for third part software that may be contained in portions of the 2Get product. We thank the open source community for all of their contributions.</string>
+    <string name="glide_title">Glide</string>
+    <string name="project_code_glide">Project Code: </string>
+    <string name="glide_pc_url">https://github.com/bumptech/glide</string>
+    <string name="glide_copy">Copyright © Sam Judd - @sjudd on GitHub, @samajudd on Twitter</string>
+    <string name="project_license_glide">Project License: </string>
+    <string name="glide_pl_url">https://github.com/bumptech/glide/blob/master/LICENSE</string>
+    <string name="eula">End User License Agreement</string>
 
 </resources>

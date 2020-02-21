@@ -13,8 +13,9 @@
         <item name="android:windowCloseOnTouchOutside">true</item>
     </style>
 
-    <style name="actionBar" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="background">@android:color/white</item>
+    <style name="SplashScreenTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_screen_background</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     </style>
 
 </resources>

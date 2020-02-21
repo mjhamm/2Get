@@ -1,0 +1,26 @@
+package com.app.toget;
+
+import java.io.Serializable;
+
+public class ViewListItem implements Serializable {
+
+    private final String itemName;
+    private boolean isStrikeThrough;
+
+    public ViewListItem(String itemName, boolean isStrikeThrough) {
+        this.itemName = itemName;
+        this.isStrikeThrough = isStrikeThrough;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public boolean getIsStrikeThrough() {
+        return isStrikeThrough;
+    }
+
+    public void setStrikeThrough(boolean strikeThrough) {
+        this.isStrikeThrough = strikeThrough;
+    }
+}
