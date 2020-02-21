@@ -1,4 +1,4 @@
-package com.example.outof;
+package com.app.toget;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,14 +7,12 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
-
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -23,7 +21,6 @@ import com.google.android.material.tabs.TabLayout;
 
 public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener, MakeListActivity.MakeListFragmentListener, ViewListActivity.ViewListFragmentListener {
 
-    private static final String TAG = "LOG: ";
 
     private Context mContext;
     private MakeListActivity makeListActivity;
@@ -43,12 +40,10 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         mAdView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
-                Log.e(TAG, "Ad successfully Loaded");
             }
 
             @Override
             public void onAdFailedToLoad(int i) {
-                Log.e(TAG, "Ad failed to Load");
             }
         });
 

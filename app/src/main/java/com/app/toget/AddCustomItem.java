@@ -1,14 +1,15 @@
-package com.example.outof;
+package com.app.toget;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class Licenses extends AppCompatActivity {
+public class AddCustomItem extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_licenses);
+        setContentView(R.layout.activity_add_custom_item);
+        setTheme(R.style.customItem);
     }
 }

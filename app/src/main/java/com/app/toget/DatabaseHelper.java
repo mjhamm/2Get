@@ -1,4 +1,4 @@
-package com.example.outof;
+package com.app.toget;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,8 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 class DatabaseHelper extends SQLiteOpenHelper {
-
-    //public static final String TAG = "LOG";
 
     private static DatabaseHelper sInstance;
     //Database Version

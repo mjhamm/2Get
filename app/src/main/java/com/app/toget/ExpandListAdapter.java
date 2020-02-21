@@ -1,4 +1,4 @@
-package com.example.outof;
+package com.app.toget;
 
 import android.content.Context;
 import android.database.DataSetObservable;
@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 class ExpandListAdapter extends BaseExpandableListAdapter {
-
-    //public static final String TAG = "LOG:";
 
     private final Context context;
     // Group Titles

@@ -1,11 +1,10 @@
-package com.example.outof;
+package com.app.toget;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,9 +68,7 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
 
         myDB = DatabaseHelper.getInstance(mContext);
         Cursor data = myDB.getListContents_View();
-        if (data.getCount() == 0) {
-            Log.e(TAG, "Database Empty for view Items");
-        } else {
+        if (data.getCount() != 0) {
             while(data.moveToNext()) {
                 itemChecked = data.getInt(2) != 0;
                 ViewListItem item = new ViewListItem(data.getString(1), itemChecked);

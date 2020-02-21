@@ -59,5 +59,6 @@
     <string name="glide_copy">Copyright © Sam Judd - @sjudd on GitHub, @samajudd on Twitter</string>
     <string name="project_license_glide">Project License: </string>
     <string name="glide_pl_url">https://github.com/bumptech/glide/blob/master/LICENSE</string>
+    <string name="eula">End User License Agreement</string>
 
 </resources>

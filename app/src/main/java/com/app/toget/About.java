@@ -1,4 +1,4 @@
-package com.example.outof;
+package com.app.toget;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
@@ -24,6 +24,8 @@ public class About extends AppCompatActivity {
         Button privacy = findViewById(R.id.privacy_button);
         //Terms & Conditions Button
         Button tou = findViewById(R.id.tou_button);
+        //End User License Agreement Button
+        Button eula = findViewById(R.id.eula_button);
 
         //Launch android licenses activity
         //licenses.setOnClickListener(click -> startActivity(new Intent(this, Licenses.class)));
@@ -43,6 +45,9 @@ public class About extends AppCompatActivity {
 
         //Start Terms & Conditions
         tou.setOnClickListener(click -> startActivity(new Intent(this, Terms.class)));
+
+        //Start EULA
+        eula.setOnClickListener(click -> startActivity(new Intent(this, EULA.class)));
     }
 
     //Make sure activities are destroyed
