@@ -5,7 +5,6 @@
     android:layout_height="?attr/actionBarSize">
 
         <ImageView
-            android:id="@+id/logo_toolbar"
             android:layout_width="wrap_content"
             android:layout_height="?attr/actionBarSize"
             android:padding="4dp"
@@ -31,7 +30,6 @@
             android:layout_toEndOf="@id/logo_toolbar" />-->
 
         <include layout="@layout/more_options"
-            android:id="@+id/options"
             android:layout_width="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"

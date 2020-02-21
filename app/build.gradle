@@ -39,7 +39,5 @@ dependencies {
     implementation 'com.google.android.gms:play-services-ads-lite:18.3.0'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
-    implementation 'androidx.preference:preference:1.1.0'
-
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
 }

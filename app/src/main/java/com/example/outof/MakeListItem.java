@@ -2,9 +2,9 @@ package com.example.outof;
 
 import java.io.Serializable;
 
-public class MakeListItem implements Serializable {
+class MakeListItem implements Serializable {
 
-    private String itemName;
+    private final String itemName;
     private boolean selected;
 
     public MakeListItem(String name, boolean selected) {

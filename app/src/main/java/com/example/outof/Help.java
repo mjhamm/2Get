@@ -24,12 +24,12 @@ public class Help extends AppCompatActivity {
         ImageView help_image_7 = findViewById(R.id.help_image_7); //8
 
         // Using Glide to insert image into ImageView
-        Glide.with(this).load(getDrawable(R.drawable.help_1)).into(help_image_1).clearOnDetach();
-        Glide.with(this).load(getDrawable(R.drawable.help_6)).into(help_image_2).clearOnDetach();
-        Glide.with(this).load(getDrawable(R.drawable.help_2)).into(help_image_3).clearOnDetach();
-        Glide.with(this).load(getDrawable(R.drawable.help_4)).into(help_image_4).clearOnDetach();
-        Glide.with(this).load(getDrawable(R.drawable.help_7)).into(help_image_5).clearOnDetach();
-        Glide.with(this).load(getDrawable(R.drawable.help_5)).into(help_image_6).clearOnDetach();
-        Glide.with(this).load(getDrawable(R.drawable.help_8)).into(help_image_7).clearOnDetach();
+        Glide.with(this).load(getDrawable(R.drawable.help_1)).dontTransform().into(help_image_1).clearOnDetach();
+        Glide.with(this).load(getDrawable(R.drawable.help_6)).dontTransform().into(help_image_2).clearOnDetach();
+        Glide.with(this).load(getDrawable(R.drawable.help_2)).dontTransform().into(help_image_3).clearOnDetach();
+        Glide.with(this).load(getDrawable(R.drawable.help_4)).dontTransform().into(help_image_4).clearOnDetach();
+        Glide.with(this).load(getDrawable(R.drawable.help_7)).dontTransform().into(help_image_5).clearOnDetach();
+        Glide.with(this).load(getDrawable(R.drawable.help_5)).dontTransform().into(help_image_6).clearOnDetach();
+        Glide.with(this).load(getDrawable(R.drawable.help_8)).dontTransform().into(help_image_7).clearOnDetach();
     }
 }

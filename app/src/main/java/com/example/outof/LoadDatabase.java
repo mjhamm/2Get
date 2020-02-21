@@ -2,7 +2,7 @@ package com.example.outof;
 
 import android.os.AsyncTask;
 
-public class LoadDatabase extends AsyncTask<Void,Void,Void> {
+class LoadDatabase extends AsyncTask<Void,Void,Void> {
 
     private MakeListActivity makeListActivity;
 

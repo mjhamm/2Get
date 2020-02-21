@@ -13,16 +13,16 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ExpandListAdapter extends BaseExpandableListAdapter {
+class ExpandListAdapter extends BaseExpandableListAdapter {
 
     //public static final String TAG = "LOG:";
 
-    private Context context;
+    private final Context context;
     // Group Titles
-    private ArrayList<String> expandableListTitle;
+    private final ArrayList<String> expandableListTitle;
 
     // Children Information with link to group
-    private HashMap<String, ArrayList<MakeListItem>> expandableListDetail;
+    private final HashMap<String, ArrayList<MakeListItem>> expandableListDetail;
     private final DataSetObservable dataSetObservable = new DataSetObservable();
 
     public ExpandListAdapter(Context context, ArrayList<String> expandableListTitle, HashMap<String, ArrayList<MakeListItem>> expandableListDetail) {

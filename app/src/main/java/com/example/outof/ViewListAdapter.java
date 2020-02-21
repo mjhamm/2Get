@@ -14,12 +14,12 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-public class ViewListAdapter extends ArrayAdapter<ViewListItem> {
+class ViewListAdapter extends ArrayAdapter<ViewListItem> {
 
-    private Context context;
-    private ArrayList<ViewListItem> listItems;
-    private DataSetObservable dataSetObservable = new DataSetObservable();
-    private DatabaseHelper myDB;
+    private final Context context;
+    private final ArrayList<ViewListItem> listItems;
+    private final DataSetObservable dataSetObservable = new DataSetObservable();
+    private final DatabaseHelper myDB;
 
     public ViewListAdapter(ArrayList<ViewListItem> listItems, Context context) {
         super(context, R.layout.view_list_item, listItems);
@@ -45,7 +45,6 @@ public class ViewListAdapter extends ArrayAdapter<ViewListItem> {
 
     class ViewHolder {
         TextView item_textView;
-        boolean item_isStrikeThrough = false;
     }
 
     @Override
@@ -82,7 +81,6 @@ public class ViewListAdapter extends ArrayAdapter<ViewListItem> {
         });
 
         viewHolder.item_textView.setText(listItems.get(position).getItemName());
-        viewHolder.item_isStrikeThrough = listItems.get(position).getIsStrikeThrough();
 
         return convertView;
     }

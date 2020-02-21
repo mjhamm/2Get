@@ -24,7 +24,7 @@ import java.util.Iterator;
 
 public class ViewListActivity extends Fragment implements View.OnClickListener {
 
-    public static final String TAG = "LOG";
+    private static final String TAG = "LOG";
 
     private TextView mTextView;
     private static ArrayList<ViewListItem> viewItems;
@@ -163,6 +163,9 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
             //Clear List - YES
             clearDialog.setPositiveButton("Confirm", (dialog, which) -> {
                 dialog.dismiss();
+                if (myLoad != null) {
+                    myLoad = new Load();
+                }
                 myLoad.execute();
             });
 
@@ -186,9 +189,10 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
         }
     }
 
+
     private class Load extends AsyncTask<Void, Void, ArrayList<ViewListItem>> {
 
-        ArrayList<String> selections = new ArrayList<>();
+        final ArrayList<String> selections = new ArrayList<>();
 
         @Override
         protected void onPreExecute() {

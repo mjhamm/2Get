@@ -21,7 +21,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -180,7 +179,7 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         }
     }
 
-    public void checkChildren() {
+    private void checkChildren() {
         int childCount = 0;
         int count = 0;
         while(childData.moveToNext()) {
@@ -715,7 +714,7 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         expandableListDetail.put("Laundry, Paper & Cleaning", paperWrap);
         expandableListDetail.put("Meat & Seafood", meat);
         expandableListDetail.put("Pet Items", petItems);
-        expandableListDetail.put("Pre-Baked Goods", petItems);
+        expandableListDetail.put("Pre-Baked Goods", preBaked);
         expandableListDetail.put("Produce", produce);
         expandableListDetail.put("Rice & Pasta",pasta);
         expandableListDetail.put("Sauces & Oils", sauceOil);
