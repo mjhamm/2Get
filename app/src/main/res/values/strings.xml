@@ -65,5 +65,8 @@
     <string name="test_item_detail">Test Item Detail</string>
     <string name="enter_item_detail_information">Enter Item Detail Information</string>
     <string name="item_detail_information">Item Detail Information</string>
+    <string name="help_title_8">Need to Add Notes to an Item?</string>
+    <string name="help_detail_8">Click and Hold the Item to Add Custom Notes!</string>
+    <string name="help_image_8">Adding notes to item</string>
 
 </resources>

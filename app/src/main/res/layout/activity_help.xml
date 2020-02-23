@@ -182,10 +182,60 @@
                 android:layout_margin="12dp"/>
 
             <TextView
-                android:id="@+id/help_addItem_title_4"
+                android:id="@+id/help_addItem_title_8"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/hr_3"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="16dp"
+                android:textSize="18sp"
+                android:textColor="@android:color/black"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/help_title_8"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/help_addItem_detail_8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/help_addItem_title_8"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="6dp"
+                android:textSize="18sp"
+                android:textColor="@android:color/black"
+                android:fontFamily="@font/roboto_condensed_regular"
+                android:text="@string/help_detail_8"
+                android:gravity="center"/>
+
+            <ImageView
+                android:id="@+id/help_image_8"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/help_addItem_detail_8"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:adjustViewBounds="true"
+                android:layout_marginTop="6dp"
+                app:layout_constraintWidth_percent="0.75"
+                android:contentDescription="@string/help_image_8" />
+
+            <View
+                android:id="@+id/hr_7"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/help_image_8"
+                android:layout_margin="12dp"/>
+
+            <TextView
+                android:id="@+id/help_addItem_title_4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/hr_7"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="16dp"

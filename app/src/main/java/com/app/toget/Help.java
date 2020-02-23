@@ -22,10 +22,12 @@ public class Help extends AppCompatActivity {
         ImageView help_image_5 = findViewById(R.id.help_image_5); //7
         ImageView help_image_6 = findViewById(R.id.help_image_6); //5
         ImageView help_image_7 = findViewById(R.id.help_image_7); //8
+        ImageView help_image_8 = findViewById(R.id.help_image_8); //3
 
         // Using Glide to insert image into ImageView
         Glide.with(this).load(getDrawable(R.drawable.help_1)).dontTransform().into(help_image_1).clearOnDetach();
         Glide.with(this).load(getDrawable(R.drawable.help_6)).dontTransform().into(help_image_2).clearOnDetach();
+        Glide.with(this).load(getDrawable(R.drawable.help_3)).dontTransform().into(help_image_8).clearOnDetach();
         Glide.with(this).load(getDrawable(R.drawable.help_2)).dontTransform().into(help_image_3).clearOnDetach();
         Glide.with(this).load(getDrawable(R.drawable.help_4)).dontTransform().into(help_image_4).clearOnDetach();
         Glide.with(this).load(getDrawable(R.drawable.help_7)).dontTransform().into(help_image_5).clearOnDetach();
