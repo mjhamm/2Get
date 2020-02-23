@@ -14,6 +14,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -22,8 +24,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class ViewListActivity extends Fragment implements View.OnClickListener {
-
-    private static final String TAG = "LOG";
 
     private TextView mTextView;
     private static ArrayList<ViewListItem> viewItems;
@@ -94,8 +94,11 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
                 sb.append("\n");
             }
         }
-
         return sb;
+    }
+
+    public boolean isListEmpty() {
+        return viewItems.isEmpty();
     }
 
     public void addItemToList(String selection) {
@@ -151,19 +154,22 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
         Animation cw = AnimationUtils.loadAnimation(mContext, R.anim.refresh_clockwise);
 
         refreshButton.setOnClickListener(refresh -> {
+            refreshButton.startAnimation(cw);
             AlertDialog.Builder clearDialog = new AlertDialog.Builder(mContext);
             clearDialog.setMessage("Are you sure that you want to remove all purchased items?");
             clearDialog.setCancelable(false);
 
-            refreshButton.startAnimation(cw);
-
             //Clear List - YES
             clearDialog.setPositiveButton("Confirm", (dialog, which) -> {
-                dialog.dismiss();
-                if (myLoad != null) {
-                    myLoad = new Load();
+                if (!viewItems.isEmpty()) {
+                    dialog.dismiss();
+                    if (myLoad != null) {
+                        myLoad = new Load();
+                    }
+                    myLoad.execute();
+                } else {
+                    Toast.makeText(mContext, "Your List is Empty.", Toast.LENGTH_SHORT).show();
                 }
-                myLoad.execute();
             });
 
             //Cancel Clearing List - NO
@@ -171,7 +177,6 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
 
             AlertDialog alertDialog = clearDialog.create();
             alertDialog.show();
-
         });
     }
 

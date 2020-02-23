@@ -111,10 +111,14 @@ class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Remove item from View list when child item unchecked
-    public boolean removeDataFromView(String name) {
+    public void removeDataFromView(String name) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_VIEW, KEY_ITEM + "=?", new String[]{name});
+    }
+    /*public boolean removeDataFromView(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TABLE_VIEW, KEY_ITEM + "=?", new String[]{name}) > 0;
-    }
+    }*/
 
     //------------------------------ GROUP TABLE -------------------------------------------------------------------------------------------
 

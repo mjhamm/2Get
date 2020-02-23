@@ -340,6 +340,7 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         myDB.addChild("Dairy", "Butter",0);
         myDB.addChild("Dairy", "Cheese",0);
         myDB.addChild("Dairy", "Cream",0);
+        myDB.addChild("Dairy", "Cream Cheese",0);
         myDB.addChild("Dairy", "Milk",0);
         myDB.addChild("Dairy", "Sour Cream",0);
         myDB.addChild("Dairy", "Yogurt",0);
@@ -401,12 +402,11 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         myDB.addChild("Meat & Seafood", "Bacon", 0);
         myDB.addChild("Meat & Seafood", "Beef", 0);
         myDB.addChild("Meat & Seafood", "Burgers", 0);
-        myDB.addChild("Meat & Seafood", "Fish", 0);
         myDB.addChild("Meat & Seafood", "Hot dogs", 0);
         myDB.addChild("Meat & Seafood", "Pork", 0);
         myDB.addChild("Meat & Seafood", "Poultry", 0);
         myDB.addChild("Meat & Seafood", "Sausage", 0);
-        myDB.addChild("Meat & Seafood", "Shrimp", 0);
+        myDB.addChild("Meat & Seafood", "Seafood", 0);
 
         //Pet Items
         myDB.addChild("Pet Items", "Cat Food", 0);
@@ -467,11 +467,13 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         myDB.addChild("Snacks","Snack Bars",0);
 
         //Spices
+        myDB.addChild("Spices", "Allspice", 0);
         myDB.addChild("Spices", "Basil", 0);
         myDB.addChild("Spices", "Bay Leaf", 0);
         myDB.addChild("Spices", "Cayenne Pepper", 0);
         myDB.addChild("Spices", "Chili Powder", 0);
         myDB.addChild("Spices", "Cinnamon", 0);
+        myDB.addChild("Spices", "Cloves", 0);
         myDB.addChild("Spices", "Crushed Red Pepper", 0);
         myDB.addChild("Spices", "Cumin", 0);
         myDB.addChild("Spices", "Curry", 0);
@@ -484,6 +486,7 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         myDB.addChild("Spices", "Pepper", 0);
         myDB.addChild("Spices", "Rosemary", 0);
         myDB.addChild("Spices", "Salt", 0);
+        myDB.addChild("Spices", "Thyme", 0);
         myDB.addChild("Spices", "Turmeric", 0);
     }
 
@@ -551,6 +554,7 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         dairy.add(new MakeListItem("Butter", false));
         dairy.add(new MakeListItem("Cheese", false));
         dairy.add(new MakeListItem("Cream", false));
+        dairy.add(new MakeListItem("Cream Cheese", false));
         dairy.add(new MakeListItem("Milk", false));
         dairy.add(new MakeListItem("Sour Cream", false));
         dairy.add(new MakeListItem("Yogurt", false));
@@ -613,12 +617,11 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         meat.add(new MakeListItem("Bacon", false));
         meat.add(new MakeListItem("Beef", false));
         meat.add(new MakeListItem("Burgers", false));
-        meat.add(new MakeListItem("Fish", false));
         meat.add(new MakeListItem("Hot dogs", false));
         meat.add(new MakeListItem("Pork", false));
         meat.add(new MakeListItem("Poultry", false));
         meat.add(new MakeListItem("Sausage", false));
-        meat.add(new MakeListItem("Shrimp", false));
+        meat.add(new MakeListItem("Seafood", false));
         //Pet Items
         ArrayList<MakeListItem> petItems = new ArrayList<>();
         petItems.add(new MakeListItem("Cat Food", false));
@@ -679,11 +682,13 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         snacks.add(new MakeListItem("Snack Bars", false));
         //Spices
         ArrayList<MakeListItem> spices = new ArrayList<>();
+        spices.add(new MakeListItem("Allspice", false));
         spices.add(new MakeListItem("Basil", false));
         spices.add(new MakeListItem("Bay Leaf", false));
         spices.add(new MakeListItem("Cayenne Pepper", false));
         spices.add(new MakeListItem("Chili Powder", false));
         spices.add(new MakeListItem("Cinnamon", false));
+        spices.add(new MakeListItem("Cloves", false));
         spices.add(new MakeListItem("Crushed Red Pepper", false));
         spices.add(new MakeListItem("Cumin", false));
         spices.add(new MakeListItem("Curry", false));
@@ -696,6 +701,7 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         spices.add(new MakeListItem("Pepper", false));
         spices.add(new MakeListItem("Rosemary", false));
         spices.add(new MakeListItem("Salt", false));
+        spices.add(new MakeListItem("Thyme", false));
         spices.add(new MakeListItem("Turmeric", false));
 
         //Adding Lists & Groups to Expandable List

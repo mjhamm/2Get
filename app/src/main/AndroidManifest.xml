@@ -12,19 +12,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".EULA"></activity>
         <activity
             android:name=".SplashScreenActivity"
             android:theme="@style/SplashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".MainActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"></activity>
+            android:configChanges="keyboardHidden|orientation|screenSize">
+        </activity>
         <activity android:name=".Licenses" />
         <activity android:name=".Terms" />
         <activity android:name=".Privacy" />
@@ -32,6 +31,7 @@
         <activity android:name=".Feedback" />
         <activity android:name=".AddCustomItem" />
         <activity android:name=".About" />
+        <activity android:name=".EULA"/>
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

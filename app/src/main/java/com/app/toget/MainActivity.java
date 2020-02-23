@@ -99,23 +99,28 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
             //Clear List
             case R.id.clear:
-                AlertDialog.Builder clearDialog = new AlertDialog.Builder(MainActivity.this);
-                clearDialog.setMessage("Are you sure that you want to clear everything on your list?");
-                clearDialog.setCancelable(false);
+                if (!viewListActivity.isListEmpty()) {
+                    AlertDialog.Builder clearDialog = new AlertDialog.Builder(MainActivity.this);
+                    clearDialog.setMessage("Are you sure that you want to clear everything on your list?");
+                    clearDialog.setCancelable(false);
 
-                //Clear List - YES
-                clearDialog.setPositiveButton("Confirm", (dialog, which) -> {
-                    makeListActivity.clear();
-                    viewListActivity.clearList();
-                    myDB.clearData();
-                    Toast.makeText(mContext, "Your List has been cleared.", Toast.LENGTH_SHORT).show();
-                });
+                    //Clear List - YES
+                    clearDialog.setPositiveButton("Confirm", (dialog, which) -> {
+                        makeListActivity.clear();
+                        viewListActivity.clearList();
+                        myDB.clearData();
+                        Toast.makeText(mContext, "Your List has been cleared.", Toast.LENGTH_SHORT).show();
+                    });
 
-                //Cancel Clearing List - NO
-                clearDialog.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+                    //Cancel Clearing List - NO
+                    clearDialog.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
-                AlertDialog alertDialog = clearDialog.create();
-                alertDialog.show();
+                    AlertDialog alertDialog = clearDialog.create();
+                    alertDialog.show();
+                } else {
+                    Toast.makeText(mContext, "Your List is empty.", Toast.LENGTH_SHORT).show();
+                }
+
                 return true;
             case R.id.share:
                 if (!viewListActivity.exportList().toString().isEmpty()) {
@@ -127,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                     shareIntent.putExtra(Intent.EXTRA_TEXT, "2Get Shopping List!\n\n" + viewListActivity.exportList().toString());
                     startActivity(Intent.createChooser(shareIntent, "Share..."));
                 } else {
-                    Toast.makeText(mContext, "You have nothing added to your List.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Your List is Empty.", Toast.LENGTH_SHORT).show();
                 }
 
                 return true;
