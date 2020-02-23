@@ -26,7 +26,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_ITEM = "name";
     private static final String KEY_CHECKED = "checked";
     private static final String KEY_DETAIL = "detail";
-    public static final String KEY_HAS_DETAIL = "hasDetail";
+    private static final String KEY_HAS_DETAIL = "hasDetail";
     private static final String KEY_GROUP_NAME = "groupName";
     private static final String KEY_GROUP_EXPANDED = "expanded";
 

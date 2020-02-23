@@ -26,7 +26,7 @@ import java.util.Iterator;
 
 public class ViewListActivity extends Fragment implements View.OnClickListener {
 
-    public static final String TAG = "LOG: ";
+    private static final String TAG = "LOG: ";
 
     private TextView mTextView;
     private static ArrayList<ViewListItem> viewItems;

@@ -1,7 +1,6 @@
 package com.app.toget;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.database.DataSetObservable;
 import android.database.DataSetObserver;
 import android.graphics.Paint;
@@ -97,44 +96,33 @@ class ViewListAdapter extends ArrayAdapter<ViewListItem> {
             }
         });
 
-        viewHolder.item_textView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                LayoutInflater layoutInflater = LayoutInflater.from(context);
-                View promptView = layoutInflater.inflate(R.layout.item_detail_prompt, null);
+        viewHolder.item_textView.setOnLongClickListener(v -> {
+            LayoutInflater layoutInflater = LayoutInflater.from(context);
+            View promptView = layoutInflater.inflate(R.layout.item_detail_prompt, null);
 
-                AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-                dialog.setView(promptView);
+            AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+            dialog.setView(promptView);
 
-                final EditText itemDetail = promptView.findViewById(R.id.item_detail_editText_prompt);
+            final EditText itemDetail = promptView.findViewById(R.id.item_detail_editText_prompt);
 
-                dialog.setCancelable(true)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (!itemDetail.getText().toString().isEmpty()) {
-                                    viewListItem.setHasDetail(true);
-                                    viewHolder.item_detail_textView.setVisibility(View.VISIBLE);
-                                    viewListItem.setItemDetail(itemDetail.getText().toString());
-                                    viewHolder.item_detail_textView.setText(itemDetail.getText().toString());
-                                    myDB.updateView(viewListItem.getItemName(), viewListItem.getIsStrikeThrough(), itemDetail.getText().toString(), viewListItem.hasDetail());
-                                } else {
-                                    viewListItem.setHasDetail(false);
-                                    viewHolder.item_detail_textView.setVisibility(View.GONE);
-                                    myDB.updateView(viewListItem.getItemName(), viewListItem.getIsStrikeThrough(), itemDetail.getText().toString(), viewListItem.hasDetail());
-                                }
-                            }
-                        })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        });
-                AlertDialog alertDialog = dialog.create();
-                alertDialog.show();
-                return false;
-            }
+            dialog.setCancelable(true)
+                    .setPositiveButton("Confirm", (dialog1, which) -> {
+                        if (!itemDetail.getText().toString().isEmpty()) {
+                            viewListItem.setHasDetail(true);
+                            viewHolder.item_detail_textView.setVisibility(View.VISIBLE);
+                            viewListItem.setItemDetail(itemDetail.getText().toString());
+                            viewHolder.item_detail_textView.setText(itemDetail.getText().toString());
+                            myDB.updateView(viewListItem.getItemName(), viewListItem.getIsStrikeThrough(), itemDetail.getText().toString(), viewListItem.hasDetail());
+                        } else {
+                            viewListItem.setHasDetail(false);
+                            viewHolder.item_detail_textView.setVisibility(View.GONE);
+                            myDB.updateView(viewListItem.getItemName(), viewListItem.getIsStrikeThrough(), itemDetail.getText().toString(), viewListItem.hasDetail());
+                        }
+                    })
+                    .setNegativeButton("Cancel", (dialog2, which) -> dialog2.cancel());
+            AlertDialog alertDialog = dialog.create();
+            alertDialog.show();
+            return false;
         });
         //Detail onClick Listener
         viewHolder.item_detail_textView.setOnClickListener(v -> {
