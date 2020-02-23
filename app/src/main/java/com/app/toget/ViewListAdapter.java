@@ -1,6 +1,7 @@
 package com.app.toget;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.DataSetObservable;
 import android.database.DataSetObserver;
 import android.graphics.Paint;
@@ -8,9 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 
 import java.util.ArrayList;
 
@@ -45,6 +48,7 @@ class ViewListAdapter extends ArrayAdapter<ViewListItem> {
 
     class ViewHolder {
         TextView item_textView;
+        TextView item_detail_textView;
     }
 
     @Override
@@ -57,30 +61,98 @@ class ViewListAdapter extends ArrayAdapter<ViewListItem> {
             convertView = layoutInflater.inflate(R.layout.view_list_item,null);
             viewHolder = new ViewHolder();
             viewHolder.item_textView = convertView.findViewById(R.id.viewList_item_text);
+            viewHolder.item_detail_textView = convertView.findViewById(R.id.viewList_item_detail);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
+        //Check for if item is strikethrough or not
         if (viewListItem.getIsStrikeThrough()) {
             viewHolder.item_textView.setPaintFlags(viewHolder.item_textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            viewHolder.item_detail_textView.setPaintFlags(viewHolder.item_detail_textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         } else {
             viewHolder.item_textView.setPaintFlags(viewHolder.item_textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+            viewHolder.item_detail_textView.setPaintFlags(viewHolder.item_detail_textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
         }
 
+        if (viewListItem.hasDetail()) {
+            viewHolder.item_detail_textView.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.item_detail_textView.setVisibility(View.GONE);
+        }
+
+        //Item name onClick Listener
         viewHolder.item_textView.setOnClickListener(v -> {
             if (viewListItem.getIsStrikeThrough()) {
                 viewListItem.setStrikeThrough(false);
-                myDB.updateView(viewListItem.getItemName(), false);
+                myDB.updateView(viewListItem.getItemName(), false, viewListItem.getItemDetail(), viewListItem.hasDetail());
                 viewHolder.item_textView.setPaintFlags(viewHolder.item_textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                viewHolder.item_detail_textView.setPaintFlags(viewHolder.item_detail_textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
             } else {
                 viewListItem.setStrikeThrough(true);
-                myDB.updateView(viewListItem.getItemName(), true);
+                myDB.updateView(viewListItem.getItemName(), true, viewListItem.getItemDetail(), viewListItem.hasDetail());
                 viewHolder.item_textView.setPaintFlags(viewHolder.item_textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                viewHolder.item_detail_textView.setPaintFlags(viewHolder.item_detail_textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            }
+        });
+
+        viewHolder.item_textView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                LayoutInflater layoutInflater = LayoutInflater.from(context);
+                View promptView = layoutInflater.inflate(R.layout.item_detail_prompt, null);
+
+                AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+                dialog.setView(promptView);
+
+                final EditText itemDetail = promptView.findViewById(R.id.item_detail_editText_prompt);
+
+                dialog.setCancelable(true)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (!itemDetail.getText().toString().isEmpty()) {
+                                    viewListItem.setHasDetail(true);
+                                    viewHolder.item_detail_textView.setVisibility(View.VISIBLE);
+                                    viewListItem.setItemDetail(itemDetail.getText().toString());
+                                    viewHolder.item_detail_textView.setText(itemDetail.getText().toString());
+                                    myDB.updateView(viewListItem.getItemName(), viewListItem.getIsStrikeThrough(), itemDetail.getText().toString(), viewListItem.hasDetail());
+                                } else {
+                                    viewListItem.setHasDetail(false);
+                                    viewHolder.item_detail_textView.setVisibility(View.GONE);
+                                    myDB.updateView(viewListItem.getItemName(), viewListItem.getIsStrikeThrough(), itemDetail.getText().toString(), viewListItem.hasDetail());
+                                }
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                AlertDialog alertDialog = dialog.create();
+                alertDialog.show();
+                return false;
+            }
+        });
+        //Detail onClick Listener
+        viewHolder.item_detail_textView.setOnClickListener(v -> {
+            if (viewListItem.getIsStrikeThrough()) {
+                viewListItem.setStrikeThrough(false);
+                myDB.updateView(viewListItem.getItemName(), false, viewListItem.getItemDetail(), viewListItem.hasDetail());
+                viewHolder.item_textView.setPaintFlags(viewHolder.item_textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                viewHolder.item_detail_textView.setPaintFlags(viewHolder.item_detail_textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+            } else {
+                viewListItem.setStrikeThrough(true);
+                myDB.updateView(viewListItem.getItemName(), true, viewListItem.getItemDetail(), viewListItem.hasDetail());
+                viewHolder.item_textView.setPaintFlags(viewHolder.item_textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                viewHolder.item_detail_textView.setPaintFlags(viewHolder.item_detail_textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             }
         });
 
         viewHolder.item_textView.setText(listItems.get(position).getItemName());
+        viewHolder.item_detail_textView.setText(viewListItem.getItemDetail());
 
         return convertView;
     }

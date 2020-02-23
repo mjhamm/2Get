@@ -25,6 +25,8 @@ class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_ID = "id";
     private static final String KEY_ITEM = "name";
     private static final String KEY_CHECKED = "checked";
+    private static final String KEY_DETAIL = "detail";
+    public static final String KEY_HAS_DETAIL = "hasDetail";
     private static final String KEY_GROUP_NAME = "groupName";
     private static final String KEY_GROUP_EXPANDED = "expanded";
 
@@ -41,7 +43,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
     //Create View List Table
     private static final String CREATE_TABLE_VIEW = "CREATE TABLE IF NOT EXISTS " + TABLE_VIEW + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + KEY_ITEM +
-            " TEXT, " + KEY_CHECKED + " INTEGER)";
+            " TEXT, " + KEY_CHECKED + " INTEGER, " + KEY_DETAIL + " TEXT, " + KEY_HAS_DETAIL + " INTEGER)";
 
     private static final String CREATE_TABLE_GROUP = "CREATE TABLE IF NOT EXISTS " + TABLE_GROUP + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + KEY_GROUP_NAME + " TEXT, " +KEY_GROUP_EXPANDED + " INTEGER)";
 
@@ -86,20 +88,24 @@ class DatabaseHelper extends SQLiteOpenHelper {
     //------------------------------ VIEW TABLE -------------------------------------------------------------------------------------------
 
     //Updates ViewList item
-    public void updateView(String name, boolean checked) {
+    public void updateView(String name, boolean checked, String detail, boolean hasDetail) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_ITEM, name);
         contentValues.put(KEY_CHECKED, checked);
+        contentValues.put(KEY_DETAIL, detail);
+        contentValues.put(KEY_HAS_DETAIL, hasDetail);
         db.update(TABLE_VIEW, contentValues,KEY_ITEM + " =?", new String[]{name});
     }
 
     //Add data to View List Table
-    public void addDataToView(String name, int checked) {
+    public void addDataToView(String name, int checked, String detail, int hasDetail) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_ITEM, name);
         contentValues.put(KEY_CHECKED, checked);
+        contentValues.put(KEY_DETAIL, detail);
+        contentValues.put(KEY_HAS_DETAIL, hasDetail);
         db.insert(TABLE_VIEW, null, contentValues);
     }
 

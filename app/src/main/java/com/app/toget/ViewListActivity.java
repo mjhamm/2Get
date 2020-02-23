@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,8 @@ import java.util.Iterator;
 
 public class ViewListActivity extends Fragment implements View.OnClickListener {
 
+    public static final String TAG = "LOG: ";
+
     private TextView mTextView;
     private static ArrayList<ViewListItem> viewItems;
     private static ViewListFragmentListener listener;
@@ -32,9 +35,11 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
     private ViewListAdapter viewListAdapter;
     private static DatabaseHelper myDB;
     private boolean itemChecked = false;
+    private boolean hasItemDetail = false;
     private ImageButton refreshButton;
     private FrameLayout progressHolder;
     private Load myLoad;
+    private View itemView;
 
     public ViewListActivity() {
 
@@ -66,12 +71,22 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
         refreshButton = view.findViewById(R.id.refresh_button);
         progressHolder = view.findViewById(R.id.progressHolder);
 
+        LayoutInflater li = LayoutInflater.from(mContext);
+        View itemView = li.inflate(R.layout.view_list_item,null);
+
         myDB = DatabaseHelper.getInstance(mContext);
         Cursor data = myDB.getListContents_View();
         if (data.getCount() != 0) {
             while(data.moveToNext()) {
                 itemChecked = data.getInt(2) != 0;
-                ViewListItem item = new ViewListItem(data.getString(1), itemChecked);
+                hasItemDetail = !data.getString(3).isEmpty();
+                ViewListItem item = new ViewListItem(data.getString(1), itemChecked, data.getString(3), hasItemDetail);
+                TextView mItemDetailText = itemView.findViewById(R.id.viewList_item_detail);
+                if (hasItemDetail) {
+                    Log.e(TAG, "Item: " + item.getItemName());
+                    mItemDetailText.setVisibility(View.VISIBLE);
+                    mItemDetailText.setText(data.getString(3));
+                }
                 viewItems.add(item);
             }
         }
@@ -87,6 +102,8 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
 
         for (int i = 0; i < viewItems.size(); i++) {
             sb.append(viewItems.get(i).getItemName());
+            sb.append(" - ");
+            sb.append(viewItems.get(i).getItemDetail());
             if (viewItems.get(i).getIsStrikeThrough()) {
                 sb.append(" - \u2713");
             }
@@ -102,8 +119,8 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
     }
 
     public void addItemToList(String selection) {
-        viewItems.add(new ViewListItem(selection, false));
-        myDB.addDataToView(selection, 0);
+        viewItems.add(new ViewListItem(selection, false, "", false));
+        myDB.addDataToView(selection, 0, "", 0);
         viewListAdapter.notifyDataSetChanged();
     }
 
@@ -112,9 +129,10 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
         if (data.getCount() != 0) {
             while(data.moveToNext()) {
                 itemChecked = data.getInt(2) != 0;
+                hasItemDetail = !data.getString(3).isEmpty();
             }
         }
-        ViewListItem viewListItem = new ViewListItem(selection, itemChecked);
+        ViewListItem viewListItem = new ViewListItem(selection, itemChecked,"", hasItemDetail);
         for (int i = 0; i < viewItems.size(); i++) {
             if (viewListItem.getItemName().equalsIgnoreCase(viewItems.get(i).getItemName())) {
                 viewItems.remove(i);
@@ -179,6 +197,8 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
             alertDialog.show();
         });
     }
+
+
 
     @Override
     public void onClick(View v) {
