@@ -101,6 +101,7 @@ class ViewListAdapter extends ArrayAdapter<ViewListItem> {
             View promptView = layoutInflater.inflate(R.layout.item_detail_prompt, null);
 
             AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+            dialog.setTitle("Item Detail Information");
             dialog.setView(promptView);
 
             final EditText itemDetail = promptView.findViewById(R.id.item_detail_editText_prompt);

@@ -103,8 +103,9 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
         for (int i = 0; i < viewItems.size(); i++) {
             sb.append(viewItems.get(i).getItemName());
             if (viewItems.get(i).hasDetail()) {
-                sb.append(" - ");
+                sb.append(" ( ");
                 sb.append(viewItems.get(i).getItemDetail());
+                sb.append(" ) ");
             }
             if (viewItems.get(i).getIsStrikeThrough()) {
                 sb.append(" - \u2713");
