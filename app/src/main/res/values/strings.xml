@@ -64,7 +64,6 @@
         \n\nUnless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.</string>
     <string name="test_item_detail">Test Item Detail</string>
     <string name="enter_item_detail_information">Enter Item Detail Information</string>
-    <string name="item_detail_information">Item Detail Information</string>
     <string name="help_title_8">Need to Add Notes to an Item?</string>
     <string name="help_detail_8">Click and Hold the Item to Add Custom Notes!</string>
     <string name="help_image_8">Adding notes to item</string>

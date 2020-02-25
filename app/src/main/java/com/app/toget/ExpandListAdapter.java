@@ -170,12 +170,12 @@ class ExpandListAdapter extends BaseExpandableListAdapter {
     }
 
     // Group Holder Class
-    class GroupHolder {
+    static class GroupHolder {
         TextView groupTitle;
     }
 
     // Child Holder Class
-    class ChildHolder {
+    static class ChildHolder {
         TextView childTitle;
         CheckBox childCheckBox;
     }

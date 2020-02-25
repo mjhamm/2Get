@@ -18,11 +18,14 @@ import java.util.ArrayList;
 
 class ViewListAdapter extends ArrayAdapter<ViewListItem> {
 
+    //Adapter for the ListView on the View List fragment
+
     private final Context context;
     private final ArrayList<ViewListItem> listItems;
     private final DataSetObservable dataSetObservable = new DataSetObservable();
     private final DatabaseHelper myDB;
 
+    //Constructor
     public ViewListAdapter(ArrayList<ViewListItem> listItems, Context context) {
         super(context, R.layout.view_list_item, listItems);
         this.listItems = listItems;
@@ -45,16 +48,20 @@ class ViewListAdapter extends ArrayAdapter<ViewListItem> {
         return position;
     }
 
-    class ViewHolder {
+    //Viewholder for item name and item detail
+    static class ViewHolder {
         TextView item_textView;
         TextView item_detail_textView;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        //Initializing of Viewholder
         ViewHolder viewHolder;
+        //Get the item at that position
         ViewListItem viewListItem = listItems.get(position);
 
+        //If the view is null then find the views and set them equal to the fields in the Viewholder
         if (convertView == null) {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
             convertView = layoutInflater.inflate(R.layout.view_list_item,null);
@@ -75,6 +82,7 @@ class ViewListAdapter extends ArrayAdapter<ViewListItem> {
             viewHolder.item_detail_textView.setPaintFlags(viewHolder.item_detail_textView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
         }
 
+        //Check if the item has a detail or not
         if (viewListItem.hasDetail()) {
             viewHolder.item_detail_textView.setVisibility(View.VISIBLE);
         } else {
@@ -96,6 +104,9 @@ class ViewListAdapter extends ArrayAdapter<ViewListItem> {
             }
         });
 
+        //Set an onLongClickListener for the item name textview
+        //Allows the user to add a detail to the item
+        //Creates a dialog box to enter the item detail information
         viewHolder.item_textView.setOnLongClickListener(v -> {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
             View promptView = layoutInflater.inflate(R.layout.item_detail_prompt, null);
@@ -126,6 +137,7 @@ class ViewListAdapter extends ArrayAdapter<ViewListItem> {
             return false;
         });
         //Detail onClick Listener
+        //Makes sure that if you click on the item or the detail it will update the strikethrough information for the item
         viewHolder.item_detail_textView.setOnClickListener(v -> {
             if (viewListItem.getIsStrikeThrough()) {
                 viewListItem.setStrikeThrough(false);
