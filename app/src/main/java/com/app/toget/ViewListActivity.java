@@ -25,6 +25,8 @@ import java.util.Iterator;
 
 public class ViewListActivity extends Fragment implements View.OnClickListener {
 
+    //private static final String TAG = "LOG: ";
+
     private TextView mTextView;
     private static ArrayList<ViewListItem> viewItems;
     private static ViewListFragmentListener listener;
@@ -32,6 +34,7 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
     private ViewListAdapter viewListAdapter;
     private static DatabaseHelper myDB;
     private boolean itemChecked = false;
+    private boolean hasItemDetail = false;
     private ImageButton refreshButton;
     private FrameLayout progressHolder;
     private Load myLoad;
@@ -44,6 +47,7 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
         return new ViewListActivity();
     }
 
+    //Interface that sends information of the item to be removed to Main Activity
     public interface ViewListFragmentListener {
         void onSelectionARemoved(String selection);
     }
@@ -52,6 +56,7 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getContext();
+        //Initialize the AsyncTask
         myLoad = new Load();
     }
 
@@ -66,29 +71,58 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
         refreshButton = view.findViewById(R.id.refresh_button);
         progressHolder = view.findViewById(R.id.progressHolder);
 
+        //Create inflater for list item in order to check on item detail
+        LayoutInflater li = LayoutInflater.from(mContext);
+        View itemView = li.inflate(R.layout.view_list_item,null);
+
+        //Opens database connection in order to loop through a cursor for the data in the listview
+        //This is what determines on startup if the item should be strikethrough or has an item detail
         myDB = DatabaseHelper.getInstance(mContext);
         Cursor data = myDB.getListContents_View();
         if (data.getCount() != 0) {
             while(data.moveToNext()) {
+                //Item strikethrough is true if the item in the cursor is not 0
                 itemChecked = data.getInt(2) != 0;
-                ViewListItem item = new ViewListItem(data.getString(1), itemChecked);
+                //Item has a detail if the item in the cursor is not empty
+                hasItemDetail = !data.getString(3).isEmpty();
+                //Item = String itemName, boolean itemChecked, String itemDetail, boolean hasDetail
+                ViewListItem item = new ViewListItem(data.getString(1), itemChecked, data.getString(3), hasItemDetail);
+                //find the detail textview and determine if it should be shown or not
+                TextView mItemDetailText = itemView.findViewById(R.id.viewList_item_detail);
+                //Check to see if it has a detail
+                //If yes, show it and set the text to the data in the cursor
+                if (hasItemDetail) {
+                    //Log.e(TAG, "Item: " + item.getItemName());
+                    mItemDetailText.setVisibility(View.VISIBLE);
+                    mItemDetailText.setText(data.getString(3));
+                }
+                //add the item to the arraylist of items
                 viewItems.add(item);
             }
         }
+        //close the cursor
         data.close();
+        //set the adapter
         viewListAdapter = new ViewListAdapter(viewItems, mContext);
         mListView.setAdapter(viewListAdapter);
 
         return view;
     }
 
+    //returns a stringbuilder for when the user wants to share their list
     public StringBuilder exportList() {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < viewItems.size(); i++) {
+            sb.append("- ");
             sb.append(viewItems.get(i).getItemName());
+            if (viewItems.get(i).hasDetail()) {
+                sb.append(" ( ");
+                sb.append(viewItems.get(i).getItemDetail());
+                sb.append(" )");
+            }
             if (viewItems.get(i).getIsStrikeThrough()) {
-                sb.append(" - \u2713");
+                sb.append(" \u2713");
             }
             if (i < viewItems.size() - 1) {
                 sb.append("\n");
@@ -97,24 +131,28 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
         return sb;
     }
 
+    //checks to see if the list is empty or not
     public boolean isListEmpty() {
         return viewItems.isEmpty();
     }
 
+    //adds an item to the list and db
     public void addItemToList(String selection) {
-        viewItems.add(new ViewListItem(selection, false));
-        myDB.addDataToView(selection, 0);
+        viewItems.add(new ViewListItem(selection, false, "", false));
+        myDB.addDataToView(selection, 0, "", 0);
         viewListAdapter.notifyDataSetChanged();
     }
 
+    //removes an item for the list and db
     public void removeItemFromList(String selection) {
         Cursor data = myDB.getListContents_View();
         if (data.getCount() != 0) {
             while(data.moveToNext()) {
                 itemChecked = data.getInt(2) != 0;
+                hasItemDetail = !data.getString(3).isEmpty();
             }
         }
-        ViewListItem viewListItem = new ViewListItem(selection, itemChecked);
+        ViewListItem viewListItem = new ViewListItem(selection, itemChecked,"", hasItemDetail);
         for (int i = 0; i < viewItems.size(); i++) {
             if (viewListItem.getItemName().equalsIgnoreCase(viewItems.get(i).getItemName())) {
                 viewItems.remove(i);
@@ -126,11 +164,13 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
         viewListAdapter.notifyDataSetChanged();
     }
 
+    //Clears all items from the list
     public void clearList() {
         viewItems.clear();
         viewListAdapter.notifyDataSetChanged();
     }
 
+    //checks to make sure that ViewListFragmentListener is implemented on current context
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -141,6 +181,7 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
         }
     }
 
+    //set the listener to null
     @Override
     public void onDetach() {
         super.onDetach();
@@ -151,8 +192,11 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //create an animation for the refresh button
         Animation cw = AnimationUtils.loadAnimation(mContext, R.anim.refresh_clockwise);
 
+        //an onClickListener for the refresh button
+        //creates an alert dialog that makes sure that the user wants to remove their purchased items
         refreshButton.setOnClickListener(refresh -> {
             refreshButton.startAnimation(cw);
             AlertDialog.Builder clearDialog = new AlertDialog.Builder(mContext);
@@ -163,6 +207,8 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
             clearDialog.setPositiveButton("Confirm", (dialog, which) -> {
                 if (!viewItems.isEmpty()) {
                     dialog.dismiss();
+                    //singleton to check if the asynctask has ran
+                    //if yes then create a new instance of the task and run it
                     if (myLoad != null) {
                         myLoad = new Load();
                     }
@@ -180,6 +226,8 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
         });
     }
 
+
+
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.viewList_item_text) {
@@ -192,6 +240,7 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
     }
 
 
+    //asynctask in order to remove all purchased items
     private class Load extends AsyncTask<Void, Void, ArrayList<ViewListItem>> {
 
         final ArrayList<String> selections = new ArrayList<>();
@@ -228,6 +277,7 @@ public class ViewListActivity extends Fragment implements View.OnClickListener {
         }
     }
 
+    //checks to see if the asynctask and if the fragment is destroyed, cancel the task
     @Override
     public void onDestroy() {
         myLoad.cancel(true);

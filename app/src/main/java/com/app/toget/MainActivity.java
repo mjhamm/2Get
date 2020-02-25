@@ -161,7 +161,6 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         viewListActivity.removeItemFromList(selection);
     }
 
-
     @Override
     public void onSelectionARemoved(String selection) {
         makeListActivity.uncheckItem(selection);

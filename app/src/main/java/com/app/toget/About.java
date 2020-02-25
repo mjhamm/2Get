@@ -27,10 +27,6 @@ public class About extends AppCompatActivity {
 
         //Launch android licenses activity
         licenses.setOnClickListener(click -> startActivity(new Intent(this, Licenses.class)));
-        /*licenses.setOnClickListener(click -> {
-            OssLicensesMenuActivity.setActivityTitle("Open Source Libraries");
-            startActivity(new Intent(this, OssLicensesMenuActivity.class));
-        });*/
 
         //Start Feedback
         feedback.setOnClickListener(click -> startActivity(new Intent(this, Feedback.class)));

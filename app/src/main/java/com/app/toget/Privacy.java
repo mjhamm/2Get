@@ -12,6 +12,7 @@ public class Privacy extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_privacy_statement);
 
+        //Opens the webview with the privacy policy in the asset folder
         WebView webView = findViewById(R.id.privacy_webView);
         webView.loadUrl("file:///android_asset/privacy_policy.html");
     }

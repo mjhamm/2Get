@@ -24,13 +24,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/osl_title"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="6dp"
-        android:padding="12dp">
+        android:layout_alignParentEnd="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="12dp">
 
             <TextView
                 android:id="@+id/osl_header"
@@ -102,7 +101,6 @@
                 android:textColorLink="@color/link_blue"/>
 
             <TextView
-                android:id="@+id/google_license"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
