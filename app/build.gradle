@@ -7,8 +7,8 @@ android {
         applicationId "com.app.toget"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0.0"
+        versionCode 4
+        versionName "2.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -36,8 +36,7 @@ dependencies {
     //androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     //androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.google.android.material:material:1.1.0'
-    implementation 'com.google.android.gms:play-services-ads-lite:18.3.0'
+    implementation 'com.google.android.gms:play-services-ads-lite:19.1.0'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
-    implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
 }

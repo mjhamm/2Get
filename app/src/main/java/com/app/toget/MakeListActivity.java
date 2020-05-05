@@ -39,6 +39,7 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
     private ConstraintLayout mAddItemParent;
     private static DatabaseHelper myDB;
     private Cursor childData;
+    private Cursor viewData;
     private View itemView;
 
     public MakeListActivity() {
@@ -79,33 +80,50 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
 
         Cursor groupData = myDB.getListContents_Group();
         childData = myDB.getListContents_Children();
+        viewData = myDB.getListContents_View();
         int groupCount = 0;
 
 
         //EXPANDING OF GROUPS
-        if (groupData.getCount() == 0) {
-            LoadDatabase load = new LoadDatabase();
-            load.execute();
-        } else {
-            while(groupData.moveToNext()) { /* Beginning of Moving through group */
-                if (groupCount == expandableListAdapter.getGroupCount()) {
-                    break;
-                } else {
-                    if (groupData.getInt(2) != 0) {
-                        expandableListView.expandGroup(groupData.getPosition());
-                    }
-                }
-                groupCount++;
-            }/* End of Moving through group */
-            groupData.close();
-        }
+        // Version 3 - Updating so groups are not automatically expanded
+//        if (groupData.getCount() == 0) {
+//            LoadDatabase load = new LoadDatabase();
+//            load.execute();
+//        } else {
+//            while(groupData.moveToNext()) { /* Beginning of Moving through group */
+//                if (groupCount == expandableListAdapter.getGroupCount()) {
+//                    break;
+//                } else {
+//                    if (groupData.getInt(2) != 0) {
+//                        expandableListView.expandGroup(groupData.getPosition());
+//                    }
+//                }
+//                groupCount++;
+//            }/* End of Moving through group */
+//            groupData.close();
+//        }
 
         //CHECK CHILDREN
         checkChildren();
 
-        expandableListView.setOnGroupExpandListener(groupPosition -> myDB.updateGroup(expandableListTitle.get(groupPosition), 1));
+        expandableListView.setOnGroupExpandListener(groupPosition -> {
+            // Version 3 - Update groups to collapse when another group is expanded
+            myDB.updateGroup(expandableListTitle.get(groupPosition), 1);
+            for (int i = 0; i < expandableListAdapter.getGroupCount(); i++) {
+                if (expandableListView.isGroupExpanded(i)) {
+                    if (i != groupPosition) {
+                        expandableListView.collapseGroup(i);
+                        myDB.updateGroup(expandableListTitle.get(i), 0);
+                    }
+                }
+            }
+            // Version 3 - Scroll to opened group
+            expandableListView.setSelection(groupPosition);
+        });
 
-        expandableListView.setOnGroupCollapseListener(groupPosition -> myDB.updateGroup(expandableListTitle.get(groupPosition), 0));
+        expandableListView.setOnGroupCollapseListener(groupPosition -> {
+            myDB.updateGroup(expandableListTitle.get(groupPosition), 0);
+        });
 
         expandableListView.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> {
             MakeListItem makeListItem = expandableListDetail.get(expandableListTitle.get(groupPosition)).get(childPosition);
@@ -344,6 +362,8 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         myDB.addChild("Dairy", "Milk",0);
         myDB.addChild("Dairy", "Sour Cream",0);
         myDB.addChild("Dairy", "Yogurt",0);
+        // Version 3 - Adding Eggs
+        myDB.addChild("Dairy", "Eggs", 0);
 
         //Deli
         myDB.addChild("Deli", "Deli Cheese", 0);
@@ -558,6 +578,8 @@ public class MakeListActivity extends Fragment implements CompoundButton.OnCheck
         dairy.add(new MakeListItem("Milk", false));
         dairy.add(new MakeListItem("Sour Cream", false));
         dairy.add(new MakeListItem("Yogurt", false));
+        // Version 3 - Add Eggs
+        dairy.add(new MakeListItem("Eggs", false));
         //Deli
         ArrayList<MakeListItem> deli = new ArrayList<>();
         deli.add(new MakeListItem("Deli Cheese", false));
